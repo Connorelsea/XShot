@@ -1,6 +1,7 @@
 package com.elsealabs.xshot;
 
 import java.awt.GraphicsDevice;
+import java.awt.Rectangle;
 
 public class Monitor {
 	
@@ -12,12 +13,12 @@ public class Monitor {
 		current = false;
 	}
 	
-	public GraphicsDevice getDevice() {
-		return device;
+	public Rectangle getBounds() {
+		return device.getDefaultConfiguration().getBounds();
 	}
 	
-	public void setDevice(GraphicsDevice device) {
-		this.device = device;
+	public GraphicsDevice getDevice() {
+		return device;
 	}
 	
 	public boolean isCurrent() {
