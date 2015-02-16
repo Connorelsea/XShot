@@ -16,7 +16,7 @@ import javax.swing.JFrame;
 public class Capturer {
 	
 	private GraphicsEnvironment graphics;
-	private ArrayList<GraphicsDevice> monitors;
+	private ArrayList<Monitor> monitors;
 	private JFrame frame;
 	
 	public Capturer() {
@@ -26,12 +26,22 @@ public class Capturer {
 	private void _initDevices() {
 		
 		graphics = GraphicsEnvironment.getLocalGraphicsEnvironment();
-		monitors = new ArrayList<GraphicsDevice>(Arrays.asList(graphics.getScreenDevices()));
+		monitors = new ArrayList<Monitor>();
+		
+		ArrayList<GraphicsDevice> devices = new ArrayList<GraphicsDevice>(
+			Arrays.asList(graphics.getScreenDevices())
+		);
+		
+		devices.stream()
+			.forEach(a -> monitors.add(new Monitor(a)));
 		
 	}
 	
 	public void findCurrentMonitor() {
-		frame.getGraphicsConfiguration().getDevice();
+		
+		GraphicsDevice current = frame.getGraphicsConfiguration().getDevice();
+		monitors.stream().forEach(a -> a.setCurrent(a.getDevice() == current));
+		
 	}
 	
 	public void setAttachedFrame(JFrame frame) {
