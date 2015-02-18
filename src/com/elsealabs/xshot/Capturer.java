@@ -1,10 +1,15 @@
 package com.elsealabs.xshot;
 
+import java.awt.EventQueue;
+import java.awt.Frame;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 import java.awt.Rectangle;
 import java.awt.Robot;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -46,7 +51,6 @@ public class Capturer {
 		);
 		
 		devices.stream().forEach(a -> monitors.add(new Monitor(a)));
-		
 	}
 	
 	/**
@@ -65,6 +69,15 @@ public class Capturer {
 		
 	}
 	
+	public Monitor getCurrentMonitor() {
+		findCurrentMonitor();
+			
+			return monitors.stream()
+					.filter(a -> a.isCurrent())
+					.findFirst()
+					.orElseGet(null);
+	}
+	
 	/**
 	 * capture(ArrayList<Monitor> monitors)
 	 * 
@@ -74,18 +87,31 @@ public class Capturer {
 	 * @param monitors An array containing the monitors to be captured
 	 * @return A combined image of both monitors' contents
 	 */
-	public BufferedImage capture(ArrayList<Monitor> monitors) {
+	public Image capture(ArrayList<Monitor> monitors) {
 		
 		Rectangle bounds = new Rectangle();
-		monitors.stream().forEach(a -> a.getBounds().union(bounds));
+		monitors.stream().forEach(a -> Rectangle.union(bounds, a.getBounds(), bounds) );
+		
+		Image image = null;
 		
 		try {
-			return new Robot().createScreenCapture(bounds);
+			
+			EventQueue.invokeAndWait(() -> frame.setExtendedState(Frame.ICONIFIED));
+			
+			while (frame.getExtendedState() != Frame.ICONIFIED) { }
+			image = new Image(new Robot().createScreenCapture(bounds));
+			
 		} catch (Exception ex) {
-			ex.printStackTrace();
-			return null;
+			ex.printStackTrace();			
 		}
 		
+		EventQueue.invokeLater(() -> frame.setExtendedState(Frame.NORMAL));
+		
+		return image;
+	}
+	
+	public Image capture(Monitor monitor) {
+		return capture(new ArrayList<Monitor>(Arrays.asList(monitor)));
 	}
 
 }

@@ -14,7 +14,7 @@ public class DisplayCapture extends JFrame {
 
 	public DisplayCapture() {
 		
-		capturer = new Capturer();
+		capturer = new Capturer(this);
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 624, 300);
@@ -34,7 +34,7 @@ public class DisplayCapture extends JFrame {
 		
 		bt_capture_rec.addActionListener(a -> {
 			
-			Screenshot screen = new Screenshot();
+			
 			
 		});
 		
