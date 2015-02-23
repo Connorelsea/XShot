@@ -1,15 +1,12 @@
 #XShot
-======
 
 ### A multi-platform, fully-featured, screenshot program.
 
 ## Build
-======
 
 Current build: (no current build)
 
 ## Features
-======
 
 - [IP] Monitor capture (M)
 - [IP] Monitor capture (M+)
@@ -24,7 +21,6 @@ Current build: (no current build)
 - [FI] Export: GIF (non-animated)
 
 ### Feature Tags
-======
 
 #### Status Symbols
 - W = Waiting
