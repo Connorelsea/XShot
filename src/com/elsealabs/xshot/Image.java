@@ -1,7 +1,6 @@
 package com.elsealabs.xshot;
 
 import java.awt.image.BufferedImage;
-import java.nio.file.Files;
 import java.nio.file.Path;
 
 import javax.imageio.ImageIO;

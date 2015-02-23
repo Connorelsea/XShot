@@ -1,18 +1,12 @@
 package com.elsealabs.xshot;
 
-import java.awt.EventQueue;
 import java.awt.Frame;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 import java.awt.Rectangle;
 import java.awt.Robot;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.awt.image.BufferedImage;
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
-
 import javax.swing.JFrame;
 
 /**
@@ -69,7 +63,17 @@ public class Capturer {
 		
 	}
 	
+	/**
+	 * getCurrentMonitor()
+	 * 
+	 * Fires findCurrentMonitor() to ensure that the current monitor is
+	 * updated, and then finds the current  monitor  in  the  array  of
+	 * monitors and returns it.
+	 * 
+	 * @version 1.0
+	 */
 	public Monitor getCurrentMonitor() {
+		
 		findCurrentMonitor();
 			
 			return monitors.stream()
@@ -96,8 +100,10 @@ public class Capturer {
 		
 		try {
 			
-			EventQueue.invokeAndWait(() -> frame.setExtendedState(Frame.ICONIFIED));
+			// Minimize window so it does not appear in the screenshot
+			frame.setExtendedState(Frame.ICONIFIED);
 			
+			// Wait for window to minimize, then create image
 			while (frame.getExtendedState() != Frame.ICONIFIED) { }
 			image = new Image(new Robot().createScreenCapture(bounds));
 			
@@ -105,7 +111,8 @@ public class Capturer {
 			ex.printStackTrace();			
 		}
 		
-		EventQueue.invokeLater(() -> frame.setExtendedState(Frame.NORMAL));
+		// Un-minimize window
+		frame.setExtendedState(Frame.NORMAL);
 		
 		return image;
 	}
