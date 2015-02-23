@@ -1,10 +1,30 @@
 #XShot
+======
+
 ### A multi-platform, fully-featured, screenshot program.
 
 ## Build
+======
+
 Current build: (no current build)
 
 ## Features
+======
+
+- [IP] Monitor capture (M)
+- [IP] Monitor capture (M+)
+- [IP] Rectangular capture (M)
+- [W] Rectangular capture (M+)
+- [W] Timed capture
+- [W] Rectangular capture axis-locking (M)
+- [W] Rectangular capture axis-locking (M+)
+- [FI] Export: PNG
+- [FI] Export: JPEG full-quality
+- [W] Export: JPEG with alterable compression
+- [FI] Export: GIF (non-animated)
+
+### Feature Tags
+======
 
 #### Status Symbols
 - W = Waiting
@@ -17,14 +37,3 @@ Current build: (no current build)
 #### Feature Labels
 - M = Single monitor
 - M+ = Multiple monitors
-
-- Monitor capture (M)
-- Monitor capture (M+)
-- Rectangular capture (M)
-- Rectangular capture (M+)
-- Timed capture
-- Rectangular capture axis-locking (M)
-- Rectangular capture axis-locking (M+)
-- Export: PNG
-- Export: JPEG
-- Export: GIF (non-animated)
