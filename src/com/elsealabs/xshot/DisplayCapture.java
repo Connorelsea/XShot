@@ -15,7 +15,7 @@ public class DisplayCapture extends JFrame {
 
 	public DisplayCapture() {
 		
-		capturer = new Capturer(this);
+		capturer = Capturer.getInstance(this);
 		
 		setTitle("XShot");
 		
@@ -36,7 +36,8 @@ public class DisplayCapture extends JFrame {
 		
 		bt_capture_rec.addActionListener(a -> {
 			
-			
+			Image image = capturer.capture(capturer.getCurrentMonitor());
+			DisplayRecCapture disp = new DisplayRecCapture(image);
 			
 		});
 		

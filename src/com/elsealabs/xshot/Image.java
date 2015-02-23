@@ -33,4 +33,7 @@ public class Image {
 		
 	}
 
+	public BufferedImage getBufferedImage() {
+		return image;
+	}
 }

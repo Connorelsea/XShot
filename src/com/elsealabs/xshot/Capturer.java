@@ -23,9 +23,23 @@ public class Capturer {
 	private ArrayList<Monitor> monitors;
 	private JFrame frame;
 	
-	public Capturer(JFrame attachedFrame) {
+	private static Capturer instance;
+	
+	private Capturer(JFrame attachedFrame) {
 		this.frame = attachedFrame;
 		_initDevices();
+	}
+	
+	public static Capturer getInstance(JFrame frame) {
+		if (instance == null) {
+			return (instance = new Capturer(frame));
+		} else {
+			return instance;
+		}
+	}
+	
+	public static Capturer getInstance() {
+		return instance;
 	}
 	
 	/**
