@@ -18,6 +18,9 @@ A list of the planned and current features of the program. Refer to the status s
 - [W] Rectangular capture axis-locking (M)
 - [W] Rectangular capture axis-locking (M+)
 - [W] Ability to draw on screenshots
+- [W] Capturing Feature: Image Resolution Display
+- [IP] Capturing Feature: Corner indicators
+- [IP] Capturing Feature: Dotted Outline
 - [W] Cursor Zoom
 - [FI] Export: PNG
 - [FI] Export: JPEG full-quality

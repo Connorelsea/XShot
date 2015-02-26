@@ -27,7 +27,7 @@ public class Image {
 			ImageIO.write(image, format.toString(), path.toFile());
 			return true;
 			
-		} 
+		}
 		catch (Exception ex)
 		{
 			ex.printStackTrace();
@@ -36,9 +36,9 @@ public class Image {
 		
 	}
 	
-	public BufferedImage getSubImage(Rectangle rec)
+	public Image getSubImage(Rectangle rec)
 	{
-		return getBufferedImage().getSubimage(rec.x, rec.y, rec.width, rec.height);
+		return new Image(getBufferedImage().getSubimage(rec.x, rec.y, rec.width, rec.height));
 	}
 
 	public BufferedImage getBufferedImage()

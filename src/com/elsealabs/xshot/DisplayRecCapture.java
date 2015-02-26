@@ -1,6 +1,7 @@
 package com.elsealabs.xshot;
 
 import java.awt.AlphaComposite;
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -13,6 +14,7 @@ import java.awt.event.MouseMotionAdapter;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
+import javax.swing.plaf.basic.BasicArrowButton;
 
 public class DisplayRecCapture extends JFrame {
 	private static final long serialVersionUID = 1L;
@@ -25,9 +27,22 @@ public class DisplayRecCapture extends JFrame {
 	private boolean dragging;
 	private Point pointBefore;
 	private Point pointNew;
+	
+	private Image currentImage;
+	
+	private BasicStroke dashed;
+	private BasicStroke normal;
+	private BasicStroke normal_thick;
 
 	public DisplayRecCapture(Image image)
 	{
+		dashed = new BasicStroke(
+				1.0f, BasicStroke.CAP_BUTT,
+		        BasicStroke.JOIN_MITER, 10.0f,
+		        new float[] { 5.0f } , 0.0f
+		);
+		normal = new BasicStroke(1.0f);
+		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(0, 0, 600, 600);
 		setUndecorated(true);
@@ -51,26 +66,55 @@ public class DisplayRecCapture extends JFrame {
 				g2d.drawImage(image.getBufferedImage(), 0, 0, null);
 				
 				// Draw rectangle over image
-				g2d.setComposite(getAlphaComposite(0.5f));
-				g2d.setColor(Color.WHITE);
+				g2d.setComposite(getAlphaComposite(0.35f));
+				g2d.setColor(Color.BLACK);
 				g2d.fillRect(0, 0, getWidth(), getHeight());
-				
-				g2d.setColor(Color.RED);
+				g2d.setComposite(getAlphaComposite(1.0f));
 				
 				if (dragging && pointNew != null)
 				{
 					//System.out.printf("Point 1: (%d, %d) Point 2: (%d, %d)\n", pointBefore.x, pointBefore.y, pointNew.x, pointNew.y);
 					
-					g2d.setComposite(getAlphaComposite(1.0f));
-					Rectangle rec = rectFromPoint(pointNew, pointBefore);
-					g2d.drawImage(image.getSubImage(rec), rec.x, rec.y, null);
+					// Create rectangle, draw cropped image
+					XRectangle rec = XRectangle.rectFromPoint(pointNew, pointBefore);
+					currentImage = image.getSubImage(rec);
+					g2d.drawImage(currentImage.getBufferedImage(), rec.x, rec.y, null);
 					
-					g2d.draw(rectFromPoint(pointNew, pointBefore));
-					
+					// Draw border
+					g2d.setStroke(normal);
 					g2d.setColor(Color.BLACK);
-					g2d.fillOval(pointBefore.x - 5, pointBefore.y - 5, 10, 10);
-					g2d.setColor(Color.blue);
-					g2d.fillOval(pointNew.x - 5, pointNew.y - 5, 10, 10);
+					
+						g2d.draw(rec);
+					
+					g2d.setStroke(dashed);
+					g2d.setColor(Color.WHITE);
+					
+						g2d.draw(rec);
+					
+					// Draw point indicators	
+					g2d.setStroke(normal);
+					g2d.setColor(Color.BLACK);
+					
+						// Before/After Points
+						g2d.fillRect(pointBefore.x - 3, pointBefore.y - 3, 6, 6);
+						g2d.fillRect(pointNew.x - 3, pointNew.y - 3, 6, 6);
+						
+						// TESTING
+						g2d.fillOval(rec.getCornerUpperLeft().x, rec.getCornerUpperLeft().y, 100, 100);
+						
+						// Other Corners
+						g2d.fillRect(rec.x - 3, rec.y - 3, 6, 6);
+						//g2d.fillRect(rec.width - 3, rec.height - 3, 6, 6);
+					
+					g2d.setColor(Color.WHITE);
+					
+						// Before/After Points
+						g2d.drawRect(pointBefore.x - 3, pointBefore.y - 3, 6, 6);
+						g2d.drawRect(pointNew.x - 3, pointNew.y - 3, 6, 6);
+						
+						// Other Corners
+						g2d.drawRect(rec.x - 3, rec.y - 3, 6, 6);
+						//g2d.drawRect(rec.width - 3, rec.height - 3, 6, 6);
 				}
 				
 				repaint();
@@ -125,23 +169,6 @@ public class DisplayRecCapture extends JFrame {
         setLocation(l);
 		
 		setVisible(true);
-	}
-	
-	private Rectangle rectFromPoint(Point pnew, Point pbef)
-	{
-		if (pnew.x > pbef.x && pnew.y > pbef.y) {
-			return new Rectangle(pbef.x, pbef.y, pnew.x - pbef.x, pnew.y - pbef.y);
-		}
-		else if (pnew.x > pbef.x && pnew.y < pbef.y) {
-			return new Rectangle(pbef.x, pnew.y, pnew.x - pbef.x, pbef.y - pnew.y);
-		}
-		else if (pnew.x < pbef.x && pnew.y < pbef.y) {
-			return new Rectangle(pnew.x, pnew.y, pbef.x - pnew.x, pbef.y - pnew.y);
-		}
-		else if (pnew.x < pbef.x && pnew.y > pbef.y) {
-			return new Rectangle(pnew.x, pbef.y, pbef.x - pnew.x, pnew.y - pbef.y);
-		}
-		return new Rectangle(1, 1, 1, 1);
 	}
 	
 	private AlphaComposite getAlphaComposite(float alpha)
