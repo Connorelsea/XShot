@@ -90,31 +90,20 @@ public class DisplayRecCapture extends JFrame {
 					g2d.setColor(Color.WHITE);
 					
 						g2d.draw(rec);
-					
-					// Draw point indicators	
+						
+					// Dynamically draw point indicators
+						
 					g2d.setStroke(normal);
-					g2d.setColor(Color.BLACK);
 					
-						// Before/After Points
-						g2d.fillRect(pointBefore.x - 3, pointBefore.y - 3, 6, 6);
-						g2d.fillRect(pointNew.x - 3, pointNew.y - 3, 6, 6);
-						
-						// TESTING
-						g2d.fillOval(rec.getCornerUpperLeft().x, rec.getCornerUpperLeft().y, 100, 100);
-						
-						// Other Corners
-						g2d.fillRect(rec.x - 3, rec.y - 3, 6, 6);
-						//g2d.fillRect(rec.width - 3, rec.height - 3, 6, 6);
+					rec.getPointsAsArray().stream()
+						.forEach(x ->
+						{
+							g2d.setColor(Color.BLACK);
+							g2d.fillRect(x.x - 3, x.y - 3, 6, 6);
+							g2d.setColor(Color.WHITE);
+							g2d.drawRect(x.x - 3, x.y - 3, 6, 6);
+						});
 					
-					g2d.setColor(Color.WHITE);
-					
-						// Before/After Points
-						g2d.drawRect(pointBefore.x - 3, pointBefore.y - 3, 6, 6);
-						g2d.drawRect(pointNew.x - 3, pointNew.y - 3, 6, 6);
-						
-						// Other Corners
-						g2d.drawRect(rec.x - 3, rec.y - 3, 6, 6);
-						//g2d.drawRect(rec.width - 3, rec.height - 3, 6, 6);
 				}
 				
 				repaint();
