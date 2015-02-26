@@ -26,8 +26,8 @@ public class DisplayRecCapture extends JFrame {
 	private Point pointBefore;
 	private Point pointNew;
 
-	public DisplayRecCapture(Image image) {
-		
+	public DisplayRecCapture(Image image)
+	{
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(0, 0, 600, 600);
 		setUndecorated(true);
@@ -38,7 +38,8 @@ public class DisplayRecCapture extends JFrame {
 		contentPane.setBorder(null);
 		setContentPane(contentPane);
 		
-		imagePane = new JPanel() {
+		imagePane = new JPanel()
+		{
 			private static final long serialVersionUID = 1L;
 			
 			public void paint(Graphics g)
@@ -56,11 +57,17 @@ public class DisplayRecCapture extends JFrame {
 				
 				g2d.setColor(Color.RED);
 				
-				if (dragging && pointNew != null) {
+				if (dragging && pointNew != null)
+				{
 					//System.out.printf("Point 1: (%d, %d) Point 2: (%d, %d)\n", pointBefore.x, pointBefore.y, pointNew.x, pointNew.y);
-					g2d.fill(rectFromPoint(pointNew, pointBefore));
-					g2d.setColor(Color.BLACK);
+					
 					g2d.setComposite(getAlphaComposite(1.0f));
+					Rectangle rec = rectFromPoint(pointNew, pointBefore);
+					g2d.drawImage(image.getSubImage(rec), rec.x, rec.y, null);
+					
+					g2d.draw(rectFromPoint(pointNew, pointBefore));
+					
+					g2d.setColor(Color.BLACK);
 					g2d.fillOval(pointBefore.x - 5, pointBefore.y - 5, 10, 10);
 					g2d.setColor(Color.blue);
 					g2d.fillOval(pointNew.x - 5, pointNew.y - 5, 10, 10);

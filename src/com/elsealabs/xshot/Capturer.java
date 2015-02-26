@@ -134,5 +134,9 @@ public class Capturer {
 	public Image capture(Monitor monitor) {
 		return capture(new ArrayList<Monitor>(Arrays.asList(monitor)));
 	}
+	
+	public Image capture() {
+		return capture(new ArrayList<Monitor>(Arrays.asList(getCurrentMonitor())));
+	}
 
 }
