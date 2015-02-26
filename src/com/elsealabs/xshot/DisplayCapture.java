@@ -1,7 +1,5 @@
 package com.elsealabs.xshot;
 
-import java.nio.file.Paths;
-
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;

@@ -1,8 +1,12 @@
 package com.elsealabs.xshot;
 
+import java.awt.AlphaComposite;
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -14,7 +18,13 @@ public class DisplayRecCapture extends JFrame {
 	private JPanel contentPane;
 	private JPanel imagePane;
 	
+	private AlphaComposite overlayComposite;
+	
 	private Capturer capturer = Capturer.getInstance();
+	
+	private boolean dragging;
+	private Point point1;
+	private Point point2;
 
 	public DisplayRecCapture(Image image) {
 		
@@ -28,6 +38,8 @@ public class DisplayRecCapture extends JFrame {
 		contentPane.setBorder(null);
 		setContentPane(contentPane);
 		
+		overlayComposite = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, .5f);
+		
 		imagePane = new JPanel() {
 			private static final long serialVersionUID = 1L;
 			
@@ -35,7 +47,23 @@ public class DisplayRecCapture extends JFrame {
 			{
 				super.paint(g);
 				Graphics2D g2d = (Graphics2D) g;
+				
+				// Draw initial image
 				g2d.drawImage(image.getBufferedImage(), 0, 0, null);
+				
+				// Draw rectangle over image
+				g2d.setComposite(overlayComposite);
+				g2d.setColor(Color.WHITE);
+				g2d.fillRect(0, 0, getWidth(), getHeight());
+				
+				g2d.setColor(Color.RED);
+				
+				if (dragging) {
+					System.out.println("yo");
+					System.out.println(point1);
+					g2d.fillRect(point1.x, point1.y, point1.x + 20, point1.y + 20);
+				}
+				
 				repaint();
 			}
 			
@@ -46,6 +74,40 @@ public class DisplayRecCapture extends JFrame {
 		imagePane.repaint();
 		
 		add(imagePane);
+		
+		// add listener(s)
+		
+		addMouseListener(new MouseListener() {
+
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				dragging = true;
+				point1 = e.getLocationOnScreen();
+			}
+
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				
+			}
+
+			@Override
+			public void mousePressed(MouseEvent e) {
+				point1 = e.getLocationOnScreen();
+				dragging = true;
+				point2 = e.getLocationOnScreen();
+			}
+
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				
+			}
+			
+		});
 		
 		// force correct positioning
         Point p = new Point(0, 0);
