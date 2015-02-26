@@ -3,9 +3,14 @@ package com.elsealabs.xshot;
 import java.awt.Point;
 
 public class XPoint extends Point {
+	private static final long serialVersionUID = 1L;
 
 	public XPoint(int x, int y) {
 		super(x, y);
+	}
+	
+	public XPoint(Point point) {
+		super(point);
 	}
 	
 	public XPoint midPoint(XPoint p)

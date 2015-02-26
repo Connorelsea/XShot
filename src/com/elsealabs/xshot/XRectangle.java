@@ -26,46 +26,82 @@ public class XRectangle extends Rectangle {
 
 	public static XRectangle rectFromPoint(Point pnew, Point pbef)
 	{
-		if (pnew.x > pbef.x && pnew.y > pbef.y)
+		/* Lower Right Quadrant */
+		if (pnew.x >= pbef.x && pnew.y >= pbef.y)
 		{
 			XRectangle rec = new XRectangle(pbef.x, pbef.y, pnew.x - pbef.x, pnew.y - pbef.y);
 			
-			rec.CornerUpperLeft  = new XPoint(pbef.x, pbef.y);
-			rec.CornerUpperRight = new XPoint(pnew.x, pbef.y);
-			rec.CornerLowerLeft  = new XPoint(pbef.x, pnew.y);
-			rec.CornerLowerRight = new XPoint(pnew.x, pnew.y);
-			
-			rec.MiddleRight = rec.CornerUpperRight.midPoint(rec.CornerLowerRight);
-			rec.MiddleLeft  = rec.CornerUpperLeft.midPoint(rec.CornerLowerLeft);
-			rec.MiddleUp    = rec.CornerUpperLeft.midPoint(rec.CornerUpperRight);
-			rec.MiddleDown  = rec.CornerLowerLeft.midPoint(rec.CornerLowerRight);
+			rec.generateCornerPoints(pbef, pnew);
+			rec.generateMidPoints();
 			
 			return rec;
 		}
-		else if (pnew.x > pbef.x && pnew.y < pbef.y) {
-			return new XRectangle(pbef.x, pnew.y, pnew.x - pbef.x, pbef.y - pnew.y);
+		
+		/* Upper Right Quadrant */
+		else if (pnew.x >= pbef.x && pnew.y <= pbef.y)
+		{
+			XRectangle rec = new XRectangle(pbef.x, pnew.y, pnew.x - pbef.x, pbef.y - pnew.y);
+			
+			rec.generateCornerPoints(pbef, pnew);
+			rec.generateMidPoints();
+			
+			return rec;
 		}
-		else if (pnew.x < pbef.x && pnew.y < pbef.y) {
-			return new XRectangle(pnew.x, pnew.y, pbef.x - pnew.x, pbef.y - pnew.y);
+		
+		/*  Upper Left Quadrant */
+		else if (pnew.x <= pbef.x && pnew.y <= pbef.y)
+		{
+			XRectangle rec = new XRectangle(pnew.x, pnew.y, pbef.x - pnew.x, pbef.y - pnew.y);
+			
+			rec.generateCornerPoints(pbef, pnew);
+			rec.generateMidPoints();
+			
+			return rec;
 		}
-		else if (pnew.x < pbef.x && pnew.y > pbef.y) {
-			return new XRectangle(pnew.x, pbef.y, pbef.x - pnew.x, pnew.y - pbef.y);
+		
+		/* Lower Left Quadrant */
+		else if (pnew.x <= pbef.x && pnew.y >= pbef.y)
+		{
+			XRectangle rec = new XRectangle(pnew.x, pbef.y, pbef.x - pnew.x, pnew.y - pbef.y);
+			
+			rec.generateCornerPoints(pbef, pnew);
+			rec.generateMidPoints();
+			
+			return rec;
 		}
-		return new XRectangle(1, 1, 1, 1);
+		else
+		{
+			System.err.printf("\n\nPBEF:(%d, %d) PNEW:(%d, %d)\n\n", pbef.x, pbef.y, pnew.x, pnew.x);
+			return null;
+		}
+	}
+	
+	public void generateMidPoints()
+	{
+		MiddleRight = CornerUpperRight.midPoint(CornerLowerRight);
+		MiddleLeft  = CornerUpperLeft.midPoint(CornerLowerLeft);
+		MiddleUp    = CornerUpperLeft.midPoint(CornerUpperRight);
+		MiddleDown  = CornerLowerLeft.midPoint(CornerLowerRight);
+	}
+	
+	public void generateCornerPoints(Point pbef, Point pnew)
+	{
+		CornerUpperLeft  = new XPoint(pbef.x, pbef.y);
+		CornerUpperRight = new XPoint(pnew.x, pbef.y);
+		CornerLowerLeft  = new XPoint(pbef.x, pnew.y);
+		CornerLowerRight = new XPoint(pnew.x, pnew.y);
 	}
 	
 	public ArrayList<XPoint> getPointsAsArray()
 	{
 		if (pointArray == null)
 		{
-			pointArray = new ArrayList<XPoint>(
-				Arrays.asList(
-					CornerUpperRight, CornerUpperLeft,
-					CornerLowerRight, CornerLowerLeft,
-					MiddleRight, MiddleLeft,
-					MiddleUp, MiddleDown
-				)
-			);
+			pointArray = new ArrayList<XPoint>(Arrays.asList(
+				CornerUpperRight, CornerUpperLeft,
+				CornerLowerRight, CornerLowerLeft,
+				MiddleRight, MiddleLeft,
+				MiddleUp, MiddleDown
+			));
 		}
 		return pointArray;
 	}
@@ -84,6 +120,22 @@ public class XRectangle extends Rectangle {
 
 	public Point getCornerLowerRight() {
 		return CornerLowerRight;
+	}
+
+	public XPoint getMiddleRight() {
+		return MiddleRight;
+	}
+
+	public XPoint getMiddleLeft() {
+		return MiddleLeft;
+	}
+
+	public XPoint getMiddleUp() {
+		return MiddleUp;
+	}
+
+	public XPoint getMiddleDown() {
+		return MiddleDown;
 	}
 	
 }

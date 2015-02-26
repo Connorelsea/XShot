@@ -22,6 +22,7 @@ A list of the planned and current features of the program. Refer to the status s
 - [IP] Capturing Feature: Corner indicators
 - [IP] Capturing Feature: Dotted Outline
 - [W] Cursor Zoom
+- [IP] Error Management System
 - [FI] Export: PNG
 - [FI] Export: JPEG full-quality
 - [W] Export: JPEG with alterable compression

@@ -26,7 +26,6 @@ public class Image {
 		{
 			ImageIO.write(image, format.toString(), path.toFile());
 			return true;
-			
 		}
 		catch (Exception ex)
 		{
@@ -38,7 +37,20 @@ public class Image {
 	
 	public Image getSubImage(Rectangle rec)
 	{
-		return new Image(getBufferedImage().getSubimage(rec.x, rec.y, rec.width, rec.height));
+		BufferedImage bimg = null;
+		
+		try
+		{
+			bimg = getBufferedImage().getSubimage(rec.x, rec.y, rec.width, rec.height);
+		}
+		catch (Exception ex)
+		{
+			ErrorManager.getInstance().newError(
+				new Error(ex, "Problem getting sub image!")
+			);
+		}
+		
+		return new Image(bimg);
 	}
 
 	public BufferedImage getBufferedImage()

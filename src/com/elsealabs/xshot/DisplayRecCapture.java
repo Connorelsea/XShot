@@ -6,7 +6,6 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
-import java.awt.Rectangle;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
@@ -14,7 +13,6 @@ import java.awt.event.MouseMotionAdapter;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
-import javax.swing.plaf.basic.BasicArrowButton;
 
 public class DisplayRecCapture extends JFrame {
 	private static final long serialVersionUID = 1L;
@@ -32,14 +30,13 @@ public class DisplayRecCapture extends JFrame {
 	
 	private BasicStroke dashed;
 	private BasicStroke normal;
-	private BasicStroke normal_thick;
 
 	public DisplayRecCapture(Image image)
 	{
 		dashed = new BasicStroke(
 				1.0f, BasicStroke.CAP_BUTT,
 		        BasicStroke.JOIN_MITER, 10.0f,
-		        new float[] { 5.0f } , 0.0f
+		        new float[] { 4.0f } , 0.0f
 		);
 		normal = new BasicStroke(1.0f);
 		
@@ -73,8 +70,6 @@ public class DisplayRecCapture extends JFrame {
 				
 				if (dragging && pointNew != null)
 				{
-					//System.out.printf("Point 1: (%d, %d) Point 2: (%d, %d)\n", pointBefore.x, pointBefore.y, pointNew.x, pointNew.y);
-					
 					// Create rectangle, draw cropped image
 					XRectangle rec = XRectangle.rectFromPoint(pointNew, pointBefore);
 					currentImage = image.getSubImage(rec);
@@ -82,12 +77,12 @@ public class DisplayRecCapture extends JFrame {
 					
 					// Draw border
 					g2d.setStroke(normal);
-					g2d.setColor(Color.BLACK);
+					g2d.setColor(Color.WHITE);
 					
 						g2d.draw(rec);
 					
 					g2d.setStroke(dashed);
-					g2d.setColor(Color.WHITE);
+					g2d.setColor(Color.BLACK);
 					
 						g2d.draw(rec);
 						
@@ -95,14 +90,13 @@ public class DisplayRecCapture extends JFrame {
 						
 					g2d.setStroke(normal);
 					
-					rec.getPointsAsArray().stream()
-						.forEach(x ->
-						{
-							g2d.setColor(Color.BLACK);
-							g2d.fillRect(x.x - 3, x.y - 3, 6, 6);
-							g2d.setColor(Color.WHITE);
-							g2d.drawRect(x.x - 3, x.y - 3, 6, 6);
-						});
+					rec.getPointsAsArray().stream().forEach(x ->
+					{
+						g2d.setColor(Color.BLACK);
+						g2d.fillRect(x.x - 3, x.y - 3, 7, 7);
+						g2d.setColor(Color.WHITE);
+						g2d.drawRect(x.x - 3, x.y - 3, 7, 7);
+					});
 					
 				}
 				
