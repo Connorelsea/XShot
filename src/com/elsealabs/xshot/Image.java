@@ -29,7 +29,9 @@ public class Image {
 		}
 		catch (Exception ex)
 		{
-			ex.printStackTrace();
+			ErrorManager.getInstance().newError(
+				new Error(ex, "Problem saving image to " + format, true)
+			);
 			return false;
 		}
 		
@@ -46,7 +48,7 @@ public class Image {
 		catch (Exception ex)
 		{
 			ErrorManager.getInstance().newError(
-				new Error(ex, "Problem getting sub image!")
+				new Error(ex, "Problem getting sub image!", false)
 			);
 		}
 		

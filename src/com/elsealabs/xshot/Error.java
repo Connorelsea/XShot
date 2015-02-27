@@ -8,11 +8,13 @@ public class Error {
 	private Exception exception;
 	private String message;
 	private String smartTrace;
+	private boolean doPopup;
 	
-	public Error(Exception exception, String message)
+	public Error(Exception exception, String message, boolean doPopup)
 	{
 		this.exception = exception;
 		this.message = message;
+		this.doPopup = doPopup;
 		generateSmartTrace();
 	}
 	
@@ -38,6 +40,10 @@ public class Error {
 		sb.append("}\n");
 		
 		smartTrace = sb.toString();
+	}
+	
+	public boolean doesPopup() {
+		return doPopup;
 	}
 	
 	public Exception getException() {

@@ -9,6 +9,7 @@ public class ErrorManager {
 	private boolean showMessages;
 	private boolean showSmartTraces;
 	private boolean showFullTraces;
+	private boolean showPopups;
 	
 	public static ErrorManager getInstance()
 	{
@@ -18,6 +19,7 @@ public class ErrorManager {
 			manager.errors = new ArrayList<Error>();
 			manager.showMessages = true;
 			manager.showSmartTraces = true;
+			manager.showPopups = true;
 			manager.showFullTraces = false;
 		}
 		return manager;
@@ -33,6 +35,11 @@ public class ErrorManager {
 		{
 			System.err.printf(error.getSmartTrace());
 		}
+		if (showPopups)
+		{
+			// TODO: Show popup if error has one
+		}
+		
 		errors.add(error);
 	}
 
