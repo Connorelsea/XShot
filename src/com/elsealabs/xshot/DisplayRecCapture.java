@@ -26,12 +26,12 @@ public class DisplayRecCapture extends JFrame {
 	private Point pointBefore;
 	private Point pointNew;
 	
-	private Image currentImage;
+	private XImage currentImage;
 	
 	private BasicStroke dashed;
 	private BasicStroke normal;
 
-	public DisplayRecCapture(Image image)
+	public DisplayRecCapture(XImage image)
 	{
 		dashed = new BasicStroke(
 				1.0f, BasicStroke.CAP_BUTT,
@@ -44,6 +44,7 @@ public class DisplayRecCapture extends JFrame {
 		setBounds(0, 0, 600, 600);
 		setUndecorated(true);
 		capturer.getCurrentMonitor().getDevice().setFullScreenWindow(this);
+		// TODO: Possibly make fullscreen transition less jittery?
 		
 		contentPane = new JPanel();
 		contentPane.setLayout(null);
@@ -86,12 +87,13 @@ public class DisplayRecCapture extends JFrame {
 					
 						g2d.draw(rec);
 						
-					// Dynamically draw point indicators
+					// Dynamically draw point indicator
 						
 					g2d.setStroke(normal);
 					
 					rec.getPointsAsArray().stream().forEach(x ->
 					{
+						// TODO: Different themes for the selector
 						g2d.setColor(Color.BLACK);
 						g2d.fillRect(x.x - 3, x.y - 3, 7, 7);
 						g2d.setColor(Color.WHITE);

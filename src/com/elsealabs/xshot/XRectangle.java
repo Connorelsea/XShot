@@ -5,6 +5,15 @@ import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+/**
+ * XRectangle.java
+ * 
+ * An extension of the Java implementation of the Rectangle shape
+ * to include functionality not present in its original form.
+ * 
+ * @author Connor Elsea
+ * @version 1.0
+ */
 public class XRectangle extends Rectangle {
 	private static final long serialVersionUID = 1L;
 	
@@ -20,12 +29,21 @@ public class XRectangle extends Rectangle {
 	
 	private ArrayList<XPoint> pointArray;
 	
-	public XRectangle(int x, int y, int i, int j) {
+	public XRectangle(int x, int y, int i, int j)
+	{
 		super(x, y, i, j);
+	}
+	
+	public XRectangle(Point pnew, Point pbef)
+	{
+		//rectFromPoint(pbef, pnew);
+		// TODO: How to do constructor like this
 	}
 
 	public static XRectangle rectFromPoint(Point pnew, Point pbef)
 	{
+		// TODO: Refact XRectangle to make more beautiful
+		
 		/* Lower Right Quadrant */
 		if (pnew.x >= pbef.x && pnew.y >= pbef.y)
 		{

@@ -6,17 +6,27 @@ import java.nio.file.Path;
 
 import javax.imageio.ImageIO;
 
-public class Image {
+/**
+ * Image.java
+ * 
+ * Implementation of an Image that is simplified for use
+ * throughout the project
+ * 
+ * @author Connor Elsea
+ * @version 1.0
+ */
+public class XImage {
 	
-	private BufferedImage image;
+	private BufferedImage image; 
 	
 	public static enum FORMAT
 	{
 		JPEG, PNG, GIF
 	}
 	
-	public Image(BufferedImage image)
+	public XImage(BufferedImage image)
 	{
+		// TODO: Make Image EXTEND BufferedImage!!!!
 		this.image = image;
 	}
 	
@@ -37,7 +47,7 @@ public class Image {
 		
 	}
 	
-	public Image getSubImage(Rectangle rec)
+	public XImage getSubImage(Rectangle rec)
 	{
 		BufferedImage bimg = null;
 		
@@ -52,7 +62,7 @@ public class Image {
 			);
 		}
 		
-		return new Image(bimg);
+		return new XImage(bimg);
 	}
 
 	public BufferedImage getBufferedImage()

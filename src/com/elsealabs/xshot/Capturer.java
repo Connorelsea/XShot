@@ -25,15 +25,21 @@ public class Capturer {
 	
 	private static Capturer instance;
 	
-	private Capturer(JFrame attachedFrame) {
+	private Capturer(JFrame attachedFrame)
+	{
 		this.frame = attachedFrame;
 		_initDevices();
 	}
 	
-	public static Capturer getInstance(JFrame frame) {
-		if (instance == null) {
+	public static Capturer getInstance(JFrame frame)
+	{
+		if (instance == null)
+		{
+			System.out.println("here");
 			return (instance = new Capturer(frame));
-		} else {
+		}
+		else
+		{
 			return instance;
 		}
 	}
@@ -49,8 +55,8 @@ public class Capturer {
 	 * 
 	 * @version 1.0
 	 */
-	private void _initDevices() {
-		
+	private void _initDevices()
+	{
 		graphics = GraphicsEnvironment.getLocalGraphicsEnvironment();
 		monitors = new ArrayList<Monitor>();
 		
@@ -70,11 +76,13 @@ public class Capturer {
 	 * 
 	 * @version 1.0
 	 */
-	public void findCurrentMonitor() {
-		
+	public void findCurrentMonitor()
+	{
 		GraphicsDevice current = frame.getGraphicsConfiguration().getDevice();
-		monitors.stream().forEach(a -> a.setCurrent(a.getDevice() == current));
 		
+		monitors.stream().forEach(a -> {
+			a.setCurrent(a.getDevice() == current);
+		});
 	}
 	
 	/**
@@ -86,14 +94,14 @@ public class Capturer {
 	 * 
 	 * @version 1.0
 	 */
-	public Monitor getCurrentMonitor() {
-		
+	public Monitor getCurrentMonitor()
+	{	
 		findCurrentMonitor();
 			
-			return monitors.stream()
-					.filter(a -> a.isCurrent())
-					.findFirst()
-					.orElseGet(null);
+		return monitors.stream()
+				.filter(a -> a.isCurrent())
+				.findFirst()
+				.orElseGet(null);
 	}
 	
 	/**
@@ -105,23 +113,26 @@ public class Capturer {
 	 * @param monitors An array containing the monitors to be captured
 	 * @return A combined image of both monitors' contents
 	 */
-	public Image capture(ArrayList<Monitor> monitors) {
+	public XImage capture(ArrayList<Monitor> monitors)
+	{
+		System.out.println(monitors.get(0).getBounds());
 		
 		Rectangle bounds = new Rectangle();
 		monitors.stream().forEach(a -> Rectangle.union(bounds, a.getBounds(), bounds) );
 		
-		Image image = null;
+		XImage image = null;
 		
-		try {
-			
+		try
+		{
 			// Minimize window so it does not appear in the screenshot
 			frame.setExtendedState(Frame.ICONIFIED);
 			
 			// Wait for window to minimize, then create image
 			while (frame.getExtendedState() != Frame.ICONIFIED) { }
-			image = new Image(new Robot().createScreenCapture(bounds));
-			
-		} catch (Exception ex) {
+			image = new XImage(new Robot().createScreenCapture(bounds));
+		}
+		catch (Exception ex)
+		{
 			ex.printStackTrace();			
 		}
 		
@@ -131,12 +142,19 @@ public class Capturer {
 		return image;
 	}
 	
-	public Image capture(Monitor monitor) {
-		return capture(new ArrayList<Monitor>(Arrays.asList(monitor)));
+	public XImage capture(Monitor monitor)
+	{
+		ArrayList<Monitor> toUse = new ArrayList<Monitor>();
+		toUse.addAll(Arrays.asList(monitor));
+		return capture(toUse);
 	}
 	
-	public Image capture() {
-		return capture(new ArrayList<Monitor>(Arrays.asList(getCurrentMonitor())));
+	public XImage capture()
+	{
+		// TODO: Fix monitor implementation, make it span both screens
+		ArrayList<Monitor> current = new ArrayList<Monitor>();
+		current.addAll(Arrays.asList(getCurrentMonitor()));
+		return capture(current);
 	}
 
 }
