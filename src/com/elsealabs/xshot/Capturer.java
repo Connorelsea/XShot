@@ -197,7 +197,6 @@ public class Capturer {
 	
 	public XImage capture()
 	{
-		// TODO: Fix monitor implementation, make it span both screens
 		ArrayList<Monitor> current = new ArrayList<Monitor>();
 		current.addAll(Arrays.asList(getCurrentMonitor()));
 		return capture(current);

@@ -3,12 +3,8 @@ package com.elsealabs.xshot;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
-import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.Stroke;
-
-import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
 
 public class ComponenetSelection {
 	
@@ -87,7 +83,7 @@ public class ComponenetSelection {
 		return new BasicStroke(width);
 	}
 	
-	public void paint(Graphics2D g, JPanel panel, XRectangle rec, XImage image)
+	public void paint(Graphics2D g, XRectangle rec, XImage image)
 	{
 		// Draw image
 		g.drawImage(image.getSubImage(rec).getBufferedImage(), rec.x, rec.y, null);

@@ -25,6 +25,7 @@ public class DisplayRecCaptureBeta extends JFrame {
 	private XImage   image;
 	
 	private ComponenetSelection componentSelection;
+	private ComponentZoom       componentZoom;
 	private JPanel panel;
 	
 	private Point pointBefore;
@@ -34,10 +35,14 @@ public class DisplayRecCaptureBeta extends JFrame {
 	private boolean pressed;
 	private boolean dragging;
 	
+	private boolean zooming;
+	
 	public DisplayRecCaptureBeta(XImage image)
 	{
 		this.image = image;
+		
 		this.componentSelection = ComponenetSelection.DEFAULT_MODERN;
+		this.componentZoom =      ComponentZoom.DEFAULT_MODERN;
 	}
 	
 	public void build()
@@ -88,7 +93,8 @@ public class DisplayRecCaptureBeta extends JFrame {
 		addMouseMotionListener(new MouseMotionAdapter() {
 			
 			@Override
-			public void mouseDragged(MouseEvent e) {
+			public void mouseDragged(MouseEvent e)
+			{
 				dragging = true;
 				pointNew = e.getLocationOnScreen();
 				SwingUtilities.convertPointFromScreen(pointNew, panel);
@@ -99,18 +105,24 @@ public class DisplayRecCaptureBeta extends JFrame {
 		addKeyListener(new KeyListener() {
 			
 			@Override
-			public void keyTyped(KeyEvent arg0) {
+			public void keyTyped(KeyEvent e)
+			{
 				
 			}
 			
 			@Override
-			public void keyReleased(KeyEvent arg0) {
-				
+			public void keyReleased(KeyEvent e)
+			{
+				zooming = false;
 			}
 			
 			@Override
-			public void keyPressed(KeyEvent arg0) {
-				
+			public void keyPressed(KeyEvent e)
+			{
+				if (e.getKeyCode() == KeyEvent.VK_Z)
+				{
+					zooming = true;
+				}
 			}
 		});
 		
@@ -143,8 +155,14 @@ public class DisplayRecCaptureBeta extends JFrame {
 					
 					if (rec.width > 0 && rec.height > 0)
 					{
-						componentSelection.paint(gd, panel, rec, image);
+						componentSelection.paint(gd, rec, image);
 					}
+				}
+				
+				// Draw zooming component
+				if (zooming == true)
+				{
+					
 				}
 				
 				repaint();

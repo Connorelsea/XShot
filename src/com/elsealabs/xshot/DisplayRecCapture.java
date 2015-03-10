@@ -44,7 +44,6 @@ public class DisplayRecCapture extends JFrame {
 		setBounds(0, 0, 600, 600);
 		setUndecorated(true);
 		capturer.getCurrentMonitor().getDevice().setFullScreenWindow(this);
-		// TODO: Possibly make fullscreen transition less jittery?
 		
 		contentPane = new JPanel();
 		contentPane.setLayout(null);
@@ -93,7 +92,6 @@ public class DisplayRecCapture extends JFrame {
 					
 					rec.getPointsAsArray().stream().forEach(x ->
 					{
-						// TODO: Different themes for the selector
 						g2d.setColor(Color.BLACK);
 						g2d.fillRect(x.x - 3, x.y - 3, 7, 7);
 						g2d.setColor(Color.WHITE);
