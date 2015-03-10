@@ -10,18 +10,18 @@ Current build: (no current build)
 
 A list of the planned and current features of the program. Refer to the status symbols to see which features are currently available.
 
-- [IP] Monitor capture (M)
-- [IP] Monitor capture (M+)
-- [IP] Rectangular capture (M)
-- [W] Rectangular capture (M+)
+- [IP] Rectangular Capture
+- [IP] Full Screen Capture
 - [W] Timed capture
-- [W] Rectangular capture axis-locking (M)
-- [W] Rectangular capture axis-locking (M+)
+- [W] Rectangular capture axis-locking
 - [W] Ability to draw on screenshots
-- [W] Capturing Feature: Image Resolution Display
+- [W] Capturing Feature: Capture Resolution Display
+- [IP] Program themes
 - [IP] Capturing Feature: Corner indicators
 - [IP] Capturing Feature: Dotted Outline
 - [W] Cursor Zoom
+- [W] Pre-defined screenshot area
+- [W] Rapid screenshot on predefined area
 - [IP] Error Management System
 - [FI] Export: PNG
 - [FI] Export: JPEG full-quality

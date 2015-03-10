@@ -1,5 +1,19 @@
 package com.elsealabs.xshot;
 
+import java.io.File;
+import java.io.IOException;
+import java.net.URI;
+import java.nio.file.FileSystem;
+import java.nio.file.Files;
+import java.nio.file.LinkOption;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.WatchKey;
+import java.nio.file.WatchService;
+import java.nio.file.WatchEvent.Kind;
+import java.nio.file.WatchEvent.Modifier;
+import java.util.Iterator;
+
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -35,13 +49,15 @@ public class DisplayCapture extends JFrame {
 		contentPane.add(bt_capture_full);
 		
 		bt_capture_rec.addActionListener(a -> {
-			
-			XImage image = capturer.capture();
-			DisplayRecCapture disp = new DisplayRecCapture(image);
+			XImage image = capturer.capture(capturer.getAllMonitors());
+			DisplayRecCaptureBeta disp = new DisplayRecCaptureBeta(image);
+			disp.build();
 		});
 		
-		bt_capture_full.addActionListener(a -> {
-			
+		bt_capture_full.addActionListener(a ->
+		{
+			XImage image = capturer.capture(capturer.getAllMonitors());
+			image.writeImage(Paths.get("C:\\Users\\connorelsea\\Desktop\\image.png"), XImage.FORMAT.PNG);
 		});
 		
 		setVisible(true);

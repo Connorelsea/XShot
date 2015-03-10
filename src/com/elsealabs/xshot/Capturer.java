@@ -21,6 +21,7 @@ public class Capturer {
 	
 	private GraphicsEnvironment graphics;
 	private ArrayList<Monitor> monitors;
+	private int monitorCount;
 	private JFrame frame;
 	
 	private static Capturer instance;
@@ -65,6 +66,9 @@ public class Capturer {
 		);
 		
 		devices.stream().forEach(a -> monitors.add(new Monitor(a)));
+		monitorCount = monitors.size();
+		
+		System.out.println(monitorCount);
 	}
 	
 	/**
@@ -78,11 +82,18 @@ public class Capturer {
 	 */
 	public void findCurrentMonitor()
 	{
-		GraphicsDevice current = frame.getGraphicsConfiguration().getDevice();
-		
-		monitors.stream().forEach(a -> {
-			a.setCurrent(a.getDevice() == current);
-		});
+		if (monitorCount > 1)
+		{
+			GraphicsDevice current = frame.getGraphicsConfiguration().getDevice();
+			
+			monitors.stream().forEach(a -> {
+				a.setCurrent(a.getDevice() == current);
+			});
+		}
+		else
+		{
+			monitors.get(0).setCurrent(true);
+		}
 	}
 	
 	/**
@@ -98,10 +109,47 @@ public class Capturer {
 	{	
 		findCurrentMonitor();
 			
-		return monitors.stream()
-				.filter(a -> a.isCurrent())
-				.findFirst()
-				.orElseGet(null);
+		if (monitorCount > 1)
+		{
+			return monitors.stream()
+					.filter(a -> a.isCurrent())
+					.findFirst()
+					.orElseGet(null);
+		}
+		else {
+			return monitors.get(0);
+		}
+	}
+	
+	public ArrayList<Monitor> getAllMonitors()
+	{
+		return monitors;
+	}
+	
+	/**
+	 * This method merges the bounds of  two  or  more  monitors together,
+	 * taking into account the offset that may be present in the operating
+	 * system.
+	 * 
+	 * @param monitors The monitors whose bounds will be combined
+	 * @return Bounds readjusted for the offset of monitors
+	 */
+	public Rectangle mergeBounds(ArrayList<Monitor> monitors)
+	{	
+		if (monitorCount > 1)
+		{
+			Rectangle bounds = new Rectangle();
+			
+			monitors.stream().forEach(a -> {
+				Rectangle.union(bounds, a.getBounds(), bounds);
+			});
+			
+			return bounds;
+		}
+		else
+		{
+			return monitors.get(0).getBounds();
+		}
 	}
 	
 	/**
@@ -110,15 +158,13 @@ public class Capturer {
 	 * Combines the bounds of multiple monitors and returns the
 	 * resulting image of both monitors' contents.
 	 * 
-	 * @param monitors An array containing the monitors to be captured
+	 * @param monitorArray An array containing the monitors to be captured
 	 * @return A combined image of both monitors' contents
 	 */
-	public XImage capture(ArrayList<Monitor> monitors)
+	public XImage capture(ArrayList<Monitor> monitorArray)
 	{
-		System.out.println(monitors.get(0).getBounds());
 		
-		Rectangle bounds = new Rectangle();
-		monitors.stream().forEach(a -> Rectangle.union(bounds, a.getBounds(), bounds) );
+		Rectangle bounds = mergeBounds(monitorArray);
 		
 		XImage image = null;
 		
@@ -133,7 +179,7 @@ public class Capturer {
 		}
 		catch (Exception ex)
 		{
-			ex.printStackTrace();			
+			ex.printStackTrace();
 		}
 		
 		// Un-minimize window

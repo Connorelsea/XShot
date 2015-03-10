@@ -1,9 +1,12 @@
 package com.elsealabs.xshot;
 
+import java.awt.Component;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.Arrays;
+
+import javax.swing.SwingUtilities;
 
 /**
  * XRectangle.java

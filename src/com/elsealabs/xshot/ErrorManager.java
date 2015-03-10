@@ -42,5 +42,10 @@ public class ErrorManager {
 		
 		errors.add(error);
 	}
+	
+	public void newError(Exception ex, String message, boolean doPopup)
+	{
+		newError(new Error(ex, message, doPopup));
+	}
 
 }

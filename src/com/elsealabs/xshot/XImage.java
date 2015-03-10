@@ -1,5 +1,6 @@
 package com.elsealabs.xshot;
 
+import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.nio.file.Path;
@@ -30,6 +31,11 @@ public class XImage {
 		this.image = image;
 	}
 	
+	public void draw(Graphics g, int x, int y)
+	{
+		g.drawImage(getBufferedImage(), x, y, null);
+	}
+	
 	public boolean writeImage(Path path, FORMAT format)
 	{
 		try 
@@ -40,7 +46,7 @@ public class XImage {
 		catch (Exception ex)
 		{
 			ErrorManager.getInstance().newError(
-				new Error(ex, "Problem saving image to " + format, true)
+				ex, "Problem saving image to " + format, true
 			);
 			return false;
 		}
@@ -58,7 +64,7 @@ public class XImage {
 		catch (Exception ex)
 		{
 			ErrorManager.getInstance().newError(
-				new Error(ex, "Problem getting sub image!", false)
+				ex, "Problem getting sub image!", false
 			);
 		}
 		
