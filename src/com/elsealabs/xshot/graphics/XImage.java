@@ -1,4 +1,4 @@
-package com.elsealabs.xshot;
+package com.elsealabs.xshot.graphics;
 
 import java.awt.Graphics;
 import java.awt.Rectangle;
@@ -6,6 +6,8 @@ import java.awt.image.BufferedImage;
 import java.nio.file.Path;
 
 import javax.imageio.ImageIO;
+
+import com.elsealabs.xshot.error.ErrorManager;
 
 /**
  * Image.java

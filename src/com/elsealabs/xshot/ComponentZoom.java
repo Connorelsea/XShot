@@ -5,6 +5,8 @@ import java.awt.Graphics2D;
 import java.awt.Shape;
 import java.awt.Stroke;
 
+import com.elsealabs.xshot.graphics.XImage;
+
 public class ComponentZoom {
 	
 	private Stroke foregroundStroke;

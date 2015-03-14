@@ -1,4 +1,4 @@
-package com.elsealabs.xshot;
+package com.elsealabs.xshot.error;
 
 import java.util.ArrayList;
 

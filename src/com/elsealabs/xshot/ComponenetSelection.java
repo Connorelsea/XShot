@@ -6,6 +6,9 @@ import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.Stroke;
 
+import com.elsealabs.xshot.graphics.XImage;
+import com.elsealabs.xshot.graphics.XRectangle;
+
 public class ComponenetSelection {
 	
 	private boolean   decorated;

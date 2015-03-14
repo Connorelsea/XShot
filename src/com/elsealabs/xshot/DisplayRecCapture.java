@@ -14,6 +14,10 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
+import com.elsealabs.xshot.graphics.Capturer;
+import com.elsealabs.xshot.graphics.XImage;
+import com.elsealabs.xshot.graphics.XRectangle;
+
 public class DisplayRecCapture extends JFrame {
 	private static final long serialVersionUID = 1L;
 	

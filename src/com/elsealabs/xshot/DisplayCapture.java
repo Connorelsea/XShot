@@ -18,6 +18,9 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import com.elsealabs.xshot.graphics.Capturer;
+import com.elsealabs.xshot.graphics.XImage;
+
 public class DisplayCapture extends JFrame {
 	private static final long serialVersionUID = 1L;
 	
