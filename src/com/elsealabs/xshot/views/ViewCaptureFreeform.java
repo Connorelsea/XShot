@@ -21,7 +21,7 @@ import com.elsealabs.xshot.graphics.Monitor;
 import com.elsealabs.xshot.graphics.XImage;
 import com.elsealabs.xshot.property.XProperty;
 
-public class ViewCaptureFreeform extends View
+public class ViewCaptureFreeform extends XView
 {
 	private static final long serialVersionUID = 1L;
 	
@@ -30,9 +30,9 @@ public class ViewCaptureFreeform extends View
 	private Rectangle bounds;
 	private Capturer  capturer;
 	
-	private XComponent componentImage;
-	private XComponent componentSelection;
-	private XComponent componentCursorZoom;
+	private XComponent cmpImage;
+	private XComponent cmpSelection;
+	private XComponent cmpCursorZoom;
 	
 	private JPanel mainPanel;
 	private XImage image;
@@ -75,7 +75,7 @@ public class ViewCaptureFreeform extends View
 			public void paint(Graphics g)
 			{
 				Graphics2D gd = (Graphics2D) g;
-				componentImage.paint(gd);
+				cmpImage.paint(gd);
 			}
 		};
 		
@@ -86,27 +86,48 @@ public class ViewCaptureFreeform extends View
 	
 	private void defineComponents()
 	{
-		componentImage = new XComponent()
+		
+		// Component: Image
+		// The image of both monitors displayed in the background
+		
+		cmpImage = new XComponent()
 		{
 			@Override
 			public void paint(Graphics2D gd)
 			{
-				
-				Color color = Color.getColor(componentImage.getProperty("color").getValueCurrent());
-				float alpha = Float.parseFloat(componentImage.getProperty("opacity").getValueCurrent());
+				// Get property values
+				Color color = Color.decode(cmpImage.getProperty("Color").getValue());
+				float alpha = Float.parseFloat(cmpImage.getProperty("Opacity").getValue());
+				boolean visible = cmpImage.getProperty("Visibility").getValue().equals("true") ? true : false;
 				
 				// Draw image
 				image.draw(gd, 0, 0);
 				
-				// Draw rectangle over image (background)
-				gd.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alpha));
-				gd.setColor(color);
-				gd.fillRect(0, 0, getWidth(), getHeight());
+				if (visible == true)
+				{
+					// Draw color overlay
+					gd.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alpha));
+					gd.setColor(color);
+					gd.fillRect(0, 0, getWidth(), getHeight());
+				}
 			}
 		};
 		
-		componentImage.addProperty(new XProperty(".5", "opacity", "The transparency of the image overlay"));
-		componentImage.addProperty(new XProperty("black", "color", "The color of the image overlay"));
+		cmpImage.addProperty(new XProperty(".5", "Opacity", "The transparency of the image overlay"));
+		cmpImage.addProperty(new XProperty("000000", "Color", "The color of the image overlay"));
+		cmpImage.addProperty(new XProperty("true", "Visibility", "Whether or not the colored overlay is visible"));
+		
+		// Component: Selection
+		// The screenshot selection
+		
+		cmpSelection = new XComponent()
+		{
+			@Override
+			public void paint(Graphics2D g)
+			{
+				
+			}
+		};
 	}
 	
 	private void initListeners()

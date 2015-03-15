@@ -10,7 +10,7 @@ import javax.imageio.ImageIO;
 import com.elsealabs.xshot.error.ErrorManager;
 
 /**
- * Image.java
+ * XImage.java
  * 
  * Implementation of an Image that is simplified for use
  * throughout the project
