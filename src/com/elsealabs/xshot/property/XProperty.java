@@ -1,7 +1,5 @@
 package com.elsealabs.xshot.property;
 
-import com.elsealabs.xshot.views.XComponent;
-
 public class XProperty
 {
 	private String     name;
