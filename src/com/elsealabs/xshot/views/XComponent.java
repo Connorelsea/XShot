@@ -43,4 +43,9 @@ public abstract class XComponent
 	{
 		return properties.getProperty(name);
 	}
+	
+	public String getValueOf(String name)
+	{
+		return properties.getValueOf(name);
+	}
 }

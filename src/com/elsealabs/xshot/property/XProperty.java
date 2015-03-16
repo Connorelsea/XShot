@@ -1,5 +1,7 @@
 package com.elsealabs.xshot.property;
 
+import javax.swing.JPanel;
+
 /**
  * XProperty.java
  * 
@@ -39,9 +41,9 @@ public class XProperty
 	 * 					  changes.
 	 */
 	public XProperty(
-		String     valueDefault,
-		String     name,
-		String     description
+		String valueDefault,
+		String name,
+		String description
 	)
 	{
 		this.name         = name;
