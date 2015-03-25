@@ -101,7 +101,7 @@ public class ViewMain extends JFrame
 		
 		JButton btnNewButton = new JButton("Free-Form");
 		btnNewButton.addActionListener(a -> {
-			ViewCaptureFreeform vcf = new ViewCaptureFreeform(Capturer.getInstance().getAllMonitors());
+			
 		});
 		btnNewButton.setBorder(null);
 		btnNewButton.setMnemonic('f');

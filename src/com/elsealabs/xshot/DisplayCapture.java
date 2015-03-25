@@ -20,7 +20,6 @@ import javax.swing.JPanel;
 
 import com.elsealabs.xshot.graphics.Capturer;
 import com.elsealabs.xshot.graphics.XImage;
-import com.elsealabs.xshot.views.ViewCaptureFreeform;
 
 public class DisplayCapture extends JFrame {
 	private static final long serialVersionUID = 1L;
@@ -53,12 +52,9 @@ public class DisplayCapture extends JFrame {
 		contentPane.add(bt_capture_full);
 		
 		bt_capture_rec.addActionListener(a -> {
-			//XImage image = capturer.capture(capturer.getAllMonitors());
-			
-			ViewCaptureFreeform vcf = new ViewCaptureFreeform(Capturer.getInstance().getAllMonitors());
-			
-			//DisplayRecCaptureBeta disp = new DisplayRecCaptureBeta(image);
-			//disp.build();
+			XImage image = capturer.capture(capturer.getAllMonitors());	
+			DisplayRecCaptureBeta disp = new DisplayRecCaptureBeta(image);
+			disp.build();
 		});
 		
 		bt_capture_full.addActionListener(a ->
