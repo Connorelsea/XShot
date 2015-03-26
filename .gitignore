@@ -4,3 +4,8 @@ bin/
 .classpath
 .project
 XShot.iml
+*target*
+*.jar
+*.war
+*.ear
+*.class

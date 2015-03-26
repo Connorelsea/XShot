@@ -1,6 +1,7 @@
 package com.elsealabs.xshot.views;
 
-import java.awt.Color;
+import java.awt.*;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
@@ -10,20 +11,28 @@ public class ModernButton extends JPanel
 {
 	private static final long serialVersionUID = 1L;
 	
-	private String text;
-	
 	private Color colorBackground;
-	private Color colorForeground;
-	private Color colorHover;
-	private Color colorClick;
-	
+	private Color colorHoverBackground;
+
+	private ModernLabel modernLabel;
+
+	private ActionListener action;
 	private MouseListener mouseListener;
 	
 	private boolean hovering;
 	
-	public ModernButton(String text)
+	public ModernButton(
+			ModernLabel modernLabel,
+			Color colorBackground,
+			Color colorHoverBackground,
+			ActionListener action)
 	{
-		this.text = text;
+		this.colorBackground = colorBackground;
+		this.colorHoverBackground = colorHoverBackground;
+		this.modernLabel = modernLabel;
+		this.action = action;
+
+		_defineListeners();
 		build();
 	}
 	
@@ -34,97 +43,44 @@ public class ModernButton extends JPanel
 			@Override
 			public void mouseReleased(MouseEvent e)
 			{
+
 			}
 			
 			@Override
 			public void mousePressed(MouseEvent e)
 			{
-				
+
 			}
 			
 			@Override
 			public void mouseExited(MouseEvent e)
 			{
 				hovering = false;
+				setBackground(colorBackground);
 			}
 			
 			@Override
 			public void mouseEntered(MouseEvent e)
 			{
 				hovering = true;
+				setBackground(colorHoverBackground);
 			}
 			
 			@Override
 			public void mouseClicked(MouseEvent e)
 			{
+				action.actionPerformed(null);
 			}
 		};
 	}
 	
 	public void build()
 	{
+		setLayout(new BorderLayout());
+		setBackground(colorBackground);
+		add(modernLabel);
+
 		addMouseListener(mouseListener);
 	}
-
-	public String getText()
-	{
-		return text;
-	}
-
-
-	public void setText(String text)
-	{
-		this.text = text;
-	}
-
-
-	public Color getColorBackground()
-	{
-		return colorBackground;
-	}
-
-
-	public void setColorBackground(Color colorBackground)
-	{
-		this.colorBackground = colorBackground;
-	}
-
-
-	public Color getColorForeground()
-	{
-		return colorForeground;
-	}
-
-
-	public void setColorForeground(Color colorForeground)
-	{
-		this.colorForeground = colorForeground;
-	}
-
-
-	public Color getColorHover()
-	{
-		return colorHover;
-	}
-
-
-	public void setColorHover(Color colorHover)
-	{
-		this.colorHover = colorHover;
-	}
-
-
-	public Color getColorClick()
-	{
-		return colorClick;
-	}
-
-
-	public void setColorClick(Color colorClick)
-	{
-		this.colorClick = colorClick;
-	}
-	
-	
 
 }

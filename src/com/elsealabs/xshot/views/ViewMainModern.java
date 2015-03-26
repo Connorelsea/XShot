@@ -1,25 +1,23 @@
 package com.elsealabs.xshot.views;
 
+import com.elsealabs.xshot.DisplayRecCaptureBeta;
+import com.elsealabs.xshot.graphics.Capturer;
+import com.elsealabs.xshot.graphics.XImage;
+
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.FontFormatException;
 import java.awt.GridLayout;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.io.File;
 import java.io.IOException;
-import java.security.AlgorithmParameterGenerator;
 
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
@@ -42,8 +40,22 @@ public class ViewMainModern extends JFrame
 	private Font font;
 	private Font fontLarge;
 
+	private Capturer capturer;
+
+	// TODO: Create color packages in the future
+
+	private Color RED_DARK      = new Color(43, 6, 6);
+	private Color RED_DARK_MED  = new Color(130, 24, 24);
+	private Color RED_LIGHT_MED = new Color(178, 52, 52);
+	private Color RED_LIGHT     = new Color(226, 86, 86);
+
+	private Color HIGHLIGHT_RED_DARK_MED  = new Color(160, 30, 30);
+	private Color HIGHLIGHT_RED_LIGHT_MED = new Color(197, 53, 53);
+	private Color HIGHLIGHT_RED_LIGHT     = new Color(255, 119, 116);
+
 	public ViewMainModern()
 	{
+		capturer = Capturer.getInstance(this);
 		_loadResources();
 		build();
 	}
@@ -54,7 +66,7 @@ public class ViewMainModern extends JFrame
 		{
 			System.setProperty("awt.useSystemAAFontSettings","on");
 			System.setProperty("swing.aatext", "true");
-			
+
 			File file = new File("res/font.ttf");
 			font = Font.createFont(Font.TRUETYPE_FONT, file);
 			fontLarge = font.deriveFont(40f);
@@ -84,13 +96,13 @@ public class ViewMainModern extends JFrame
 		mainPanel.setLayout(new BorderLayout());
 		
 		titlePanel = new JPanel();
-		titlePanel.setBackground(new Color(43, 6, 6));
+		titlePanel.setBackground(RED_DARK);
 		titlePanel.setPreferredSize(new Dimension(titlePanel.getPreferredSize().width, 60));
 		mainPanel.add(titlePanel, BorderLayout.NORTH);
 		
 		containerPanel = new JPanel();
 		containerPanel.setLayout(new CardLayout());
-		containerPanel.setBackground(new Color(130, 24, 24));
+		containerPanel.setBackground(RED_DARK_MED);
 		mainPanel.add(containerPanel, BorderLayout.CENTER);
 		
 		JPanel buttonPanelContainer = new JPanel();
@@ -100,63 +112,37 @@ public class ViewMainModern extends JFrame
 		JPanel buttonPanel = new JPanel();
 		buttonPanel.setLayout(new GridLayout(1, 3));
 		buttonPanelContainer.add(buttonPanel, BorderLayout.CENTER);
-		
-		JPanel button_freeform = new JPanel();
-			button_freeform.setLayout(new BorderLayout());
-			button_freeform.setBackground(new Color(130, 24, 24));
-			
-			ModernLabel label_freeform = new ModernLabel("freeform", new Color(43, 6, 6), fontLarge);
-			button_freeform.add(label_freeform, BorderLayout.CENTER);
-			
-			button_freeform.addMouseListener(new MouseListener()
-			{				
-				@Override
-				public void mouseExited(MouseEvent arg0)
-				{
-					button_freeform.setBackground(new Color(130, 24, 24));
-				}
-				
-				@Override
-				public void mouseEntered(MouseEvent arg0)
-				{
-					button_freeform.setBackground(new Color(145, 38, 38));
-				}
-				
-				@Override
-				public void mousePressed(MouseEvent arg0)
-				{
-				}
-				
-				@Override
-				public void mouseClicked(MouseEvent arg0)
-				{
-					System.out.println("EVENT");
-				}
-				
-				@Override
-				public void mouseReleased(MouseEvent arg0)
-				{
-				}
-				
-			});
+
+		ModernButton button_freeform = new ModernButton(
+				new ModernLabel("freeform", RED_DARK, fontLarge),
+				RED_DARK_MED,
+				HIGHLIGHT_RED_DARK_MED,
+				a -> {
+					XImage image = capturer.capture(capturer.getAllMonitors());
+					DisplayRecCaptureBeta disp = new DisplayRecCaptureBeta(image);
+					disp.build();
+				});
+
 		buttonPanel.add(button_freeform);
-		
-		JPanel button_fullscreen = new JPanel();
-			button_fullscreen.setLayout(new BorderLayout());
-			button_fullscreen.setBackground(new Color(178, 52, 52));
-			
-			ModernLabel label_fullscreen = new ModernLabel("fullscreen", new Color(130, 24, 24), fontLarge);
-			button_fullscreen.add(label_fullscreen, BorderLayout.CENTER);
+
+		ModernButton button_fullscreen = new ModernButton(
+				new ModernLabel("fullscreen", RED_DARK_MED, fontLarge),
+				RED_LIGHT_MED,
+				HIGHLIGHT_RED_LIGHT_MED,
+				a -> {
+
+				});
 		buttonPanel.add(button_fullscreen);
-		
-		JPanel button_rapid = new JPanel();
-			button_rapid.setLayout(new BorderLayout());
-			button_rapid.setBackground(new Color(226, 86, 86));
-			
-			ModernLabel label_rapid = new ModernLabel("rapid", new Color(178, 52, 52), fontLarge);
-			button_rapid.add(label_rapid, BorderLayout.CENTER);
+
+		ModernButton button_rapid = new ModernButton(
+				new ModernLabel("rapid", RED_LIGHT_MED, fontLarge),
+				RED_LIGHT,
+				HIGHLIGHT_RED_LIGHT,
+				a -> {
+
+				});
 		buttonPanel.add(button_rapid);
-		
+
 		setOpacity(0.0f);
 		setVisible(true);
 		
