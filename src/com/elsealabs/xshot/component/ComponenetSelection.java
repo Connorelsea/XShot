@@ -1,4 +1,4 @@
-package com.elsealabs.xshot;
+package com.elsealabs.xshot.component;
 
 import java.awt.BasicStroke;
 import java.awt.Color;

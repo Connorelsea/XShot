@@ -73,8 +73,19 @@ public class XImage {
 		return new XImage(bimg);
 	}
 
+	public int getWidth()
+	{
+		return image.getWidth();
+	}
+
+	public int getHeight()
+	{
+		return image.getHeight();
+	}
+
 	public BufferedImage getBufferedImage()
 	{
 		return image;
 	}
+
 }

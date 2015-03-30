@@ -1,4 +1,4 @@
-package com.elsealabs.xshot;
+package com.elsealabs.xshot.views;
 
 import java.awt.AlphaComposite;
 import java.awt.Color;
@@ -16,11 +16,13 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
+import com.elsealabs.xshot.component.ComponenetSelection;
+import com.elsealabs.xshot.component.ComponentZoom;
 import com.elsealabs.xshot.graphics.Capturer;
 import com.elsealabs.xshot.graphics.XImage;
 import com.elsealabs.xshot.graphics.XRectangle;
 
-public class DisplayRecCaptureBeta extends JFrame {
+public class ViewCaptureRec extends JFrame {
 	private static final long serialVersionUID = 1L;
 	
 	private Rectangle bounds;
@@ -29,19 +31,22 @@ public class DisplayRecCaptureBeta extends JFrame {
 	private XImage   image;
 	
 	private ComponenetSelection componentSelection;
-	private ComponentZoom       componentZoom;
+	private ComponentZoom componentZoom;
 	private JPanel panel;
 	
 	private Point pointBefore;
 	private Point pointNew;
 	
 	private boolean clicked;
-	private boolean pressed;
 	private boolean dragging;
-	
+	private boolean released;
+	private boolean keep = true;
+
 	private boolean zooming;
+
+	private XRectangle prevRec;
 	
-	public DisplayRecCaptureBeta(XImage image)
+	public ViewCaptureRec(XImage image)
 	{
 		this.image = image;
 		
@@ -73,15 +78,14 @@ public class DisplayRecCaptureBeta extends JFrame {
 			@Override
 			public void mouseReleased(MouseEvent e)
 			{
-				pressed = false;
 				dragging = false;
+				released = true;
 			}
 			
 			@Override
 			public void mousePressed(MouseEvent e)
 			{
 				clicked = false;
-				pressed = true;
 				pointBefore = e.getLocationOnScreen();
 				SwingUtilities.convertPointFromScreen(pointBefore, panel);
 			}
@@ -127,6 +131,11 @@ public class DisplayRecCaptureBeta extends JFrame {
 				{
 					zooming = true;
 				}
+
+				if (e.getKeyCode() == KeyEvent.VK_K)
+				{
+					keep = false;
+				}
 			}
 		});
 		
@@ -142,33 +151,50 @@ public class DisplayRecCaptureBeta extends JFrame {
 			{
 				super.paint(g);
 				Graphics2D gd = (Graphics2D) g;
-				
+
 				// Draw image
 				image.draw(gd, 0, 0);
-				
+
 				// Draw rectangle over image (background)
 				gd.setComposite(getAlphaComposite(0.35f));
 				gd.setColor(Color.BLACK);
 				gd.fillRect(0, 0, getWidth(), getHeight());
 				gd.setComposite(getAlphaComposite(1.0f));
-				
-				// Draw Selection Component
-				if (dragging && !clicked)
+
+				// If they have not released their selection
+				if (released == false && keep == true)
 				{
-					XRectangle rec = XRectangle.rectFromPoint(pointNew, pointBefore);
-					
-					if (rec.width > 0 && rec.height > 0)
+					// Draw Selection Component
+					if (dragging && !clicked)
 					{
-						componentSelection.paint(gd, rec, image);
+						prevRec = XRectangle.rectFromPoint(pointNew, pointBefore);
+
+						if (prevRec.width > 0 && prevRec.height > 0)
+						{
+							componentSelection.paint(gd, prevRec, image);
+						}
+					}
+
+					// Draw zooming component
+					if (zooming == true)
+					{
+
 					}
 				}
-				
-				// Draw zooming component
-				if (zooming == true)
+				// If they have released their selection
+				else if (released == true)
 				{
-					
+					if (keep == true)
+					{
+						componentSelection.paint(gd, prevRec, image);
+					}
+					else if (keep == false)
+					{
+						keep = true;
+						released = false;
+					}
 				}
-				
+
 				repaint();
 			}
 		};

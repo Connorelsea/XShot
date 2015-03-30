@@ -1,4 +1,4 @@
-package com.elsealabs.xshot;
+package com.elsealabs.xshot.component;
 
 import java.awt.Color;
 import java.awt.Graphics2D;

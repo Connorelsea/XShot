@@ -36,7 +36,6 @@ public class Capturer {
 	{
 		if (instance == null)
 		{
-			System.out.println("here");
 			return (instance = new Capturer(frame));
 		}
 		else

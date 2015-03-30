@@ -1,6 +1,5 @@
 package com.elsealabs.xshot.views;
 
-import com.elsealabs.xshot.DisplayRecCaptureBeta;
 import com.elsealabs.xshot.graphics.Capturer;
 import com.elsealabs.xshot.graphics.XImage;
 
@@ -96,9 +95,13 @@ public class ViewMainModern extends JFrame
 		mainPanel.setLayout(new BorderLayout());
 		
 		titlePanel = new JPanel();
+		titlePanel.setLayout(new BorderLayout());
 		titlePanel.setBackground(RED_DARK);
 		titlePanel.setPreferredSize(new Dimension(titlePanel.getPreferredSize().width, 60));
 		mainPanel.add(titlePanel, BorderLayout.NORTH);
+
+		ModernLabel labelTitle = new ModernLabel("xshot", RED_LIGHT, fontLarge);
+		titlePanel.add(labelTitle, BorderLayout.WEST);
 		
 		containerPanel = new JPanel();
 		containerPanel.setLayout(new CardLayout());
@@ -117,10 +120,12 @@ public class ViewMainModern extends JFrame
 				new ModernLabel("freeform", RED_DARK, fontLarge),
 				RED_DARK_MED,
 				HIGHLIGHT_RED_DARK_MED,
-				a -> {
+				a ->
+				{
 					XImage image = capturer.capture(capturer.getAllMonitors());
-					DisplayRecCaptureBeta disp = new DisplayRecCaptureBeta(image);
+					ViewCaptureRec disp = new ViewCaptureRec(image);
 					disp.build();
+					dispose();
 				});
 
 		buttonPanel.add(button_freeform);
@@ -129,7 +134,8 @@ public class ViewMainModern extends JFrame
 				new ModernLabel("fullscreen", RED_DARK_MED, fontLarge),
 				RED_LIGHT_MED,
 				HIGHLIGHT_RED_LIGHT_MED,
-				a -> {
+				a ->
+				{
 
 				});
 		buttonPanel.add(button_fullscreen);
