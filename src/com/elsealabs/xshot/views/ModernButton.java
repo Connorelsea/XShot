@@ -6,6 +6,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
 import javax.swing.JPanel;
+import javax.swing.border.Border;
 
 public class ModernButton extends JPanel
 {
@@ -20,7 +21,7 @@ public class ModernButton extends JPanel
 	private MouseListener mouseListener;
 	
 	private boolean hovering;
-	
+
 	public ModernButton(
 			ModernLabel modernLabel,
 			Color colorBackground,
@@ -35,45 +36,13 @@ public class ModernButton extends JPanel
 		_defineListeners();
 		build();
 	}
-	
-	private void _defineListeners()
+
+	public void paint(Graphics gd)
 	{
-		mouseListener = new MouseListener()
-		{
-			@Override
-			public void mouseReleased(MouseEvent e)
-			{
-
-			}
-			
-			@Override
-			public void mousePressed(MouseEvent e)
-			{
-
-			}
-			
-			@Override
-			public void mouseExited(MouseEvent e)
-			{
-				hovering = false;
-				setBackground(colorBackground);
-			}
-			
-			@Override
-			public void mouseEntered(MouseEvent e)
-			{
-				hovering = true;
-				setBackground(colorHoverBackground);
-			}
-			
-			@Override
-			public void mouseClicked(MouseEvent e)
-			{
-				action.actionPerformed(null);
-			}
-		};
+		Graphics2D g = (Graphics2D) gd;
+		super.paint(g);
 	}
-	
+
 	public void build()
 	{
 		setLayout(new BorderLayout());
@@ -81,6 +50,37 @@ public class ModernButton extends JPanel
 		add(modernLabel);
 
 		addMouseListener(mouseListener);
+	}
+	
+	private void _defineListeners() {
+		mouseListener = new MouseListener() {
+			@Override
+			public void mouseReleased(MouseEvent e) {
+
+			}
+
+			@Override
+			public void mousePressed(MouseEvent e) {
+
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				hovering = false;
+				setBackground(colorBackground);
+			}
+
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				hovering = true;
+				setBackground(colorHoverBackground);
+			}
+
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				action.actionPerformed(null);
+			}
+		};
 	}
 
 }
