@@ -2,7 +2,9 @@
 
 ### A Java-8, multi-platform, fully-featured, screenshot program.
 
-![Xshot program screenshot](http://imgur.com/Pv2sGA5.png)
+#### Multi-monitor support - Timed captures - Rapid screenshot - More
+
+![Xshot program screenshot](http://i.imgur.com/LMDvjYX.png)
 
 ## Build
 
@@ -30,8 +32,6 @@ A list of the planned and current features of the program. Refer to the status s
 - [W] Export: JPEG with alterable compression
 - [FI] Export: GIF (non-animated)
 
-### Feature Tags
-
 #### Status Symbols
 - W = Waiting
 - IP = In Progress
@@ -40,6 +40,6 @@ A list of the planned and current features of the program. Refer to the status s
 - FR = Feature Review
 - B = Done/Built
 
-#### Feature Labels
-- M = Single monitor
-- M+ = Multiple monitors
+## How to Contribute
+
+No detailed description of how to contribute is provided at this time, but viewers are encouraged to contribute to the project as they see fit. In the future, tasks that are in need of completion will be highlighted in a more sophisticated manner, allowing viewers to contribute more easily.

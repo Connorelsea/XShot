@@ -96,32 +96,6 @@ public class ViewPicture extends JFrame
 				panelImage.repaint();
 			}
 		});
-
-		// Resizing Listeners:
-		// They detect when the window begins resizing and stops
-		// resizing in order to allow  for  the  optimization of
-		// collision detection
-
-		getRootPane().addComponentListener(new ComponentAdapter()
-		{
-			@Override
-			public void componentResized(ComponentEvent e)
-			{
-				super.componentResized(e);
-				System.out.print("resize\n");
-				resizing = true;
-			}
-		});
-
-		getRootPane().addMouseListener(new MouseAdapter()
-		{
-			@Override
-			public void mouseReleased(MouseEvent e)
-			{
-				System.out.print("false");
-				resizing = false;
-			}
-		});
 	}
 
 	public void build()
@@ -165,50 +139,46 @@ public class ViewPicture extends JFrame
 				int collisionHeight = 10;
 				int collisionWidth  = 10;
 
-				if (!resizing)
-				{
-					System.out.println("drawing");
-					// Image Size
-					imageSize.setBounds(
-							imageX,
-							imageY,
-							image.getWidth(),
-							image.getHeight()
-					);
+				// Image Size
+				imageSize.setBounds(
+						imageX,
+						imageY,
+						image.getWidth(),
+						image.getHeight()
+				);
 
-					// Image's Northern Collision Bounds
-					imageNorth.setBounds(
-							imageX,
-							imageY - (collisionHeight / 2),
-							image.getWidth(),
-							collisionHeight
-					);
+				// Image's Northern Collision Bounds
+				imageNorth.setBounds(
+						imageX,
+						imageY - (collisionHeight / 2),
+						image.getWidth(),
+						collisionHeight
+				);
 
-					// Image's Southern Collision Bounds
-					imageSouth.setBounds(
-							imageX,
-							imageY + image.getHeight() - (collisionHeight / 2),
-							image.getWidth(),
-							collisionHeight
-					);
+				// Image's Southern Collision Bounds
+				imageSouth.setBounds(
+						imageX,
+						imageY + image.getHeight() - (collisionHeight / 2),
+						image.getWidth(),
+						collisionHeight
+				);
 
-					// Image's Eastern Collision Bounds
-					imageEast.setBounds(
-							imageX + image.getWidth() - (collisionWidth / 2),
-							imageY,
-							collisionWidth,
-							image.getHeight()
-					);
+				// Image's Eastern Collision Bounds
+				imageEast.setBounds(
+						imageX + image.getWidth() - (collisionWidth / 2),
+						imageY,
+						collisionWidth,
+						image.getHeight()
+				);
 
-					// Image's Western Collision Bounds
+				// Image's Western Collision Bounds
 
-					imageWest.setBounds(
-							imageX - (collisionWidth / 2),
-							imageY,
-							collisionWidth,
-							image.getHeight()
-					);
-				}
+				imageWest.setBounds(
+						imageX - (collisionWidth / 2),
+						imageY,
+						collisionWidth,
+						image.getHeight()
+				);
 
 				g.drawImage(
 						image.getBufferedImage(),
