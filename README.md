@@ -2,6 +2,8 @@
 
 ### A Java-8, multi-platform, fully-featured, screenshot program.
 
+![Xshot program screenshot](http://imgur.com/Pv2sGA5)
+
 ## Build
 
 Current build: (no current build)
