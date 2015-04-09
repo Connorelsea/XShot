@@ -1,29 +1,46 @@
 package com.elsealabs.xshot.views;
 
+import com.elsealabs.xshot.graphics.BoundRectangle;
 import com.elsealabs.xshot.graphics.XImage;
 
 import javax.swing.*;
-import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.geom.AffineTransform;
 
+/**
+ * ViewPicture.java
+ *
+ * A user interface providing basic editing functionality, basic
+ * annotation functionality, and the ability to save images.
+ */
 public class ViewPicture extends JFrame
 {
+	// Componenets
 	private XImage image;
 	private JPanel panelBar;
 	private JPanel panelImage;
 	private JScrollPane scrollPane;
 
+	private ModernButton buttonSave;
+	private ModernButton buttonNew;
+
+	// Image rendering and collision
 	private int imageX;
 	private int imageY;
-	private Rectangle imageSize;
-	private Rectangle imageNorth;
-	private Rectangle imageEast;
-	private Rectangle imageSouth;
-	private Rectangle imageWest;
+	private BoundRectangle imageSize;
+	private BoundRectangle imageNorth;
+	private BoundRectangle imageEast;
+	private BoundRectangle imageSouth;
+	private BoundRectangle imageWest;
 	private boolean hovering = false;
 	private boolean resizing = false;
 
+	// Image zooming
+	private double scaleTarget = 2;
+	private double scaleCurrent = 1;
+
+	// Screen sizes and width
 	private Dimension screenSize;
 	private double calcWidth;
 	private double calcHeight;
@@ -36,13 +53,13 @@ public class ViewPicture extends JFrame
 
 	private void _init()
 	{
-		imageSize = new Rectangle();
+		imageSize = new BoundRectangle();
 		screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 
-		imageNorth = new Rectangle();
-		imageEast  = new Rectangle();
-		imageSouth = new Rectangle();
-		imageWest  = new Rectangle();
+		imageNorth = new BoundRectangle();
+		imageEast  = new BoundRectangle();
+		imageSouth = new BoundRectangle();
+		imageWest  = new BoundRectangle();
 	}
 
 	private void _initListeners()
@@ -112,7 +129,28 @@ public class ViewPicture extends JFrame
 		panelBar = new JPanel();
 		panelBar.setPreferredSize(new Dimension(90, 90));
 		panelBar.setBackground(Color.LIGHT_GRAY);
+		panelBar.setLayout(new GridLayout(1, 6));
 		add(panelBar, BorderLayout.NORTH);
+
+		buttonSave = new ModernButton(
+			new ModernLabel("save", Color.WHITE, null),
+			Color.LIGHT_GRAY,
+			Color.GRAY,
+			a -> {
+
+			}
+		);
+		panelBar.add(buttonSave);
+
+		buttonNew = new ModernButton(
+				new ModernLabel("new", Color.WHITE, null),
+				Color.LIGHT_GRAY,
+				Color.GRAY,
+				a -> {
+
+				}
+		);
+		panelBar.add(buttonNew);
 
 		scrollPane = new JScrollPane();
 		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
@@ -130,11 +168,10 @@ public class ViewPicture extends JFrame
 
 				// DRAW IMAGE
 
-				imageX = (getWidth() / 2) - (image.getWidth() / 2);
+				imageX = (getWidth() / 2)  - (image.getWidth() / 2);
 				imageY = (getHeight() / 2) - (image.getHeight() / 2);
 
 				// TODO: Do not do calculations while resizing
-				// TODO: Move boxes so they completely overlap at corners
 
 				int collisionHeight = 10;
 				int collisionWidth  = 10;
@@ -147,37 +184,37 @@ public class ViewPicture extends JFrame
 						image.getHeight()
 				);
 
-				// Image's Northern Collision Bounds
+				// Bounds setup of a rectangle
 				imageNorth.setBounds(
-						imageX,
+						imageX - (collisionWidth / 2),
 						imageY - (collisionHeight / 2),
-						image.getWidth(),
+						image.getWidth() + collisionWidth,
 						collisionHeight
 				);
 
 				// Image's Southern Collision Bounds
 				imageSouth.setBounds(
-						imageX,
+						imageX - (collisionWidth / 2),
 						imageY + image.getHeight() - (collisionHeight / 2),
-						image.getWidth(),
+						image.getWidth() + collisionWidth,
 						collisionHeight
 				);
 
 				// Image's Eastern Collision Bounds
 				imageEast.setBounds(
 						imageX + image.getWidth() - (collisionWidth / 2),
-						imageY,
+						imageY - (collisionHeight / 2),
 						collisionWidth,
-						image.getHeight()
+						image.getHeight() + collisionHeight
 				);
 
 				// Image's Western Collision Bounds
 
 				imageWest.setBounds(
 						imageX - (collisionWidth / 2),
-						imageY,
+						imageY - (collisionHeight / 2),
 						collisionWidth,
-						image.getHeight()
+						image.getHeight() + collisionHeight
 				);
 
 				g.drawImage(
@@ -187,22 +224,24 @@ public class ViewPicture extends JFrame
 						null
 				);
 
-				g.setColor(Color.BLACK);
-				g.drawRect((int) imageSize.getX(), (int) imageSize.getY(), (int) imageSize.getWidth(), (int) imageSize.getHeight());
+				// animate scaling
 
-				g.setColor(Color.GREEN);
-				g.drawRect((int) imageNorth.getX(), (int) imageNorth.getY(), (int) imageNorth.getWidth(), (int)
-						imageNorth.getHeight());
-
-				g.setColor(Color.RED);
-				g.drawRect((int) imageWest.getX(), (int) imageWest.getY(), (int) imageWest.getWidth(), (int)
-						imageWest.getHeight());
-
-				if (hovering)
+				if (scaleCurrent != scaleTarget)
 				{
-					g.setColor(Color.BLACK);
-					g.drawRect((int) imageSize.getX(), (int) imageSize.getY(), (int) imageSize.getWidth(), (int) imageSize.getHeight());
+					scaleCurrent += (scaleTarget - scaleCurrent) / 10;
+					AffineTransform transform = new AffineTransform();
+					transform.scale(2, 2);
+					g.setTransform(transform);
+
+					// TODO: Reset rectangle and panel, etc after changing size of image with scale.
 				}
+
+				g.drawImage(
+						image.getBufferedImage(),
+						(int) imageSize.getX(),
+						(int) imageSize.getY(),
+						null
+				);
 			}
 		};
 		panelImage.setBorder(null);

@@ -19,8 +19,8 @@ import javax.swing.SwingUtilities;
 import com.elsealabs.xshot.component.ComponenetSelection;
 import com.elsealabs.xshot.component.ComponentZoom;
 import com.elsealabs.xshot.graphics.Capturer;
+import com.elsealabs.xshot.graphics.PointRectangle;
 import com.elsealabs.xshot.graphics.XImage;
-import com.elsealabs.xshot.graphics.XRectangle;
 
 public class ViewCaptureRec extends JFrame {
 	private static final long serialVersionUID = 1L;
@@ -44,7 +44,7 @@ public class ViewCaptureRec extends JFrame {
 
 	private boolean zooming;
 
-	private XRectangle prevRec;
+	private PointRectangle prevRec;
 	
 	public ViewCaptureRec(XImage image)
 	{
@@ -167,7 +167,7 @@ public class ViewCaptureRec extends JFrame {
 					// Draw Selection Component
 					if (dragging && !clicked)
 					{
-						prevRec = XRectangle.rectFromPoint(pointNew, pointBefore);
+						prevRec = PointRectangle.rectFromPoint(pointNew, pointBefore);
 
 						if (prevRec.width > 0 && prevRec.height > 0)
 						{

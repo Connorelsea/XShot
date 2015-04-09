@@ -25,7 +25,7 @@ public class ModernLabel extends JLabel
 		setHorizontalAlignment(JLabel.CENTER);
 		setText(text);
 		setForeground(color);
-		setFont(font);
+		if (font != null) setFont(font);
 	}
 	
 	@Override

@@ -20,7 +20,7 @@ import com.elsealabs.xshot.component.ComponenetSelection;
 import com.elsealabs.xshot.component.ComponentZoom;
 import com.elsealabs.xshot.graphics.Capturer;
 import com.elsealabs.xshot.graphics.XImage;
-import com.elsealabs.xshot.graphics.XRectangle;
+import com.elsealabs.xshot.graphics.PointRectangle;
 
 public class DisplayRecCaptureBeta extends JFrame {
 	private static final long serialVersionUID = 1L;
@@ -157,7 +157,7 @@ public class DisplayRecCaptureBeta extends JFrame {
 				// Draw Selection Component
 				if (dragging && !clicked)
 				{
-					XRectangle rec = XRectangle.rectFromPoint(pointNew, pointBefore);
+					PointRectangle rec = PointRectangle.rectFromPoint(pointNew, pointBefore);
 					
 					if (rec.width > 0 && rec.height > 0)
 					{

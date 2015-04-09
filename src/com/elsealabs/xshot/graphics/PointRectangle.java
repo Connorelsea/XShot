@@ -1,15 +1,12 @@
 package com.elsealabs.xshot.graphics;
 
-import java.awt.Component;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import javax.swing.SwingUtilities;
-
 /**
- * XRectangle.java
+ * PointRectangle.java
  * 
  * An extension of the Java implementation of the Rectangle shape
  * to include functionality not present in its original form.
@@ -17,7 +14,7 @@ import javax.swing.SwingUtilities;
  * @author Connor Elsea
  * @version 1.0
  */
-public class XRectangle extends Rectangle {
+public class PointRectangle extends Rectangle {
 	private static final long serialVersionUID = 1L;
 	
 	private XPoint CornerUpperLeft;
@@ -32,25 +29,25 @@ public class XRectangle extends Rectangle {
 	
 	private ArrayList<XPoint> pointArray;
 	
-	public XRectangle(int x, int y, int i, int j)
+	public PointRectangle(int x, int y, int i, int j)
 	{
 		super(x, y, i, j);
 	}
 	
-	public XRectangle(Point pnew, Point pbef)
+	public PointRectangle(Point pnew, Point pbef)
 	{
 		//rectFromPoint(pbef, pnew);
 		// TODO: How to do constructor like this
 	}
 
-	public static XRectangle rectFromPoint(Point pnew, Point pbef)
+	public static PointRectangle rectFromPoint(Point pnew, Point pbef)
 	{
-		// TODO: Refact XRectangle to make more beautiful
+		// TODO: Refact PointRectangle to make more beautiful
 		
 		/* Lower Right Quadrant */
 		if (pnew.x >= pbef.x && pnew.y >= pbef.y)
 		{
-			XRectangle rec = new XRectangle(pbef.x, pbef.y, pnew.x - pbef.x, pnew.y - pbef.y);
+			PointRectangle rec = new PointRectangle(pbef.x, pbef.y, pnew.x - pbef.x, pnew.y - pbef.y);
 			
 			rec.generateCornerPoints(pbef, pnew);
 			rec.generateMidPoints();
@@ -61,7 +58,7 @@ public class XRectangle extends Rectangle {
 		/* Upper Right Quadrant */
 		else if (pnew.x >= pbef.x && pnew.y <= pbef.y)
 		{
-			XRectangle rec = new XRectangle(pbef.x, pnew.y, pnew.x - pbef.x, pbef.y - pnew.y);
+			PointRectangle rec = new PointRectangle(pbef.x, pnew.y, pnew.x - pbef.x, pbef.y - pnew.y);
 			
 			rec.generateCornerPoints(pbef, pnew);
 			rec.generateMidPoints();
@@ -72,7 +69,7 @@ public class XRectangle extends Rectangle {
 		/*  Upper Left Quadrant */
 		else if (pnew.x <= pbef.x && pnew.y <= pbef.y)
 		{
-			XRectangle rec = new XRectangle(pnew.x, pnew.y, pbef.x - pnew.x, pbef.y - pnew.y);
+			PointRectangle rec = new PointRectangle(pnew.x, pnew.y, pbef.x - pnew.x, pbef.y - pnew.y);
 			
 			rec.generateCornerPoints(pbef, pnew);
 			rec.generateMidPoints();
@@ -83,7 +80,7 @@ public class XRectangle extends Rectangle {
 		/* Lower Left Quadrant */
 		else if (pnew.x <= pbef.x && pnew.y >= pbef.y)
 		{
-			XRectangle rec = new XRectangle(pnew.x, pbef.y, pbef.x - pnew.x, pnew.y - pbef.y);
+			PointRectangle rec = new PointRectangle(pnew.x, pbef.y, pbef.x - pnew.x, pnew.y - pbef.y);
 			
 			rec.generateCornerPoints(pbef, pnew);
 			rec.generateMidPoints();
