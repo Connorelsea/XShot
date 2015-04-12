@@ -236,12 +236,12 @@ public class ViewPicture extends JFrame
 					// TODO: Reset rectangle and panel, etc after changing size of image with scale.
 				}
 
-				g.drawImage(
-						image.getBufferedImage(),
-						(int) imageSize.getX(),
-						(int) imageSize.getY(),
-						null
-				);
+//				g.drawImage(
+//						image.getBufferedImage(),
+//						(int) imageSize.getX(),
+//						(int) imageSize.getY(),
+//						null
+//				);
 			}
 		};
 		panelImage.setBorder(null);

@@ -111,7 +111,7 @@ public class ComponenetSelection {
 			{
 				g.setColor(decorBackgroundColor);
 				g.fillRect(a.x - (decorShape.width / 2), a.y - (decorShape.height / 2), decorShape.width, decorShape.height);
-				
+
 				g.setColor(decorForegroundColor);
 				g.drawRect(a.x - (decorShape.width / 2), a.y - (decorShape.height / 2), decorShape.width, decorShape.height);
 			});

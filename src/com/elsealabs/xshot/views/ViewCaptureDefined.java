@@ -5,4 +5,5 @@ package com.elsealabs.xshot.views;
  * allows the user to control captures being taken of that area on a smaller view  screen.
  */
 public class ViewCaptureDefined {
+
 }
