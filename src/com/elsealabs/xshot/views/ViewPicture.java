@@ -1,6 +1,5 @@
 package com.elsealabs.xshot.views;
 
-import com.elsealabs.xshot.graphics.BoundRectangle;
 import com.elsealabs.xshot.graphics.XImage;
 
 import javax.swing.*;
@@ -28,11 +27,11 @@ public class ViewPicture extends JFrame
 	// Image rendering and collision
 	private int imageX;
 	private int imageY;
-	private BoundRectangle imageSize;
-	private BoundRectangle imageNorth;
-	private BoundRectangle imageEast;
-	private BoundRectangle imageSouth;
-	private BoundRectangle imageWest;
+	private Rectangle imageSize;
+	private Rectangle imageNorth;
+	private Rectangle imageEast;
+	private Rectangle imageSouth;
+	private Rectangle imageWest;
 	private boolean hovering = false;
 	private boolean resizing = false;
 
@@ -53,13 +52,13 @@ public class ViewPicture extends JFrame
 
 	private void _init()
 	{
-		imageSize = new BoundRectangle();
+		imageSize = new Rectangle();
 		screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 
-		imageNorth = new BoundRectangle();
-		imageEast  = new BoundRectangle();
-		imageSouth = new BoundRectangle();
-		imageWest  = new BoundRectangle();
+		imageNorth = new Rectangle();
+		imageEast  = new Rectangle();
+		imageSouth = new Rectangle();
+		imageWest  = new Rectangle();
 	}
 
 	private void _initListeners()
@@ -127,30 +126,54 @@ public class ViewPicture extends JFrame
 		}
 
 		panelBar = new JPanel();
+		panelBar.setLayout(new GridBagLayout());
 		panelBar.setPreferredSize(new Dimension(90, 90));
 		panelBar.setBackground(Color.LIGHT_GRAY);
-		panelBar.setLayout(new GridLayout(1, 6));
 		add(panelBar, BorderLayout.NORTH);
+
+		GridBagConstraints c = new GridBagConstraints();
+
+		c.fill = GridBagConstraints.BOTH;
+		c.weightx = 0.5;
+		c.weighty = 1;
+		c.gridx = 0;
+		c.gridy = 0;
 
 		buttonSave = new ModernButton(
 			new ModernLabel("save", Color.WHITE, null),
-			Color.LIGHT_GRAY,
+			new Color(62, 62, 62),
 			Color.GRAY,
 			a -> {
 
 			}
 		);
-		panelBar.add(buttonSave);
+		panelBar.add(buttonSave, c);
+
+		c.gridx = 1;
+		c.gridy = 0;
 
 		buttonNew = new ModernButton(
 				new ModernLabel("new", Color.WHITE, null),
-				Color.LIGHT_GRAY,
+				new Color(104, 104, 104),
 				Color.GRAY,
 				a -> {
 
 				}
 		);
-		panelBar.add(buttonNew);
+		panelBar.add(buttonNew, c);
+
+		c.gridx = 2;
+		c.gridy = 0;
+
+		buttonNew = new ModernButton(
+				new ModernLabel("copy", Color.WHITE, null),
+				new Color(143, 143, 143),
+				Color.GRAY,
+				a -> {
+
+				}
+		);
+		panelBar.add(buttonNew, c);
 
 		scrollPane = new JScrollPane();
 		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);

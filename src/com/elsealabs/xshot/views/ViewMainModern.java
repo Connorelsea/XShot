@@ -1,6 +1,8 @@
 package com.elsealabs.xshot.views;
 
 import com.elsealabs.xshot.graphics.Capturer;
+import com.elsealabs.xshot.graphics.ColorContainer;
+import com.elsealabs.xshot.graphics.ColorGlobalSet;
 import com.elsealabs.xshot.graphics.XImage;
 
 import java.awt.BorderLayout;
@@ -43,14 +45,7 @@ public class ViewMainModern extends JFrame
 
 	// TODO: Create color packages in the future
 
-	private Color RED_DARK      = new Color(43, 6, 6);
-	private Color RED_DARK_MED  = new Color(130, 24, 24);
-	private Color RED_LIGHT_MED = new Color(178, 52, 52);
-	private Color RED_LIGHT     = new Color(226, 86, 86);
-
-	private Color HIGHLIGHT_RED_DARK_MED  = new Color(160, 30, 30);
-	private Color HIGHLIGHT_RED_LIGHT_MED = new Color(197, 53, 53);
-	private Color HIGHLIGHT_RED_LIGHT     = new Color(255, 119, 116);
+	private ColorContainer container;
 
 	public ViewMainModern()
 	{
@@ -68,6 +63,7 @@ public class ViewMainModern extends JFrame
 
 			File file = new File("res/font.ttf");
 			font = Font.createFont(Font.TRUETYPE_FONT, file);
+			font = font.deriveFont(18f);
 			fontLarge = font.deriveFont(40f);
 		}
 		catch (FontFormatException e)
@@ -82,6 +78,8 @@ public class ViewMainModern extends JFrame
 	
 	public void build()
 	{
+		container = ColorGlobalSet.getInstance().getDefaultOf("main");
+
 		setUndecorated(true);
 		setSize(600, 230);
 		setLocationRelativeTo(null);
@@ -91,21 +89,25 @@ public class ViewMainModern extends JFrame
 		mainPanel = new JPanel();
 		setContentPane(mainPanel);
 		
-		mainPanel.setBackground(new Color(43, 6, 6));
+		mainPanel.setBackground(container.getColor("dark"));
 		mainPanel.setLayout(new BorderLayout());
 		
 		titlePanel = new JPanel();
-		titlePanel.setLayout(new BorderLayout());
-		titlePanel.setBackground(RED_DARK);
+		titlePanel.setLayout(new GridLayout(0, 5, 0, 10));
+		titlePanel.setBackground(container.getColor("dark"));
 		titlePanel.setPreferredSize(new Dimension(titlePanel.getPreferredSize().width, 60));
 		mainPanel.add(titlePanel, BorderLayout.NORTH);
 
-		ModernLabel labelTitle = new ModernLabel("xshot", RED_LIGHT, fontLarge);
-		titlePanel.add(labelTitle, BorderLayout.WEST);
+
+		ModernLabel labelTitle = new ModernLabel("xshot", container.getColor("light"), fontLarge);
+		titlePanel.add(labelTitle);
+
+		ModernLabel labelElsea = new ModernLabel("beta version", container.getColor("light"), font);
+		titlePanel.add(labelElsea);
 		
 		containerPanel = new JPanel();
 		containerPanel.setLayout(new CardLayout());
-		containerPanel.setBackground(RED_DARK_MED);
+		containerPanel.setBackground(container.getColor("med_dark"));
 		mainPanel.add(containerPanel, BorderLayout.CENTER);
 		
 		JPanel buttonPanelContainer = new JPanel();
@@ -117,9 +119,9 @@ public class ViewMainModern extends JFrame
 		buttonPanelContainer.add(buttonPanel, BorderLayout.CENTER);
 
 		ModernButton button_freeform = new ModernButton(
-				new ModernLabel("freeform", RED_DARK, fontLarge),
-				RED_DARK_MED,
-				HIGHLIGHT_RED_DARK_MED,
+				new ModernLabel("freeform", container.getColor("dark"), fontLarge),
+				container.getColor("med_dark"),
+				container.getColor("med_dark").brighter(),
 				a ->
 				{
 					XImage image = capturer.capture(capturer.getAllMonitors());
@@ -131,9 +133,9 @@ public class ViewMainModern extends JFrame
 		buttonPanel.add(button_freeform);
 
 		ModernButton button_fullscreen = new ModernButton(
-				new ModernLabel("fullscreen", RED_DARK_MED, fontLarge),
-				RED_LIGHT_MED,
-				HIGHLIGHT_RED_LIGHT_MED,
+				new ModernLabel("fullscreen", container.getColor("med_dark"), fontLarge),
+				container.getColor("med_light"),
+				container.getColor("med_light").brighter(),
 				a ->
 				{
 
@@ -141,9 +143,9 @@ public class ViewMainModern extends JFrame
 		buttonPanel.add(button_fullscreen);
 
 		ModernButton button_rapid = new ModernButton(
-				new ModernLabel("rapid", RED_LIGHT_MED, fontLarge),
-				RED_LIGHT,
-				HIGHLIGHT_RED_LIGHT,
+				new ModernLabel("rapid", container.getColor("med_light"), fontLarge),
+				container.getColor("light"),
+				container.getColor("light").brighter(),
 				a -> {
 
 				});
