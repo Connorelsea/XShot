@@ -32,6 +32,7 @@ public class ColorContainer {
         this.set  = set;
         this.name = name;
         this.map  = map;
+        this.defaultOfSet = false;
     }
 
     public Color getColor(String identity)

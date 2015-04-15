@@ -44,7 +44,7 @@ public class Program {
         main_gray_colors.put("light", new Color(182, 182, 182));
 
         ColorContainer main_gray = new ColorContainer("main", "red", main_gray_colors);
-        main_gray.setDefault(true);
+        main_gray.setDefault(false);
         colors.addContainer(main_gray);
 
         HashMap<String, Color> main_green_colors = new HashMap<String, Color>();
@@ -56,6 +56,16 @@ public class Program {
         ColorContainer main_green = new ColorContainer("main", "red", main_green_colors);
         main_green.setDefault(false);
         colors.addContainer(main_green);
+
+        HashMap<String, Color> main_blue_colors = new HashMap<String, Color>();
+        main_blue_colors.put("dark",      new Color(4, 19, 40));
+        main_blue_colors.put("med_dark",  new Color(8, 38, 79));
+        main_blue_colors.put("med_light", new Color(12, 54, 112));
+        main_blue_colors.put("light",     new Color(18, 75, 153));
+
+        ColorContainer main_blue = new ColorContainer("main", "red", main_blue_colors);
+        main_blue.setDefault(true);
+        colors.addContainer(main_blue);
     }
 
 }
