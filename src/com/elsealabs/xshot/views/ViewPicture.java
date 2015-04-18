@@ -1,7 +1,6 @@
 package com.elsealabs.xshot.views;
 
 import com.elsealabs.xshot.file.FileUtil;
-import com.elsealabs.xshot.file.ImageSaver;
 import com.elsealabs.xshot.graphics.XImage;
 
 import javax.swing.*;

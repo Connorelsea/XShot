@@ -4,6 +4,7 @@ import com.elsealabs.xshot.graphics.Capturer;
 import com.elsealabs.xshot.graphics.ColorContainer;
 import com.elsealabs.xshot.graphics.ColorGlobalSet;
 import com.elsealabs.xshot.graphics.XImage;
+import com.elsealabs.xshot.program.Program;
 
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
@@ -63,8 +64,19 @@ public class ViewMainModern extends JFrame
 			System.setProperty("awt.useSystemAAFontSettings","on");
 			System.setProperty("swing.aatext", "true");
 
-			InputStream is = getClass().getResourceAsStream("/res/font.ttf");
-			font = Font.createFont(Font.TRUETYPE_FONT, is);
+			System.out.println(Program.getInstance().getBuildType());
+
+			if (Program.getInstance().getBuildType() == Program.BUILD_TYPE.JAR)
+			{
+				InputStream is = getClass().getResourceAsStream("/res/font.ttf");
+				font = Font.createFont(Font.TRUETYPE_FONT, is);
+			}
+			else if (Program.getInstance().getBuildType() == Program.BUILD_TYPE.IDE)
+			{
+				File file = new File("res/font.ttf");
+				font = Font.createFont(Font.TRUETYPE_FONT, file);
+			}
+
 			font = font.deriveFont(18f);
 			fontLarge = font.deriveFont(40f);
 		}

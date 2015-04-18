@@ -10,7 +10,24 @@ import java.util.HashMap;
 
 public class Program {
 
+    private static Program program;
     private ColorGlobalSet colors;
+
+    private BUILD_TYPE buildType = BUILD_TYPE.IDE;
+
+    public static enum BUILD_TYPE {
+        IDE,
+        JAR
+    }
+
+    public static Program getInstance()
+    {
+        if (program == null)
+        {
+            program = new Program();
+        }
+        return program;
+    }
 
     public void run()
     {
@@ -18,12 +35,12 @@ public class Program {
         EventQueue.invokeLater(() -> new ViewMainModern());
     }
 
-    public void init()
+    private void init()
     {
         defineColors();
     }
 
-    public void defineColors()
+    private void defineColors()
     {
         colors = ColorGlobalSet.getInstance();
 
@@ -34,7 +51,7 @@ public class Program {
         main_red_colors.put("light", new Color(226, 86, 86));
 
         ColorContainer main_red = new ColorContainer("main", "red", main_red_colors);
-        main_red.setDefault(false);
+        main_red.setDefault(true);
         colors.addContainer(main_red);
 
         HashMap<String, Color> main_gray_colors = new HashMap<String, Color>();
@@ -64,8 +81,13 @@ public class Program {
         main_blue_colors.put("light",     new Color(18, 75, 153));
 
         ColorContainer main_blue = new ColorContainer("main", "red", main_blue_colors);
-        main_blue.setDefault(true);
+        main_blue.setDefault(false);
         colors.addContainer(main_blue);
+    }
+
+    public BUILD_TYPE getBuildType()
+    {
+        return buildType;
     }
 
 }
