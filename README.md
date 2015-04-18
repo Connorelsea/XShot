@@ -1,4 +1,5 @@
 #XShot
+##### [Download Latest Release](https://github.com/Elsealabs/XShot/releases)
 
 ### A Java-8, multi-platform, fully-featured, screenshot program.
 
@@ -10,7 +11,8 @@ For more information about XShot, visit our Github Wiki or Github Issues.
 
 ## Build
 
-Current build: (no current build)
+Current build: Beta 1.0
+Download: [Download Beta 1.0](https://github.com/Elsealabs/XShot/releases/tag/beta-1.0) [(JAR)](https://github.com/Elsealabs/XShot/releases/download/beta-1.0/XShot.jar)
 
 ## Contributing
 
