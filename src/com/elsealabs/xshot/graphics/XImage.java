@@ -3,6 +3,7 @@ package com.elsealabs.xshot.graphics;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.nio.file.Path;
 
 import javax.imageio.ImageIO;
@@ -38,11 +39,11 @@ public class XImage {
 		g.drawImage(getBufferedImage(), x, y, null);
 	}
 	
-	public boolean writeImage(Path path, FORMAT format)
+	public boolean writeImage(File file, FORMAT format)
 	{
-		try 
+		try
 		{
-			ImageIO.write(image, format.toString(), path.toFile());
+			ImageIO.write(image, format.toString(), file);
 			return true;
 		}
 		catch (Exception ex)

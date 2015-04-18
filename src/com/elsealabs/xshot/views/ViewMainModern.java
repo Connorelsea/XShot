@@ -17,6 +17,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -52,6 +53,7 @@ public class ViewMainModern extends JFrame
 		capturer = Capturer.getInstance(this);
 		_loadResources();
 		build();
+
 	}
 	
 	private void _loadResources()
@@ -61,8 +63,8 @@ public class ViewMainModern extends JFrame
 			System.setProperty("awt.useSystemAAFontSettings","on");
 			System.setProperty("swing.aatext", "true");
 
-			File file = new File("res/font.ttf");
-			font = Font.createFont(Font.TRUETYPE_FONT, file);
+			InputStream is = getClass().getResourceAsStream("/res/font.ttf");
+			font = Font.createFont(Font.TRUETYPE_FONT, is);
 			font = font.deriveFont(18f);
 			fontLarge = font.deriveFont(40f);
 		}

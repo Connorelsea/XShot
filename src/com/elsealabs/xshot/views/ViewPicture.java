@@ -1,5 +1,6 @@
 package com.elsealabs.xshot.views;
 
+import com.elsealabs.xshot.file.FileUtil;
 import com.elsealabs.xshot.file.ImageSaver;
 import com.elsealabs.xshot.graphics.XImage;
 
@@ -7,6 +8,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.geom.AffineTransform;
+import java.io.File;
 
 /**
  * ViewPicture.java
@@ -16,7 +18,7 @@ import java.awt.geom.AffineTransform;
  */
 public class ViewPicture extends JFrame
 {
-	// Componenets
+	// Components
 	private XImage image;
 	private JPanel panelBar;
 	private JPanel panelImage;
@@ -146,8 +148,10 @@ public class ViewPicture extends JFrame
 			Color.GRAY,
 			a -> {
 
-				ImageSaver saver = new ImageSaver();
-				saver.getLocationFromUser();
+				File defaultFile = new File("C:\\Capture.PNG");
+				File dest = new FileUtil().getUserSaveLocation(defaultFile, "Save Image");
+				image.writeImage(dest, XImage.FORMAT.PNG);
+
 			}
 		);
 		panelBar.add(buttonSave, c);

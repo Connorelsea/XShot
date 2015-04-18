@@ -1,6 +1,7 @@
 package com.elsealabs.xshot.program;
 
 import java.awt.EventQueue;
+import java.util.stream.IntStream;
 
 import com.elsealabs.xshot.views.ViewMainModern;
 

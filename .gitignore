@@ -9,3 +9,4 @@ XShot.iml
 *.war
 *.ear
 *.class
+.out/
