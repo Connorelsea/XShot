@@ -30,7 +30,6 @@ public class XImage {
 	
 	public XImage(BufferedImage image)
 	{
-		// TODO: Make Image EXTEND BufferedImage!!!!
 		this.image = image;
 	}
 	
