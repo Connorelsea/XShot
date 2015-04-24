@@ -18,6 +18,7 @@ import javax.swing.SwingUtilities;
 
 import com.elsealabs.xshot.component.ComponenetSelection;
 import com.elsealabs.xshot.component.ComponentZoom;
+import com.elsealabs.xshot.graphics.Capture;
 import com.elsealabs.xshot.graphics.Capturer;
 import com.elsealabs.xshot.graphics.PointRectangle;
 import com.elsealabs.xshot.graphics.XImage;
@@ -188,7 +189,8 @@ public class ViewCaptureRec extends JFrame {
 					if (keep == true)
 					{
 						componentSelection.paint(gd, prevRec, image);
-						new ViewPicture(image.getSubImage(prevRec)).build();
+						//new ViewPicture(image.getSubImage(prevRec)).build();
+						new ViewPictureRefined(new Capture(image, prevRec)).build();
 						dispose();
 					}
 					else if (keep == false)

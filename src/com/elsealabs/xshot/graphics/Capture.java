@@ -23,6 +23,15 @@ public class Capture
 		this.updatedBounds  = originalBounds;
 	}
 
+	public XImage getFullImage()
+	{
+		return image;
+	}
+
+	public XImage getBoundedImage() {
+		return image.getSubImage(updatedBounds);
+	}
+
 	public void updateBounds(Rectangle updatedBounds)
 	{
 		this.updatedBounds = updatedBounds;
