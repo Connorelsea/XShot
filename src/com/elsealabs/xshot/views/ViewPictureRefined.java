@@ -20,7 +20,7 @@ public class ViewPictureRefined extends JFrame {
 
     private JPanel bar;
     private JPanel container;
-    private PanelImage panelImage;
+    private PanelCapture panelCapture;
 
     private JScrollPane scrollPane;
 
@@ -72,15 +72,15 @@ public class ViewPictureRefined extends JFrame {
         container.add(scrollPane, BorderLayout.CENTER);
 
         // Customized image panel
-        panelImage = new PanelImage(scrollPane, capture);
-        panelImage.setBorder(null);
-        panelImage.setPreferredSize(
+        panelCapture = new PanelCapture(scrollPane, (JFrame) this, capture);
+        panelCapture.setBorder(null);
+        panelCapture.setPreferredSize(
                 new Dimension(
                         capture.getBoundedImage().getWidth() + 500,
                         capture.getBoundedImage().getHeight() + 500
                 )
         );
-        scrollPane.getViewport().add(panelImage);
+        scrollPane.getViewport().add(panelCapture);
 
         setTitle(title);
         setLocationRelativeTo(null);
