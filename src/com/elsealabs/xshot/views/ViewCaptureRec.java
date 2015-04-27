@@ -190,7 +190,7 @@ public class ViewCaptureRec extends JFrame {
 					{
 						componentSelection.paint(gd, prevRec, image);
 						//new ViewPicture(image.getSubImage(prevRec)).build();
-						new ViewPictureRefined(new Capture(image, prevRec)).build();
+						new ViewPicture(new Capture(image, prevRec)).build();
 						dispose();
 					}
 					else if (keep == false)
