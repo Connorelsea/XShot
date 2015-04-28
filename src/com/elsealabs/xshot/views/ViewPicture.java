@@ -6,9 +6,7 @@ import com.elsealabs.xshot.graphics.XImage;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
+import java.awt.event.*;
 import java.io.File;
 
 /**
@@ -16,6 +14,8 @@ import java.io.File;
  *
  */
 public class ViewPicture extends JFrame {
+
+	private JFrame instance;
 
     private String title;
     private int barHeight;
@@ -36,12 +36,19 @@ public class ViewPicture extends JFrame {
 
     private Capture capture;
 
+	private String[] options;
+
     public ViewPicture(Capture capture)
     {
         this.capture = capture;
 
+		instance = this;
         title = "Capture";
         barHeight = 90;
+
+		options = new String[] {"Save", "Back", "Close"};
+
+		addListeners();
     }
 
     public void build() {
@@ -118,7 +125,7 @@ public class ViewPicture extends JFrame {
         setTitle(title);
         setLocationRelativeTo(null);
         setVisible(true);
-    }
+    }	
 
     private void addListeners()
     {
@@ -128,10 +135,51 @@ public class ViewPicture extends JFrame {
             @Override
             public void windowClosing(WindowEvent e)
             {
+				int n = JOptionPane.showOptionDialog(
+						instance,
+						"Your image is unsaved and will be lost. Are you sure you want to close?",
+						"Confirm Close",
+						JOptionPane.YES_NO_CANCEL_OPTION,
+						JOptionPane.WARNING_MESSAGE,
+						null,
+						options,
+						options[0]
+				);
+
+				if (n == JOptionPane.YES_OPTION)
+				{
+					actionSave.actionPerformed(null);
+				}
+				else if (n == JOptionPane.NO_OPTION)
+				{
+
+				}
+				else
+				{
+					instance.dispose();
+				}
+
                 super.windowClosing(e);
             }
 
         });
+
+		addMouseMotionListener(new MouseMotionListener()
+		{
+
+			@Override
+			public void mouseDragged(MouseEvent e)
+			{
+
+			}
+
+			@Override
+			public void mouseMoved(MouseEvent e)
+			{
+
+			}
+
+		});
     }
 
     private void setLookAndFeel()
