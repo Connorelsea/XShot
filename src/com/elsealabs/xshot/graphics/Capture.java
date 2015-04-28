@@ -16,11 +16,29 @@ public class Capture
 	private Rectangle originalBounds;
 	private Rectangle updatedBounds;
 
+	public static final int NORTH = 1;
+	public static final int SOUTH = 2;
+	public static final int EAST  = 3;
+	public static final int WEST  = 4;
+
 	public Capture(XImage image, Rectangle originalBounds)
 	{
 		this.image = image;
 		this.originalBounds = originalBounds;
 		this.updatedBounds  = originalBounds;
+	}
+
+	public void addTo(int direction, int add)
+	{
+		if (direction == Capture.NORTH)
+		{
+			updatedBounds.setBounds(
+					(int) updatedBounds.getX(),
+					(int) updatedBounds.getY() - add,
+					(int) updatedBounds.getWidth(),
+					(int) updatedBounds.getHeight() + add
+			);
+		}
 	}
 
 	public XImage getFullImage()
