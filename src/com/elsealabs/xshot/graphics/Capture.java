@@ -16,10 +16,11 @@ public class Capture
 	private Rectangle originalBounds;
 	private Rectangle updatedBounds;
 
-	public static final int NORTH = 1;
-	public static final int SOUTH = 2;
-	public static final int EAST  = 3;
-	public static final int WEST  = 4;
+	public static enum AREA
+	{
+		NORTH, SOUTH, EAST, WEST,
+		NORTHEAST, NORTHWEST, SOUTHEAST, SOUTHWEST
+	}
 
 	public Capture(XImage image, Rectangle originalBounds)
 	{
@@ -28,15 +29,15 @@ public class Capture
 		this.updatedBounds  = originalBounds;
 	}
 
-	public void addTo(int direction, int add)
+	public void addTo(AREA area, int amountToAdd)
 	{
-		if (direction == Capture.NORTH)
+		if (area == AREA.NORTH)
 		{
 			updatedBounds.setBounds(
 					(int) updatedBounds.getX(),
-					(int) updatedBounds.getY() - add,
+					(int) updatedBounds.getY() - amountToAdd,
 					(int) updatedBounds.getWidth(),
-					(int) updatedBounds.getHeight() + add
+					(int) updatedBounds.getHeight() + amountToAdd
 			);
 		}
 	}
@@ -48,11 +49,6 @@ public class Capture
 
 	public XImage getBoundedImage() {
 		return image.getSubImage(updatedBounds);
-	}
-
-	public void updateBounds(Rectangle updatedBounds)
-	{
-		this.updatedBounds = updatedBounds;
 	}
 
 	public Rectangle getUpdatedBounds()

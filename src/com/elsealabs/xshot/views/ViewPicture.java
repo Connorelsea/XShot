@@ -116,8 +116,8 @@ public class ViewPicture extends JFrame {
         panelCapture.setBorder(null);
         panelCapture.setPreferredSize(
                 new Dimension(
-                        capture.getBoundedImage().getWidth() + 500,
-                        capture.getBoundedImage().getHeight() + 500
+                        capture.getFullImage().getWidth(),
+                        capture.getFullImage().getHeight()
                 )
         );
         scrollPane.getViewport().add(panelCapture);
@@ -163,23 +163,6 @@ public class ViewPicture extends JFrame {
             }
 
         });
-
-		addMouseMotionListener(new MouseMotionListener()
-		{
-
-			@Override
-			public void mouseDragged(MouseEvent e)
-			{
-
-			}
-
-			@Override
-			public void mouseMoved(MouseEvent e)
-			{
-
-			}
-
-		});
     }
 
     private void setLookAndFeel()
