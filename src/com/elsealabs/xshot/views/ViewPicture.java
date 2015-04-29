@@ -125,7 +125,7 @@ public class ViewPicture extends JFrame {
         setTitle(title);
         setLocationRelativeTo(null);
         setVisible(true);
-    }	
+    }
 
     private void addListeners()
     {

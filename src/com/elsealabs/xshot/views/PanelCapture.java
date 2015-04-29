@@ -37,8 +37,18 @@ public class PanelCapture extends JPanel {
     private int collisionWidth;
     private int collisionHeight;
 
+    private AREA    currentArea;
+    private boolean hasArea;
+    private boolean iniUpdated;
+
     private Point ini;
     private Point fin;
+
+    private enum AREA
+    {
+        NORTH, SOUTH, EAST, WEST,
+        NORTHEAST, NORTHWEST, SOUTHEAST, SOUTHWEST
+    }
 
     public PanelCapture(JComponent parent, JFrame frame, Capture capture)
     {
@@ -62,6 +72,8 @@ public class PanelCapture extends JPanel {
 
         ini = new Point();
         fin = new Point();
+
+        iniUpdated = false;
 
         addListeners();
 
@@ -172,8 +184,40 @@ public class PanelCapture extends JPanel {
         collisionUpdated = true;
     }
 
+    public AREA locateArea(Point p)
+    {
+        if      (imageNorth.contains(p) && imageEast .contains(p)) return AREA.NORTHEAST;
+        else if (imageEast .contains(p) && imageSouth.contains(p)) return AREA.SOUTHEAST;
+        else if (imageSouth.contains(p) && imageWest .contains(p)) return AREA.SOUTHWEST;
+        else if (imageWest .contains(p) && imageNorth.contains(p)) return AREA.NORTHWEST;
+
+        else if (imageNorth.contains(p)) return AREA.NORTH;
+        else if (imageEast .contains(p)) return AREA.EAST;
+        else if (imageSouth.contains(p)) return AREA.SOUTH;
+        else if (imageWest .contains(p)) return AREA.WEST;
+
+        else    return null;
+    }
+
     public void addListeners()
     {
+        this.addMouseListener(new MouseAdapter()
+        {
+            @Override
+            public void mousePressed(MouseEvent e)
+            {
+                currentArea = locateArea(e.getPoint());
+
+                if (currentArea != null)
+                {
+
+                }
+
+
+                ini = e.getPoint();
+                super.mousePressed(e);
+            }
+        });
 
         this.addMouseMotionListener(new MouseMotionListener()
         {
@@ -182,61 +226,6 @@ public class PanelCapture extends JPanel {
             public void mouseDragged(MouseEvent e)
             {
 
-                // North Eastern Corner
-                if (imageNorth.contains(e.getPoint()) && imageEast.contains(e.getPoint()))
-                {
-                    System.out.println("North Eastern");
-                }
-
-                // South Eastern Corner
-                else if (imageEast.contains(e.getPoint()) && imageSouth.contains(e.getPoint()))
-                {
-                    System.out.println("South Eastern");
-                }
-
-                // South Western Corner
-                else if (imageSouth.contains(e.getPoint()) && imageWest.contains(e.getPoint()))
-                {
-                    System.out.println("South Western");
-                }
-
-                // North Wester Corner
-                else if (imageWest.contains(e.getPoint()) && imageNorth.contains(e.getPoint()))
-                {
-                    System.out.println("North Western");
-                }
-
-                // Northern Rectangle
-                else if (imageNorth.contains(e.getPoint()))
-                {
-                    fin = e.getPoint();
-                    //int addY = (e.getPoint().getY())
-
-                    capture.addTo(Capture.NORTH, 10);
-                }
-
-                // Eastern Rectangle
-                else if (imageEast.contains(e.getPoint()))
-                {
-                    System.out.println("Eastern");
-                }
-
-                // Southern Rectangle
-                else if (imageSouth.contains(e.getPoint()))
-                {
-                    System.out.println("Southern");
-                }
-
-                // Western Rectangle
-                else if (imageWest.contains(e.getPoint()))
-                {
-                    System.out.println("Western");
-                }
-
-                else
-                {
-                    System.out.println("Other");
-                }
 
             }
 
