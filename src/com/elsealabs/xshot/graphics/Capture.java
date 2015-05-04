@@ -15,6 +15,7 @@ public class Capture
 	private XImage image;
 	private Rectangle originalBounds;
 	private Rectangle updatedBounds;
+	private Rectangle totalBounds;
 
 	public static enum AREA
 	{
@@ -27,6 +28,8 @@ public class Capture
 		this.image = image;
 		this.originalBounds = originalBounds;
 		this.updatedBounds  = originalBounds;
+		
+		this.totalBounds = new Rectangle(image.getWidth(), image.getHeight());
 	}
 
 	public void addTo(AREA area, int amountToAdd)
@@ -59,6 +62,11 @@ public class Capture
 	public Rectangle getOriginalBounds()
 	{
 		return originalBounds;
+	}
+
+	public Rectangle getTotalBounds()
+	{
+		return totalBounds;
 	}
 
 }

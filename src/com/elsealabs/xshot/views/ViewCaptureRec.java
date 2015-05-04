@@ -94,6 +94,7 @@ public class ViewCaptureRec extends JFrame {
 			@Override
 			public void mouseClicked(MouseEvent e)
 			{
+				System.out.println(e.getPoint());
 				clicked = true;
 			}
 			

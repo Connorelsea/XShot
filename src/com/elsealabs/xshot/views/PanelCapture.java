@@ -1,8 +1,8 @@
 package com.elsealabs.xshot.views;
 
 import com.elsealabs.xshot.graphics.Capture;
-
 import javax.swing.*;
+
 import java.awt.*;
 import java.awt.event.*;
 
@@ -95,11 +95,11 @@ public class PanelCapture extends JPanel {
             _updateCollisionBounds();
         }
 
-        capture.getBoundedImage().draw(g, (int) imagePoint.getX(), (int) imagePoint.getY());
+        capture.getBoundedImage().draw(g, (int) capture.getUpdatedBounds().getX(), (int) capture.getUpdatedBounds().getY());
 
         if (mouseInImage)
         {
-            g.setColor(Color.LIGHT_GRAY);
+             g.setColor(Color.LIGHT_GRAY);
             g.drawRect((int) imagePoint.getX(), (int) imagePoint.getY(), capture.getBoundedImage().getWidth(), capture.getBoundedImage().getHeight());
         }
     }
@@ -107,26 +107,33 @@ public class PanelCapture extends JPanel {
     private void _updateImagePosition()
     {
         collisionUpdated = false;
+        
+        int lengthWhole = capture.getFullImage().getWidth() + 500;
+        int lengthPart  = capture.getFullImage().getWidth();
+        int imageX      = 500 + (int) capture.getUpdatedBounds().getX();
+        
+        int heightWhole = capture.getFullImage().getHeight() + 500;
+        int heightPart  = capture.getFullImage().getHeight();
+        int imageY      = 500 + (int) capture.getUpdatedBounds().getY();
 
-        imagePoint = new Point(
-                (getWidth()  / 2) - (capture.getBoundedImage().getWidth()  / 2),
-                (getHeight() / 2) - (capture.getBoundedImage().getHeight() / 2)
-        );
+        Point viewportRender = new Point(imageX, imageY);
 
         // If parent is a JScrolPane, perform extra operations
         // such as setting the position of the viewport.
 
         if (parent instanceof JScrollPane)
         {
-            int padding_x = (int) (parent.getWidth() - capture.getUpdatedBounds().getWidth()) / 2;
-            int padding_y = (int) (parent.getHeight() - capture.getUpdatedBounds().getHeight()) / 2;
-
-            ((JScrollPane) parent).getViewport().setViewPosition(
-                    new Point(
-                            (int) imagePoint.getX() - padding_x,
-                            (int) imagePoint.getY() - padding_y
-                    )
-            );
+//            int padding_x = ((int) parent.getWidth()  / 2) - ((int) capture.getUpdatedBounds().getWidth() / 2);
+//            int padding_y = ((int) parent.getHeight() / 2) - ((int) capture.getUpdatedBounds().getHeight() / 2);
+//
+//            ((JScrollPane) parent).getViewport().setViewPosition(
+//                    new Point(
+//                            (int) imagePoint.getX() - padding_x,
+//                            (int) imagePoint.getY() - padding_y
+//                    )
+//            );
+            
+            ((JScrollPane) parent).getViewport().setViewPosition(viewportRender);
         }
 
         // Set updated frame size
@@ -135,6 +142,7 @@ public class PanelCapture extends JPanel {
 
     private void _updateCollisionBounds()
     {
+    	
         // Bounds of entire image, plus padding
         imageWhole.setBounds(
                 (int) imagePoint.getX() - paddingWidth,

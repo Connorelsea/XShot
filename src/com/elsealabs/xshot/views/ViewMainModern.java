@@ -156,14 +156,14 @@ public class ViewMainModern extends JFrame
 				});
 		buttonPanel.add(button_fullscreen);
 
-		ModernButton button_rapid = new ModernButton(
-				new ModernLabel("rapid", container.getColor("med_light"), fontLarge),
+		ModernButton button_timed = new ModernButton(
+				new ModernLabel("timed", container.getColor("med_light"), fontLarge),
 				container.getColor("light"),
 				container.getColor("light").brighter(),
 				a -> {
-
+					
 				});
-		buttonPanel.add(button_rapid);
+		buttonPanel.add(button_timed);
 
 		setOpacity(0.0f);
 		setVisible(true);

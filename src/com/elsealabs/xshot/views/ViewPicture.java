@@ -5,6 +5,7 @@ import com.elsealabs.xshot.graphics.Capture;
 import com.elsealabs.xshot.graphics.XImage;
 
 import javax.swing.*;
+
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
@@ -100,27 +101,49 @@ public class ViewPicture extends JFrame {
         buttonCopy.addActionListener(actionCopy);
         bar.add(buttonCopy);
 
-        // Container for easier maniuplation of the scroll pane.
+        // Container for easier manipulation of the scroll pane.
         container = new JPanel();
-        container.setLayout(new BorderLayout());
-        add(container, BorderLayout.CENTER);
+        container.setLayout(null);
+        container.setBackground(Color.BLACK);
+        
+        Dimension containerSize = new Dimension(
+				(int) capture.getTotalBounds().getWidth() + 500, 
+				(int) capture.getTotalBounds().getHeight() + 500
+		);
+        
+        container.setSize(containerSize);
+        container.setPreferredSize(containerSize);
+        container.setLocation(0, 0);
 
         // Scroll pane with always-on scroll bars
         scrollPane = new JScrollPane();
         scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
         scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-        container.add(scrollPane, BorderLayout.CENTER);
+        add(scrollPane, BorderLayout.CENTER);
+        
+        scrollPane.getViewport().setLayout(null);
+        scrollPane.getViewport().add(container);
 
         // Customized image panel
         panelCapture = new PanelCapture(scrollPane, (JFrame) this, capture);
-        panelCapture.setBorder(null);
-        panelCapture.setPreferredSize(
-                new Dimension(
-                        capture.getFullImage().getWidth(),
-                        capture.getFullImage().getHeight()
-                )
+        
+        // Set size the same as the size of the full original image
+        
+        Dimension panelCaptureSize = new Dimension(
+                capture.getFullImage().getWidth(),
+                capture.getFullImage().getHeight()
         );
-        scrollPane.getViewport().add(panelCapture);
+        
+        panelCapture.setSize(panelCaptureSize);
+        panelCapture.setPreferredSize(panelCaptureSize);
+        
+        panelCapture.setLocation(
+        		((capture.getFullImage().getWidth()  + 500) / 2) - (capture.getFullImage().getWidth()  / 2),
+        		((capture.getFullImage().getHeight() + 500) / 2) - (capture.getFullImage().getHeight() /  2)
+        );
+        
+        // Add panelCapture at static position
+        container.add(panelCapture);
 
         setTitle(title);
         setLocationRelativeTo(null);
