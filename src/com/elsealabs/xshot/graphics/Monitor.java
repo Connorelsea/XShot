@@ -11,6 +11,7 @@ public class Monitor {
 	public Monitor(GraphicsDevice device) {
 		this.device = device;
 		current = false;
+		System.out.println("OMB: " + device.getDefaultConfiguration().getBounds());
 	}
 	
 	public Rectangle getBounds() {

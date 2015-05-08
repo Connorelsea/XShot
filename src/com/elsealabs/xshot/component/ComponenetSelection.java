@@ -6,8 +6,8 @@ import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.Stroke;
 
-import com.elsealabs.xshot.graphics.PointRectangle;
 import com.elsealabs.xshot.graphics.XImage;
+import com.elsealabs.xshot.math.PointRectangle;
 
 public class ComponenetSelection {
 	

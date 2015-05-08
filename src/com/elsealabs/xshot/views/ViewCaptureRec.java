@@ -20,8 +20,8 @@ import com.elsealabs.xshot.component.ComponenetSelection;
 import com.elsealabs.xshot.component.ComponentZoom;
 import com.elsealabs.xshot.graphics.Capture;
 import com.elsealabs.xshot.graphics.Capturer;
-import com.elsealabs.xshot.graphics.PointRectangle;
 import com.elsealabs.xshot.graphics.XImage;
+import com.elsealabs.xshot.math.PointRectangle;
 
 public class ViewCaptureRec extends JFrame {
 	private static final long serialVersionUID = 1L;
