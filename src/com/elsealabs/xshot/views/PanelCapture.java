@@ -1,7 +1,8 @@
 package com.elsealabs.xshot.views;
 
-import com.elsealabs.xshot.graphics.Capture;
 import javax.swing.*;
+
+import com.elsealabs.xshot.capture.Capture;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -95,12 +96,12 @@ public class PanelCapture extends JPanel {
             _updateCollisionBounds();
         }
 
-        capture.getBoundedImage().draw(g, (int) capture.getUpdatedBounds().getX(), (int) capture.getUpdatedBounds().getY());
+        g.drawImage(capture.getUpdatedImage(), capture.getUpdatedBounds().x, capture.getUpdatedBounds().y, null);
 
         if (mouseInImage)
         {
-             g.setColor(Color.LIGHT_GRAY);
-            g.drawRect((int) imagePoint.getX(), (int) imagePoint.getY(), capture.getBoundedImage().getWidth(), capture.getBoundedImage().getHeight());
+        	g.setColor(Color.LIGHT_GRAY);
+            g.drawRect(imagePoint.x, imagePoint.y, capture.getUpdatedBounds().width, capture.getUpdatedBounds().height);
         }
     }
 
@@ -147,32 +148,32 @@ public class PanelCapture extends JPanel {
         imageWhole.setBounds(
                 (int) imagePoint.getX() - paddingWidth,
                 (int) imagePoint.getY() - paddingWidth,
-                capture.getBoundedImage().getWidth()  + (paddingWidth * 2),
-                capture.getBoundedImage().getHeight() + (paddingWidth * 2)
+                capture.getUpdatedImage().getWidth()  + (paddingWidth * 2),
+                capture.getUpdatedImage().getHeight() + (paddingWidth * 2)
         );
 
         // Image's Northern Collision Bounds
         imageNorth.setBounds(
                 (int) imagePoint.getX() - (collisionWidth  / 2),
                 (int) imagePoint.getY() - (collisionHeight / 2),
-                capture.getBoundedImage().getWidth() + collisionWidth,
+                capture.getUpdatedImage().getWidth() + collisionWidth,
                 collisionHeight
         );
 
         // Image's Southern Collision Bounds
         imageSouth.setBounds(
                 (int) imagePoint.getX() - (collisionWidth / 2),
-                (int) imagePoint.getY() + capture.getBoundedImage().getHeight() - (collisionHeight / 2),
-                capture.getBoundedImage().getWidth() + collisionWidth,
+                (int) imagePoint.getY() + capture.getUpdatedImage().getHeight() - (collisionHeight / 2),
+                capture.getUpdatedImage().getWidth() + collisionWidth,
                 collisionHeight
         );
 
         // Image's Eastern Collision Bounds
         imageEast.setBounds(
-               (int) imagePoint.getX() + capture.getBoundedImage().getWidth() - (collisionWidth / 2),
+               (int) imagePoint.getX() + capture.getUpdatedImage().getWidth() - (collisionWidth / 2),
                (int) imagePoint.getY() - (collisionHeight / 2),
                collisionWidth,
-               capture.getBoundedImage().getHeight() + collisionHeight
+               capture.getUpdatedImage().getHeight() + collisionHeight
         );
 
         // Image's Western Collision Bounds
@@ -180,7 +181,7 @@ public class PanelCapture extends JPanel {
                 (int) imagePoint.getX() - (collisionWidth  / 2),
                 (int) imagePoint.getY() - (collisionHeight / 2),
                 collisionWidth,
-                capture.getBoundedImage().getHeight() + collisionHeight
+                capture.getUpdatedImage().getHeight() + collisionHeight
         );
 
         collisionUpdated = true;

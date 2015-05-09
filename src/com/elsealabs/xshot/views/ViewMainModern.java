@@ -1,14 +1,15 @@
 package com.elsealabs.xshot.views;
 
-import com.elsealabs.xshot.graphics.Capturer;
+import com.elsealabs.xshot.capture.CaptureDevice;
 import com.elsealabs.xshot.graphics.ColorContainer;
 import com.elsealabs.xshot.graphics.ColorGlobalSet;
-import com.elsealabs.xshot.graphics.XImage;
+
 import com.elsealabs.xshot.program.Program;
+
+
 
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.FontFormatException;
@@ -16,9 +17,12 @@ import java.awt.GridLayout;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+
+
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -43,15 +47,12 @@ public class ViewMainModern extends JFrame
 	private Font font;
 	private Font fontLarge;
 
-	private Capturer capturer;
-
 	// TODO: Create color packages in the future
 
 	private ColorContainer container;
 
 	public ViewMainModern()
 	{
-		capturer = Capturer.getInstance(this);
 		_loadResources();
 		build();
 
@@ -138,9 +139,12 @@ public class ViewMainModern extends JFrame
 				container.getColor("med_dark").brighter(),
 				a ->
 				{
-					XImage image = capturer.capture(capturer.getAllMonitors());
-					ViewCaptureRec disp = new ViewCaptureRec(image);
-					disp.build();
+					CaptureDevice device = new CaptureDevice();
+					BufferedImage image  = device.captureAll();
+					
+					ViewCaptureRec disp  = new ViewCaptureRec(image);
+					disp.build(device.mergeBounds(device.getMonitors()));
+					
 					dispose();
 				});
 

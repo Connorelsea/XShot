@@ -2,9 +2,7 @@ package com.elsealabs.xshot.test;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
-
 import javax.imageio.ImageIO;
-
 import com.elsealabs.xshot.capture.*;
 
 public class NewCaptureTest

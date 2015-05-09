@@ -7,7 +7,8 @@ import java.awt.GraphicsEnvironment;
 import java.awt.Rectangle;
 import java.awt.Robot;
 import java.awt.image.BufferedImage;
-import java.util.*;
+import java.util.List;
+import java.util.ArrayList;
 
 /**
  * CaptureDevice.java

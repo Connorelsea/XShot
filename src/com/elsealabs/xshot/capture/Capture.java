@@ -15,24 +15,99 @@ import java.awt.image.BufferedImage;
 public class Capture
 {
 	private BufferedImage image;
+	private Rectangle     total;
 	private Rectangle     original;
 	private Rectangle     updated;
 	
-	public Capture(BufferedImage image, Rectangle originalBounds)
+	public static enum AREA
+	{
+		NORTH, SOUTH, EAST, WEST,
+		NORTHWEST, NORTHEAST, SOUTHWEST, SOUTHEAST
+	}
+	
+	public Capture(BufferedImage image, Rectangle total, Rectangle originalBounds)
 	{
 		this.image    = image;
+		this.total    = total;
 		this.original = originalBounds;
 		this.updated  = originalBounds;
 	}
 	
-	public BufferedImage getCurrentImage()
+	public void addTo(AREA area, int amountToAdd)
+	{
+		if (area == AREA.NORTH)
+		{
+			updated.setBounds(
+					updated.x,
+					updated.y - amountToAdd,
+					updated.width,
+					updated.height + amountToAdd
+			);
+		}
+	}
+	
+	/**
+	 * Returns the original full image
+	 * 
+	 * @return The original full image
+	 */
+	public BufferedImage getFullImage()
+	{
+		return image;
+	}
+	
+	/**
+	 * Returns the bounds of the full image, extending beyond
+	 * the bounds of the original or the updated capture.
+	 * 
+	 * @return The full image bounds
+	 */
+	public Rectangle getFullBounds()
+	{
+		return total;
+	}
+	
+	/**
+	 * Returns a sub-image of the whole image that adheres
+	 * to the Capture's updated bounds.
+	 * 
+	 * @return Image with updated bounds
+	 */
+	public BufferedImage getUpdatedImage()
 	{
 		return getSubImage(updated);
 	}
 	
+	/**
+	 * Returns the most recent change in the capture's bounds
+	 * 
+	 * @return The updated capture bounds
+	 */
+	public Rectangle getUpdatedBounds()
+	{
+		return original;
+	}
+	
+	/**
+	 * Returns a sub-image of the whole image that adheres
+	 * to the Capture's original bounds that were set upon
+	 * creation.
+	 * 
+	 * @return Image with original bounds
+	 */
 	public BufferedImage getOriginalImage()
 	{
 		return getSubImage(original);
+	}
+	
+	/**
+	 * Returns the original capture bounds set upon creation
+	 * 
+	 * @return The original capture bounds
+	 */
+	public Rectangle getOriginalBounds()
+	{
+		return original;
 	}
 	
 	public BufferedImage getSubImage(Rectangle d)

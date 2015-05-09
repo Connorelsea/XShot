@@ -4,9 +4,7 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Shape;
 import java.awt.Stroke;
-
-import com.elsealabs.xshot.graphics.XImage;
-
+import java.awt.image.BufferedImage;
 public class ComponentZoom {
 	
 	private Stroke foregroundStroke;
@@ -27,7 +25,7 @@ public class ComponentZoom {
 		this.shape            = shape;
 	}
 	
-	public void paint(Graphics2D g, XImage image)
+	public void paint(Graphics2D g, BufferedImage image)
 	{
 		
 	}

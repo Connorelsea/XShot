@@ -11,28 +11,23 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
+import java.awt.image.BufferedImage;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
+import com.elsealabs.xshot.capture.Capture;
 import com.elsealabs.xshot.component.ComponenetSelection;
-import com.elsealabs.xshot.component.ComponentZoom;
-import com.elsealabs.xshot.graphics.Capture;
-import com.elsealabs.xshot.graphics.Capturer;
-import com.elsealabs.xshot.graphics.XImage;
 import com.elsealabs.xshot.math.PointRectangle;
 
 public class ViewCaptureRec extends JFrame {
 	private static final long serialVersionUID = 1L;
 	
 	private Rectangle bounds;
-	
-	private Capturer capturer;
-	private XImage   image;
+	private BufferedImage image;
 	
 	private ComponenetSelection componentSelection;
-	private ComponentZoom componentZoom;
 	private JPanel panel;
 	
 	private Point pointBefore;
@@ -47,19 +42,16 @@ public class ViewCaptureRec extends JFrame {
 
 	private PointRectangle prevRec;
 	
-	public ViewCaptureRec(XImage image)
+	public ViewCaptureRec(BufferedImage image)
 	{
 		this.image = image;
 		
 		this.componentSelection = ComponenetSelection.DEFAULT_MODERN;
-		this.componentZoom =      ComponentZoom.DEFAULT_MODERN;
 	}
 	
-	public void build()
+	public void build(Rectangle bounds)
 	{
-		
-		capturer = Capturer.getInstance();
-		bounds   = capturer.mergeBounds(capturer.getAllMonitors());
+		this.bounds = bounds;
 		
 		setUndecorated(true);
 		setBounds(bounds.x, bounds.y, bounds.width, bounds.height);
@@ -155,7 +147,7 @@ public class ViewCaptureRec extends JFrame {
 				Graphics2D gd = (Graphics2D) g;
 
 				// Draw image
-				image.draw(gd, 0, 0);
+				g.drawImage(image, 0, 0, null);
 
 				// Draw rectangle over image (background)
 				gd.setComposite(getAlphaComposite(0.35f));
@@ -190,8 +182,11 @@ public class ViewCaptureRec extends JFrame {
 					if (keep == true)
 					{
 						componentSelection.paint(gd, prevRec, image);
-						//new ViewPicture(image.getSubImage(prevRec)).build();
-						new ViewPicture(new Capture(image, prevRec)).build();
+						
+						Capture  capture = new Capture(image, prevRec, bounds);
+						ViewPicture view = new ViewPicture(capture);
+						
+						view.build();
 						dispose();
 					}
 					else if (keep == false)

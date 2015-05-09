@@ -1,8 +1,7 @@
 package com.elsealabs.xshot.views;
 
+import com.elsealabs.xshot.capture.Capture;
 import com.elsealabs.xshot.file.FileUtil;
-import com.elsealabs.xshot.graphics.Capture;
-import com.elsealabs.xshot.graphics.XImage;
 
 import javax.swing.*;
 
@@ -76,7 +75,9 @@ public class ViewPicture extends JFrame {
         {
             File defaultFile = new File("C:\\Capture.PNG");
             File dest = new FileUtil().getUserSaveLocation(defaultFile, "Save Image");
-            capture.getBoundedImage().writeImage(dest, XImage.FORMAT.PNG);
+            
+            // TODO: re-implement image saving
+            //capture.getUpdatedImage().writeImage(dest, XImage.FORMAT.PNG);
         };
 
         buttonSave = new JButton("Save");
@@ -107,8 +108,8 @@ public class ViewPicture extends JFrame {
         container.setBackground(Color.BLACK);
         
         Dimension containerSize = new Dimension(
-				(int) capture.getTotalBounds().getWidth() + 500, 
-				(int) capture.getTotalBounds().getHeight() + 500
+				(int) capture.getFullBounds().getWidth() + 500, 
+				(int) capture.getFullBounds().getHeight() + 500
 		);
         
         container.setSize(containerSize);
