@@ -109,12 +109,12 @@ public class PanelCapture extends JPanel {
     {
         collisionUpdated = false;
         
-        int lengthWhole = capture.getFullImage().getWidth() + 500;
-        int lengthPart  = capture.getFullImage().getWidth();
+        int lengthWhole = capture.getTotalImage().getWidth() + 500;
+        int lengthPart  = capture.getTotalImage().getWidth();
         int imageX      = 500 + (int) capture.getUpdatedBounds().getX();
         
-        int heightWhole = capture.getFullImage().getHeight() + 500;
-        int heightPart  = capture.getFullImage().getHeight();
+        int heightWhole = capture.getTotalImage().getHeight() + 500;
+        int heightPart  = capture.getTotalImage().getHeight();
         int imageY      = 500 + (int) capture.getUpdatedBounds().getY();
 
         Point viewportRender = new Point(imageX, imageY);

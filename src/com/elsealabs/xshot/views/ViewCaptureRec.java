@@ -183,7 +183,7 @@ public class ViewCaptureRec extends JFrame {
 					{
 						componentSelection.paint(gd, prevRec, image);
 						
-						Capture  capture = new Capture(image, prevRec, bounds);
+						Capture  capture = new Capture(image, bounds, prevRec);
 						ViewPicture view = new ViewPicture(capture);
 						
 						view.build();

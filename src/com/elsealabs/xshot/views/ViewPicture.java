@@ -22,7 +22,7 @@ public class ViewPicture extends JFrame {
 
     private JPanel bar;
     private JPanel container;
-    private PanelCapture panelCapture;
+    private PanelCaptureNew panelCapture;
 
     private JScrollPane scrollPane;
 
@@ -54,8 +54,8 @@ public class ViewPicture extends JFrame {
     public void build() {
         // Set size of window
         setSize(
-                (int) capture.getOriginalBounds().getWidth() + 200,
-                (int) capture.getOriginalBounds().getHeight() + barHeight + 200
+                capture.getUpdatedBounds().width  + 200,
+                capture.getUpdatedBounds().height + barHeight + 200
         );
 
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
@@ -105,11 +105,11 @@ public class ViewPicture extends JFrame {
         // Container for easier manipulation of the scroll pane.
         container = new JPanel();
         container.setLayout(null);
-        container.setBackground(Color.BLACK);
+        container.setBackground(Color.LIGHT_GRAY);
         
         Dimension containerSize = new Dimension(
-				(int) capture.getFullBounds().getWidth() + 500, 
-				(int) capture.getFullBounds().getHeight() + 500
+				capture.getTotalBounds().width  + 500, 
+				capture.getTotalBounds().height + 500
 		);
         
         container.setSize(containerSize);
@@ -126,21 +126,21 @@ public class ViewPicture extends JFrame {
         scrollPane.getViewport().add(container);
 
         // Customized image panel
-        panelCapture = new PanelCapture(scrollPane, (JFrame) this, capture);
+        panelCapture = new PanelCaptureNew(scrollPane, (JFrame) this, capture);
         
         // Set size the same as the size of the full original image
         
         Dimension panelCaptureSize = new Dimension(
-                capture.getFullImage().getWidth(),
-                capture.getFullImage().getHeight()
+                capture.getTotalBounds().width,
+                capture.getTotalBounds().height
         );
         
         panelCapture.setSize(panelCaptureSize);
         panelCapture.setPreferredSize(panelCaptureSize);
         
         panelCapture.setLocation(
-        		((capture.getFullImage().getWidth()  + 500) / 2) - (capture.getFullImage().getWidth()  / 2),
-        		((capture.getFullImage().getHeight() + 500) / 2) - (capture.getFullImage().getHeight() /  2)
+        		((capture.getTotalBounds().width  + 500) / 2) - (capture.getTotalBounds().width  / 2),
+        		((capture.getTotalBounds().height + 500) / 2) - (capture.getTotalBounds().height /  2)
         );
         
         // Add panelCapture at static position

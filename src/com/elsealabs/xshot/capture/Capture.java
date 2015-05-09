@@ -51,7 +51,7 @@ public class Capture
 	 * 
 	 * @return The original full image
 	 */
-	public BufferedImage getFullImage()
+	public BufferedImage getTotalImage()
 	{
 		return image;
 	}
@@ -62,7 +62,7 @@ public class Capture
 	 * 
 	 * @return The full image bounds
 	 */
-	public Rectangle getFullBounds()
+	public Rectangle getTotalBounds()
 	{
 		return total;
 	}
