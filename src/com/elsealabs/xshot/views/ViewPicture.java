@@ -22,7 +22,7 @@ public class ViewPicture extends JFrame {
 
     private JPanel bar;
     private JPanel container;
-    private PanelCaptureNew panelCapture;
+    private PanelCapture panelCapture;
 
     private JScrollPane scrollPane;
 
@@ -118,15 +118,20 @@ public class ViewPicture extends JFrame {
 
         // Scroll pane with always-on scroll bars
         scrollPane = new JScrollPane();
+        
         scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
         scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+       
+        scrollPane.getVerticalScrollBar()  .setUnitIncrement(16);
+        scrollPane.getHorizontalScrollBar().setUnitIncrement(16);
+        
         add(scrollPane, BorderLayout.CENTER);
         
         scrollPane.getViewport().setLayout(null);
         scrollPane.getViewport().add(container);
 
         // Customized image panel
-        panelCapture = new PanelCaptureNew(scrollPane, (JFrame) this, capture);
+        panelCapture = new PanelCapture(scrollPane, (JFrame) this, capture);
         
         // Set size the same as the size of the full original image
         
