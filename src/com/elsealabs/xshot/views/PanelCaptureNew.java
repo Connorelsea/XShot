@@ -6,6 +6,9 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionAdapter;
 
 import javax.swing.JComponent;
 import javax.swing.JFrame;
@@ -14,19 +17,29 @@ import javax.swing.JScrollPane;
 import javax.swing.JViewport;
 
 import com.elsealabs.xshot.capture.Capture;
+import com.elsealabs.xshot.capture.Capture.AREA;
 
 public class PanelCaptureNew extends JPanel
 {
+	// Referenced outside objects
+	
 	private JComponent parent;
 	private JFrame     frame;
+	private Capture    capture;
+	
+	// State-related attributes
 	
 	private boolean debug = true;
+	
+	// Size-related attributes
 	
 	private int width;
 	private int height;
 	
 	private Dimension frameSize;
 	private Point viewportPoint;
+	
+	// Information regarding collision
 	
     private int paddingWidth;
     private int collisionWidth;
@@ -37,8 +50,10 @@ public class PanelCaptureNew extends JPanel
     private Rectangle imageSouth;
     private Rectangle imageEast;
     private Rectangle imageWest;
-	
-	private Capture capture;
+    
+    private AREA    currentArea;
+    private Point   initial;
+    private boolean pressListening;
 	
 	/**
 	 * Creates a new PanelCapture
@@ -67,8 +82,80 @@ public class PanelCaptureNew extends JPanel
         collisionHeight = 20;
 		
 		frameSize = new Dimension(0, 0);
+		
+		_addListeners();
 	}
 	
+	/**
+	 * Adds relevant listeners required for the panel capture to
+	 * function correctly.
+	 */
+	private void _addListeners()
+	{
+		addMouseListener(new MouseAdapter()
+		{
+			@Override
+			public void mouseReleased(MouseEvent e)
+			{
+				pressListening = false;
+				super.mouseReleased(e);
+			}
+			
+			@Override
+			public void mousePressed(MouseEvent e)
+			{
+				currentArea = locateArea(e.getPoint());
+				
+				if (currentArea != null)
+				{
+					pressListening = true;
+					initial = e.getPoint();
+					
+					System.out.println("Initial Point: (" + initial.x + ", " + initial.y + ")");
+				}
+				
+				super.mousePressed(e);
+			}
+		});
+		
+		addMouseMotionListener(new MouseMotionAdapter()
+		{
+			@Override
+			public void mouseDragged(MouseEvent e)
+			{
+				if (currentArea != null && pressListening)
+				{
+					// Update currentAreas based on whether or not they are being updated
+					// on the y-axis or the x-axis;
+					
+					if (currentArea == Capture.AREA.NORTH || currentArea == Capture.AREA.SOUTH)
+					{
+						capture.addTo(currentArea, initial.y - e.getPoint().y);
+						initial = e.getPoint();
+					}
+					else if (currentArea == Capture.AREA.EAST || currentArea == Capture.AREA.WEST)
+					{
+						capture.addTo(currentArea, initial.x - e.getPoint().x);
+						initial = e.getPoint();
+					}
+					else
+					{
+						
+					}
+					
+					updateCollisionBounds();
+					repaint();
+				}
+				
+				super.mouseDragged(e);
+			}
+		});
+	}
+	
+	/**
+	 * Paints the components and handles when information regarding
+	 * positioning should be updated
+	 */
 	public void paint(Graphics gd)
 	{
 		Graphics2D g = (Graphics2D) gd;
@@ -96,7 +183,7 @@ public class PanelCaptureNew extends JPanel
 		if (debug)
 		{
 			g.setColor(Color.RED);
-			g.drawRect(imageWhole.x, imageWhole.y, imageWhole.width, imageWhole.height);
+			g.drawRect(capture.getUpdatedBounds().x, capture.getUpdatedBounds().y, capture.getUpdatedBounds().width, capture.getUpdatedBounds().height);
 			
 			g.setColor(Color.BLUE);
 			g.drawRect(imageEast.x, imageEast.y, imageEast.width, imageEast.height);
@@ -176,6 +263,27 @@ public class PanelCaptureNew extends JPanel
                 collisionWidth,
                 capture.getUpdatedImage().getHeight() + collisionHeight
         );
+    }
+    
+    /**
+     * Quickly locate the area in which the point is contained by.
+     * 
+     * @param p The point whose area is to be located.
+     * @return  The area in which the point is located.
+     */
+    public Capture.AREA locateArea(Point p)
+    {
+        if      (imageNorth.contains(p) && imageEast .contains(p)) return Capture.AREA.NORTHEAST;
+        else if (imageEast .contains(p) && imageSouth.contains(p)) return Capture.AREA.SOUTHEAST;
+        else if (imageSouth.contains(p) && imageWest .contains(p)) return Capture.AREA.SOUTHWEST;
+        else if (imageWest .contains(p) && imageNorth.contains(p)) return Capture.AREA.NORTHWEST;
+
+        else if (imageNorth.contains(p)) return Capture.AREA.NORTH;
+        else if (imageEast .contains(p)) return Capture.AREA.EAST;
+        else if (imageSouth.contains(p)) return Capture.AREA.SOUTH;
+        else if (imageWest .contains(p)) return Capture.AREA.WEST;
+
+        else    return null;
     }
 
 }

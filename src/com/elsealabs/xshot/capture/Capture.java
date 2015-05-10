@@ -44,6 +44,33 @@ public class Capture
 					updated.height + amountToAdd
 			);
 		}
+		else if (area == AREA.SOUTH)
+		{
+			updated.setBounds(
+					updated.x,
+					updated.y,
+					updated.width,
+					updated.height - amountToAdd
+			);			
+		}
+		else if (area == AREA.EAST)
+		{
+			updated.setBounds(
+					updated.x,
+					updated.y,
+					updated.width - amountToAdd,
+					updated.height
+			);		
+		}
+		else if (area == AREA.WEST)
+		{
+			updated.setBounds(
+					updated.x - amountToAdd,
+					updated.y,
+					updated.width + amountToAdd,
+					updated.height
+			);	
+		}
 	}
 	
 	/**

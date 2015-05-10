@@ -48,20 +48,20 @@ public class Program {
         main_red_colors.put("dark",      new Color(43, 6, 6));
         main_red_colors.put("med_dark",  new Color(130, 24, 24));
         main_red_colors.put("med_light", new Color(178, 52, 52));
-        main_red_colors.put("light", new Color(226, 86, 86));
+        main_red_colors.put("light",     new Color(226, 86, 86));
 
         ColorContainer main_red = new ColorContainer("main", "red", main_red_colors);
-        main_red.setDefault(true);
+        main_red.setDefault(false);
         colors.addContainer(main_red);
 
         HashMap<String, Color> main_gray_colors = new HashMap<String, Color>();
         main_gray_colors.put("dark",      new Color(40, 40, 40));
-        main_gray_colors.put("med_dark", new Color(73, 73, 73));
+        main_gray_colors.put("med_dark",  new Color(73, 73, 73));
         main_gray_colors.put("med_light", new Color(126, 126, 126));
-        main_gray_colors.put("light", new Color(182, 182, 182));
+        main_gray_colors.put("light",     new Color(182, 182, 182));
 
         ColorContainer main_gray = new ColorContainer("main", "red", main_gray_colors);
-        main_gray.setDefault(false);
+        main_gray.setDefault(true);
         colors.addContainer(main_gray);
 
         HashMap<String, Color> main_green_colors = new HashMap<String, Color>();
