@@ -27,28 +27,27 @@ import com.elsealabs.xshot.program.Program;
 
 public class ViewMainModern extends JFrame
 {
-	private static final long serialVersionUID = 1L;
 
 	private JPanel mainPanel;
 	private JPanel titlePanel;
 	private JPanel containerPanel;
 
-	private Timer timerAlpha;
-	private float alpha = 0f;
+	private Timer  timerAlpha;
+	private float  alpha = 0f;
 
-	private int animationState = 0;
+	private int    animationState = 0;
 	private double target;
 	private double ypos;
-	private Point pos;
+	private Point  pos;
 
-	private Font font;
-	private Font fontLarge;
+	private Font   font;
+	private Font   fontLarge;
 
 	int pX, pY;
 
 	// TODO: Create color packages in the future
 
-	private ColorContainer container;
+	private ColorContainer		container;
 
 	public ViewMainModern()
 	{
@@ -68,10 +67,10 @@ public class ViewMainModern extends JFrame
 
 			if (Program.getInstance().getBuildType() == Program.BUILD_TYPE.JAR)
 			{
-				InputStream is = getClass()
-						.getResourceAsStream("/res/font.ttf");
+				InputStream is = getClass().getResourceAsStream("/res/font.ttf");
 				font = Font.createFont(Font.TRUETYPE_FONT, is);
-			} else if (Program.getInstance().getBuildType() == Program.BUILD_TYPE.IDE)
+			}
+			else if (Program.getInstance().getBuildType() == Program.BUILD_TYPE.IDE)
 			{
 				File file = new File("res/font.ttf");
 				font = Font.createFont(Font.TRUETYPE_FONT, file);
@@ -79,10 +78,12 @@ public class ViewMainModern extends JFrame
 
 			font = font.deriveFont(18f);
 			fontLarge = font.deriveFont(40f);
-		} catch (FontFormatException e)
+		}
+		catch (FontFormatException e)
 		{
 			e.printStackTrace();
-		} catch (IOException e)
+		}
+		catch (IOException e)
 		{
 			e.printStackTrace();
 		}
@@ -108,16 +109,13 @@ public class ViewMainModern extends JFrame
 		titlePanel = new JPanel();
 		titlePanel.setLayout(new GridLayout(0, 5, 0, 10));
 		titlePanel.setBackground(container.getColor("dark"));
-		titlePanel.setPreferredSize(new Dimension(
-				titlePanel.getPreferredSize().width, 60));
+		titlePanel.setPreferredSize(new Dimension(titlePanel.getPreferredSize().width, 60));
 		mainPanel.add(titlePanel, BorderLayout.NORTH);
 
-		ModernLabel labelTitle = new ModernLabel("xshot",
-				container.getColor("light"), fontLarge);
+		ModernLabel labelTitle = new ModernLabel("xshot", container.getColor("light"), fontLarge);
 		titlePanel.add(labelTitle);
 
-		ModernLabel labelElsea = new ModernLabel("beta version",
-				container.getColor("light"), font);
+		ModernLabel labelElsea = new ModernLabel("beta version", container.getColor("light"), font);
 		titlePanel.add(labelElsea);
 
 		containerPanel = new JPanel();
@@ -134,10 +132,11 @@ public class ViewMainModern extends JFrame
 		buttonPanelContainer.add(buttonPanel, BorderLayout.CENTER);
 
 		ModernButton button_freeform = new ModernButton(new ModernLabel(
-				"freeform", container.getColor("dark"), fontLarge),
-				container.getColor("med_dark"), container.getColor("med_dark")
-						.brighter(), a ->
-				{
+				"freeform",
+				container.getColor("dark"), fontLarge),
+				container.getColor("med_dark"),
+				container.getColor("med_dark").brighter(),
+				a -> {
 					CaptureDevice device = new CaptureDevice();
 					BufferedImage image = device.captureAll();
 
@@ -150,19 +149,20 @@ public class ViewMainModern extends JFrame
 		buttonPanel.add(button_freeform);
 
 		ModernButton button_fullscreen = new ModernButton(new ModernLabel(
-				"fullscreen", container.getColor("med_dark"), fontLarge),
-				container.getColor("med_light"), container
-						.getColor("med_light").brighter(), a ->
-				{
+				"fullscreen",
+				container.getColor("med_dark"), fontLarge),
+				container.getColor("med_light"),
+				container .getColor("med_light").brighter(),
+				a -> {
 
 				});
 		buttonPanel.add(button_fullscreen);
 
 		ModernButton button_timed = new ModernButton(new ModernLabel("timed",
 				container.getColor("med_light"), fontLarge),
-				container.getColor("light"), container.getColor("light")
-						.brighter(), a ->
-				{
+				container.getColor("light"),
+				container.getColor("light").brighter(),
+				a -> {
 
 				});
 		buttonPanel.add(button_timed);
@@ -175,8 +175,7 @@ public class ViewMainModern extends JFrame
 
 	public void startAnimations()
 	{
-		timerAlpha = new Timer(5, new ActionListener()
-		{
+		timerAlpha = new Timer(5, new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
@@ -200,7 +199,8 @@ public class ViewMainModern extends JFrame
 				{
 					alpha += 0.05f;
 					setOpacity(alpha);
-				} else
+				}
+				else
 				{
 					setOpacity(1.0f);
 					timerAlpha.stop();
@@ -212,8 +212,7 @@ public class ViewMainModern extends JFrame
 
 	private void addListeners()
 	{
-		addMouseMotionListener(new MouseMotionListener()
-		{
+		addMouseMotionListener(new MouseMotionListener() {
 
 			@Override
 			public void mouseMoved(MouseEvent e)
@@ -225,8 +224,7 @@ public class ViewMainModern extends JFrame
 			@Override
 			public void mouseDragged(MouseEvent e)
 			{
-				setLocation(getLocation().x + e.getX() - pX, getLocation().y
-						+ e.getY() - pY);
+				setLocation(getLocation().x + e.getX() - pX, getLocation().y + e.getY() - pY);
 			}
 		});
 	}
