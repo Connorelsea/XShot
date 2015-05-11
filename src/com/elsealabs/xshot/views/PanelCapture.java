@@ -23,13 +23,15 @@ public class PanelCapture extends JPanel
 {
 	// Referenced outside objects
 	
-	private JComponent parent;
-	private JFrame     frame;
-	private Capture    capture;
+	private JComponent  parent;
+	private JFrame      frame;
+	private Capture     capture;
+	private JScrollPane scrollPane;
 	
 	// State-related attributes
 	
 	private boolean debug = false;
+	private boolean saved = false;
 	
 	// Size-related attributes
 	
@@ -41,9 +43,9 @@ public class PanelCapture extends JPanel
 	
 	// Information regarding collision
 	
-    private int paddingWidth;
-    private int collisionWidth;
-    private int collisionHeight;
+    private int padWidth;
+    private int colWidth;
+    private int colHeight;
 	
     private Rectangle imageWhole;
     private Rectangle imageNorth;
@@ -54,6 +56,10 @@ public class PanelCapture extends JPanel
     private AREA    currentArea;
     private Point   initial;
     private boolean pressListening;
+    
+    // Image hover hints
+    
+    private AREA hoverArea;
 	
 	/**
 	 * Creates a new PanelCapture
@@ -68,6 +74,8 @@ public class PanelCapture extends JPanel
 		this.frame   = frame;
 		this.capture = capture;
 		
+		if (parent instanceof JScrollPane) scrollPane = ((JScrollPane) parent);
+		
 		width  = capture.getTotalBounds().width;
 		height = capture.getTotalBounds().height;
 		
@@ -77,9 +85,9 @@ public class PanelCapture extends JPanel
         imageEast  = new Rectangle();
         imageWest  = new Rectangle();
 		
-        paddingWidth    = 10;
-        collisionWidth  = 20;
-        collisionHeight = 20;
+        padWidth  = 10;
+        colWidth  = 20;
+        colHeight = 20;
 		
 		frameSize = new Dimension(0, 0);
 		
@@ -87,11 +95,14 @@ public class PanelCapture extends JPanel
 	}
 	
 	/**
-	 * Adds relevant listeners required for the panel capture to
+	 * Adds relevant listeners required f  or the panel capture to
 	 * function correctly.
 	 */
 	private void _addListeners()
 	{
+		/**
+		 * Mouse Listener to track initial point that starts the drag
+		 */
 		addMouseListener(new MouseAdapter()
 		{
 			@Override
@@ -104,21 +115,18 @@ public class PanelCapture extends JPanel
 			@Override
 			public void mousePressed(MouseEvent e)
 			{
-				currentArea = locateArea(e.getPoint());
-				
-				if (currentArea != null)
+				if ((currentArea = locateArea(e.getPoint())) != null)
 				{
 					pressListening = true;
 					initial = e.getPoint();
-					
-					System.out.println("Initial Point: (" + initial.x + ", " + initial.y + ")");
 				}
-				
 				super.mousePressed(e);
 			}
 		});
 		
-		
+		/**
+		 * Mouse Motion Listener to track dragging
+		 */
 		addMouseMotionListener(new MouseMotionAdapter()
 		{
 			
@@ -133,43 +141,43 @@ public class PanelCapture extends JPanel
 					// Update currentAreas based on whether or not they are being updated
 					// on the y-axis or the x-axis;
 					
-					if (currentArea == Capture.AREA.NORTH || currentArea == Capture.AREA.SOUTH)
+					switch (currentArea)
 					{
-						capture.addTo(currentArea, initial.y - e.getPoint().y);
-						initial = e.getPoint();
-					}
-					else if (currentArea == Capture.AREA.EAST || currentArea == Capture.AREA.WEST)
-					{
-						capture.addTo(currentArea, initial.x - e.getPoint().x);
-						initial = e.getPoint();
-					}
-					else
-					{
-						if (currentArea == Capture.AREA.NORTHWEST)
-						{
+						case NORTH:
+						case SOUTH:
+							capture.addTo(currentArea, initial.y - e.getPoint().y);
+							break;
+							
+						case EAST:
+						case WEST:
+							capture.addTo(currentArea, initial.x - e.getPoint().x);
+							break;
+							
+						case NORTHWEST:
 							capture.addTo(Capture.AREA.NORTH, initial.y - e.getPoint().y);
 							capture.addTo(Capture.AREA.WEST , initial.x - e.getPoint().x);
-							initial = e.getPoint();
-						}
-						else if (currentArea == Capture.AREA.NORTHEAST)
-						{
+							break;
+							
+						case NORTHEAST:
 							capture.addTo(Capture.AREA.NORTH, initial.y - e.getPoint().y);
 							capture.addTo(Capture.AREA.EAST , initial.x - e.getPoint().x);
-							initial = e.getPoint();
-						}
-						else if (currentArea == Capture.AREA.SOUTHWEST)
-						{
+							break;
+							
+						case SOUTHWEST:
 							capture.addTo(Capture.AREA.SOUTH, initial.y - e.getPoint().y);
 							capture.addTo(Capture.AREA.WEST , initial.x - e.getPoint().x);
-							initial = e.getPoint();
-						}
-						else if (currentArea == Capture.AREA.SOUTHEAST)
-						{
+							break;
+						
+						case SOUTHEAST:
 							capture.addTo(Capture.AREA.SOUTH, initial.y - e.getPoint().y);
 							capture.addTo(Capture.AREA.EAST , initial.x - e.getPoint().x);
-							initial = e.getPoint();
-						}
+							break;
+							
+						default:
+							break;
 					}
+					
+					initial = e.getPoint();
 					
 					updateCollisionBounds();
 					repaint();
@@ -184,11 +192,10 @@ public class PanelCapture extends JPanel
 			@Override
 			public void mouseMoved(MouseEvent e)
 			{
-				if (imageWhole.contains(e.getPoint()))
-				{
-					
-				}
+				if (imageWhole.contains(e.getPoint())) hoverArea = locateArea(e.getPoint());
+				else hoverArea = null;
 				
+				repaint();
 				super.mouseMoved(e);
 			}
 		});
@@ -201,7 +208,6 @@ public class PanelCapture extends JPanel
 	public void paint(Graphics gd)
 	{
 		Graphics2D g = (Graphics2D) gd;
-		
 		g.clearRect(0, 0, width, height);
 		
 		/**
@@ -229,26 +235,29 @@ public class PanelCapture extends JPanel
 		
 		// Draw the image's visual hints
 		
-		g.setColor(Color.GRAY);
-		g.drawRect(
-				capture.getUpdatedBounds().x,
-				capture.getUpdatedBounds().y,
-				capture.getUpdatedBounds().width,
-				capture.getUpdatedBounds().height
-		);
+		if (hoverArea == null)
+		{
+			g.setColor(Color.LIGHT_GRAY);
+			g.draw(capture.getUpdatedBounds());
+		}
+		else
+		{
+			g.setColor(Color.black);
+			g.draw(capture.getUpdatedBounds());;
+		}
 		
 		if (debug)
 		{
 			g.setColor(Color.RED);
-			g.drawRect(capture.getUpdatedBounds().x, capture.getUpdatedBounds().y, capture.getUpdatedBounds().width, capture.getUpdatedBounds().height);
+			g.draw(capture.getUpdatedBounds());
 			
 			g.setColor(Color.BLUE);
-			g.drawRect(imageEast.x, imageEast.y, imageEast.width, imageEast.height);
-			g.drawRect(imageWest.x, imageWest.y, imageWest.width, imageWest.height);
+			g.draw(imageEast);
+			g.draw(imageWest);
 			
 			g.setColor(Color.GREEN);
-			g.drawRect(imageNorth.x, imageNorth.y, imageNorth.width, imageNorth.height);
-			g.drawRect(imageSouth.x, imageSouth.y, imageSouth.width, imageSouth.height);
+			g.draw(imageNorth);
+			g.draw(imageSouth);
 		}
 	}
 	
@@ -260,7 +269,7 @@ public class PanelCapture extends JPanel
 	{
 		if (parent instanceof JScrollPane)
 		{
-			JViewport viewport = ((JScrollPane) parent).getViewport();
+			JViewport viewport = scrollPane.getViewport();
 			
 			int proper_width  = (viewport.getWidth()  / 2) - (capture.getUpdatedBounds().width  / 2);
 			int proper_height = (viewport.getHeight() / 2) - (capture.getUpdatedBounds().height / 2);
@@ -283,42 +292,42 @@ public class PanelCapture extends JPanel
     	
         // Bounds of entire image, plus padding
         imageWhole.setBounds(
-                (int) capture.getUpdatedBounds().getX() - paddingWidth,
-                (int) capture.getUpdatedBounds().getY() - paddingWidth,
-                capture.getUpdatedImage().getWidth()  + (paddingWidth * 2),
-                capture.getUpdatedImage().getHeight() + (paddingWidth * 2)
+                capture.getUpdatedBounds().x - padWidth,
+                capture.getUpdatedBounds().y - padWidth,
+                capture.getUpdatedBounds().width  + (padWidth * 2),
+                capture.getUpdatedBounds().height + (padWidth * 2)
         );
 
         // Image's Northern Collision Bounds
         imageNorth.setBounds(
-                (int) capture.getUpdatedBounds().getX() - (collisionWidth  / 2),
-                (int) capture.getUpdatedBounds().getY() - (collisionHeight / 2),
-                capture.getUpdatedImage().getWidth() + collisionWidth,
-                collisionHeight
+                capture.getUpdatedBounds().x - (colWidth  / 2),
+                capture.getUpdatedBounds().y - (colHeight / 2),
+                capture.getUpdatedBounds().width + colWidth,
+                colHeight
         );
 
         // Image's Southern Collision Bounds
         imageSouth.setBounds(
-                (int) capture.getUpdatedBounds().getX() - (collisionWidth / 2),
-                (int) capture.getUpdatedBounds().getY() + capture.getUpdatedImage().getHeight() - (collisionHeight / 2),
-                capture.getUpdatedImage().getWidth() + collisionWidth,
-                collisionHeight
+                capture.getUpdatedBounds().x - (colWidth / 2),
+                capture.getUpdatedBounds().y + capture.getUpdatedBounds().height - (colHeight / 2),
+                capture.getUpdatedBounds().width + colWidth,
+                colHeight
         );
 
         // Image's Eastern Collision Bounds
         imageEast.setBounds(
-               (int) capture.getUpdatedBounds().getX() + capture.getUpdatedImage().getWidth() - (collisionWidth / 2),
-               (int) capture.getUpdatedBounds().getY() - (collisionHeight / 2),
-               collisionWidth,
-               capture.getUpdatedImage().getHeight() + collisionHeight
+               capture.getUpdatedBounds().x + capture.getUpdatedBounds().width - (colWidth / 2),
+               capture.getUpdatedBounds().y - (colHeight / 2),
+               colWidth,
+               capture.getUpdatedBounds().height + colHeight
         );
 
         // Image's Western Collision Bounds
         imageWest.setBounds(
-                (int) capture.getUpdatedBounds().getX() - (collisionWidth  / 2),
-                (int) capture.getUpdatedBounds().getY() - (collisionHeight / 2),
-                collisionWidth,
-                capture.getUpdatedImage().getHeight() + collisionHeight
+                capture.getUpdatedBounds().x - (colWidth  / 2),
+                capture.getUpdatedBounds().y - (colHeight / 2),
+                colWidth,
+                capture.getUpdatedBounds().height + colHeight
         );
     }
     
@@ -339,8 +348,20 @@ public class PanelCapture extends JPanel
         else if (imageEast .contains(p)) return Capture.AREA.EAST;
         else if (imageSouth.contains(p)) return Capture.AREA.SOUTH;
         else if (imageWest .contains(p)) return Capture.AREA.WEST;
+        
+        else if (imageWhole.contains(p)) return Capture.AREA.WHOLE;
 
         else    return null;
+    }
+    
+    public void setSaved(boolean saved)
+    {
+    	this.saved = saved;
+    }
+    
+    public boolean isSaved()
+    {
+    	return saved;
     }
 
 }
