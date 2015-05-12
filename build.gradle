@@ -1,0 +1,22 @@
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'application'
+
+mainClassName = 'com.elsealabs.xshot.program.Driver'
+
+// Source sets in the project, specify source directories
+sourceSets {
+    main {
+        java.srcDir("${projectDir}/src/main/java/")
+        resources.srcDir("${projectDir}/src/main/java/")
+    }
+}
+
+// Dependencies for the project are stored in the libs directory
+dependencies {
+    compile fileTree(dir: "libs", includes: ["*.jar"])
+    runtime fileTree(dir: "libs", includes: ["*.jar"])
+
+    // Using this because the resources are in source code
+    runtime fileTree(dir: "${projectDir}/src/main/java/", includes: ["*"])
+}
