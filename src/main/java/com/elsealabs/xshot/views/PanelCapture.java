@@ -1,13 +1,24 @@
 package com.elsealabs.xshot.views;
 
-import com.elsealabs.xshot.capture.Capture;
-import com.elsealabs.xshot.capture.Capture.AREA;
-
-import javax.swing.*;
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
+
+import javax.swing.JComponent;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JViewport;
+
+import com.elsealabs.xshot.annotation.AnnotationEngine;
+import com.elsealabs.xshot.capture.Capture;
+import com.elsealabs.xshot.capture.Capture.AREA;
 
 public class PanelCapture extends JPanel
 {
@@ -17,6 +28,8 @@ public class PanelCapture extends JPanel
 	private JFrame      frame;
 	private Capture     capture;
 	private JScrollPane scrollPane;
+	
+	private AnnotationEngine engine;
 
 	// State-related attributes
 
@@ -65,6 +78,9 @@ public class PanelCapture extends JPanel
 		this.capture = capture;
 
 		if (parent instanceof JScrollPane) scrollPane = ((JScrollPane) parent);
+		
+		engine = new AnnotationEngine();
+		engine.addTo(this);
 
 		width  = capture.getTotalBounds().width;
 		height = capture.getTotalBounds().height;

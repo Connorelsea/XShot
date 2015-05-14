@@ -1,12 +1,13 @@
 package com.elsealabs.xshot.views;
 
-import com.elsealabs.xshot.capture.CaptureDevice;
-import com.elsealabs.xshot.graphics.ColorContainer;
-import com.elsealabs.xshot.graphics.ColorGlobalSet;
-import com.elsealabs.xshot.program.Program;
-
-import javax.swing.*;
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.CardLayout;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.FontFormatException;
+import java.awt.GridLayout;
+import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
 import java.awt.image.BufferedImage;
@@ -14,9 +15,20 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.Timer;
+
+import com.elsealabs.xshot.capture.Capture;
+import com.elsealabs.xshot.capture.CaptureDevice;
+import com.elsealabs.xshot.graphics.ColorContainer;
+import com.elsealabs.xshot.graphics.ColorGlobalSet;
+import com.elsealabs.xshot.program.Program;
+
 public class ViewMainModern extends JFrame
 {
-
+	private static final long serialVersionUID = 1L;
+	
 	private JPanel mainPanel;
 	private JPanel titlePanel;
 	private JPanel containerPanel;
@@ -34,9 +46,7 @@ public class ViewMainModern extends JFrame
 
 	int pX, pY;
 
-	// TODO: Create color packages in the future
-
-	private ColorContainer		container;
+	private ColorContainer container;
 
 	public ViewMainModern()
 	{
@@ -123,9 +133,9 @@ public class ViewMainModern extends JFrame
 				container.getColor("med_dark").brighter(),
 				a -> {
 					CaptureDevice device = new CaptureDevice();
-					BufferedImage image = device.captureAll();
+					BufferedImage image  = device.captureAll();
 
-					ViewCaptureRec disp = new ViewCaptureRec(image);
+					ViewCaptureRec disp  = new ViewCaptureRec(image);
 					disp.build(device.mergeBounds(device.getMonitors()));
 
 					dispose();
@@ -139,7 +149,13 @@ public class ViewMainModern extends JFrame
 				container.getColor("med_light"),
 				container .getColor("med_light").brighter(),
 				a -> {
-
+					CaptureDevice device = new CaptureDevice();
+					BufferedImage image  = device.captureAll();
+					
+					Rectangle total  = new Rectangle(0, 0, image.getWidth(), image.getHeight());
+					Capture capture  = new Capture(image, total, total);
+					ViewPicture view = new ViewPicture(capture);
+					view.build();
 				});
 		buttonPanel.add(button_fullscreen);
 
