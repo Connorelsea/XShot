@@ -1,4 +1,4 @@
-package com.elsealabs.xshot.graphics;
+package com.elsaelabs.xshot.theme;
 
 import java.awt.*;
 import java.util.HashMap;

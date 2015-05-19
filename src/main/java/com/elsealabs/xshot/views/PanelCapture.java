@@ -80,7 +80,6 @@ public class PanelCapture extends JPanel
 		if (parent instanceof JScrollPane) scrollPane = ((JScrollPane) parent);
 		
 		engine = new AnnotationEngine();
-		engine.addTo(this);
 
 		width  = capture.getTotalBounds().width;
 		height = capture.getTotalBounds().height;
@@ -110,7 +109,7 @@ public class PanelCapture extends JPanel
 		 * Mouse Listener to track initial point that starts the drag
 		 */
 		addMouseListener(new MouseAdapter()
-		{
+		{ 
 			@Override
 			public void mouseReleased(MouseEvent e)
 			{

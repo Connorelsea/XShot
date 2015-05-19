@@ -7,8 +7,8 @@ import java.awt.GraphicsEnvironment;
 import java.awt.Rectangle;
 import java.awt.Robot;
 import java.awt.image.BufferedImage;
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * CaptureDevice.java
@@ -23,18 +23,25 @@ public class CaptureDevice
 	private GraphicsEnvironment environment;
 	private GraphicsDevice[]    screenDevices;
 	private List<Monitor>       monitors;
-
+	
+	private static CaptureDevice instance;
 	private Robot robot;
 
 	/**
 	 * Fires various setup methods to find environment information
 	 * and create needed variables.
 	 */
-	public CaptureDevice()
+	private CaptureDevice()
 	{
 		setupEnvironment();
 		setupMonitors();
 		setupRobot();
+	}
+	
+	public static CaptureDevice getInstance()
+	{
+		if (instance == null) instance = new CaptureDevice();
+		return instance;
 	}
 
 	/**

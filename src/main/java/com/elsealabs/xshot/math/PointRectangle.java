@@ -1,8 +1,7 @@
 package com.elsealabs.xshot.math;
 
-import com.elsealabs.xshot.graphics.XPoint;
-
-import java.awt.*;
+import java.awt.Point;
+import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.Arrays;
 

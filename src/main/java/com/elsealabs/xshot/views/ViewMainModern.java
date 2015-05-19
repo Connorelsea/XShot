@@ -19,10 +19,10 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
+import com.elsaelabs.xshot.theme.ColorContainer;
+import com.elsaelabs.xshot.theme.ColorGlobalSet;
 import com.elsealabs.xshot.capture.Capture;
 import com.elsealabs.xshot.capture.CaptureDevice;
-import com.elsealabs.xshot.graphics.ColorContainer;
-import com.elsealabs.xshot.graphics.ColorGlobalSet;
 import com.elsealabs.xshot.program.Program;
 
 public class ViewMainModern extends JFrame
@@ -52,7 +52,6 @@ public class ViewMainModern extends JFrame
 	{
 		_loadResources();
 		build();
-
 	}
 
 	private void _loadResources()
@@ -132,7 +131,7 @@ public class ViewMainModern extends JFrame
 				container.getColor("med_dark"),
 				container.getColor("med_dark").brighter(),
 				a -> {
-					CaptureDevice device = new CaptureDevice();
+					CaptureDevice device = CaptureDevice.getInstance();
 					BufferedImage image  = device.captureAll();
 
 					ViewCaptureRec disp  = new ViewCaptureRec(image);
@@ -147,9 +146,9 @@ public class ViewMainModern extends JFrame
 				"fullscreen",
 				container.getColor("med_dark"), fontLarge),
 				container.getColor("med_light"),
-				container .getColor("med_light").brighter(),
+				container.getColor("med_light").brighter(),
 				a -> {
-					CaptureDevice device = new CaptureDevice();
+					CaptureDevice device = CaptureDevice.getInstance();
 					BufferedImage image  = device.captureAll();
 					
 					Rectangle total  = new Rectangle(0, 0, image.getWidth(), image.getHeight());

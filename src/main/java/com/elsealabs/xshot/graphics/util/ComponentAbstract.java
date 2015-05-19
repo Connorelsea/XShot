@@ -1,13 +1,8 @@
-package com.elsealabs.xshot.component;
+package com.elsealabs.xshot.graphics.util;
 
 import java.awt.Graphics2D;
-import java.awt.event.MouseEvent;
 
-public interface Component
-{
-	public void mouseDragged  (MouseEvent e);
-	public void mousePressed  (MouseEvent e);
-	public void mouseReleased (MouseEvent e);
-	
+public interface ComponentAbstract
+{	
 	public void paint(Graphics2D g);
 }

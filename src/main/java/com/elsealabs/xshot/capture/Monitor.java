@@ -39,6 +39,16 @@ public class Monitor
 		return bounds;
 	}
 	
+	public int getWidth()
+	{
+		return bounds.width;
+	}
+	
+	public int getHeight()
+	{
+		return bounds.height;
+	}
+	
 	public boolean isDefaultMonitor()
 	{
 		return isdefault;

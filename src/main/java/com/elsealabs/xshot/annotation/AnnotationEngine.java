@@ -3,8 +3,6 @@ package com.elsealabs.xshot.annotation;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.JComponent;
-
 /**
  * AnnotationEngine.java
  * 
@@ -17,9 +15,6 @@ public class AnnotationEngine
 {
 	private List<Annotation> annotations;
 	
-	private AnnotationMouseListener       mouseListener;
-	private AnnotationMouseMotionListener mouseMotionListener;
-	
 	public static enum STATE
 	{
 		NONE, LINE, ARROW
@@ -29,30 +24,6 @@ public class AnnotationEngine
 	public AnnotationEngine()
 	{
 		annotations = new ArrayList<Annotation>();
-	}
-	
-	/**
-	 * Sets up the specified component to work as input for the Annotation Engine.
-	 * 
-	 * @param component The specified component to set up.
-	 */
-	public void addTo(JComponent component)
-	{
-		addListenersTo(component);
-	}
-	
-	/**
-	 * Adds the required key listeners to the specified component.
-	 * 
-	 * @param component The component to add the listeners to.
-	 */
-	public void addListenersTo(JComponent component)
-	{
-		mouseListener 		= new AnnotationMouseListener();
-		mouseMotionListener = new AnnotationMouseMotionListener();
-		
-		component.addMouseListener(mouseListener);
-		component.addMouseMotionListener(mouseMotionListener);
 	}
 	
 	public STATE getState()

@@ -1,7 +1,7 @@
 package com.elsealabs.xshot.program;
 
-import com.elsealabs.xshot.graphics.ColorContainer;
-import com.elsealabs.xshot.graphics.ColorGlobalSet;
+import com.elsaelabs.xshot.theme.ColorContainer;
+import com.elsaelabs.xshot.theme.ColorGlobalSet;
 import com.elsealabs.xshot.views.ViewMainModern;
 
 import java.awt.*;
