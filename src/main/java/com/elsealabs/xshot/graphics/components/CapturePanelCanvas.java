@@ -5,8 +5,6 @@ import java.awt.Dimension;
 
 import javax.swing.JPanel;
 
-import com.elsealabs.xshot.math.Scale;
-
 public class CapturePanelCanvas extends JPanel
 {
 	private Dimension size;
@@ -21,15 +19,5 @@ public class CapturePanelCanvas extends JPanel
 	public void supplyCapturePanel()
 	{
 		
-	}
-	
-	public Scale getScale()
-	{
-		return scale;
-	}
-	
-	public void setScale(Scale scale)
-	{
-		this.scale = scale;
 	}
 }
