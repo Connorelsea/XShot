@@ -123,14 +123,4 @@ public class ViewCapture extends ViewAbstract
 		return dimension;
 	}
 	
-	public void setScale(Scale scale)
-	{
-		this.scale = scale;
-	}
-	
-	public Scale getScale()
-	{
-		return scale;
-	}
-	
 }

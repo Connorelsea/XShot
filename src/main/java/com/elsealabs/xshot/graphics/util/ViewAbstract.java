@@ -1,5 +1,6 @@
 package com.elsealabs.xshot.graphics.util;
 
+import com.elsealabs.xshot.math.Scale;
 
 
 /**
@@ -14,6 +15,7 @@ package com.elsealabs.xshot.graphics.util;
 public abstract class ViewAbstract
 {
 	private String  name;
+	private Scale   scale;
 	
 	public ViewAbstract(String name)
 	{
@@ -56,5 +58,15 @@ public abstract class ViewAbstract
 	public String getName()
 	{
 		return name;
+	}
+	
+	public void setScale(Scale scale)
+	{
+		this.scale = scale;
+	}
+	
+	public Scale getScale()
+	{
+		return scale;
 	}
 }
