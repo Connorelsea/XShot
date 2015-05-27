@@ -1,0 +1,8 @@
+MSYS-1.0.18 Build:2012-11-21 22:34
+Exception: STATUS_ACCESS_VIOLATION at eip=00000000
+eax=6857385C ebx=68573964 ecx=0001B008 edx=00000110 esi=00000000 edi=685700D4
+ebp=0028FEC0 esp=0028FEA4 program=c:\Program Files (x86)\MinGHC-7.8.3\msys-1.0.1\bin\lessecho.exe
+cs=0023 ds=002B es=002B fs=0053 gs=002B ss=002B
+Stack trace:
+Frame     Function  Args
+End of stack trace
