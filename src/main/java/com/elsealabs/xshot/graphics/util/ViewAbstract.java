@@ -1,5 +1,7 @@
 package com.elsealabs.xshot.graphics.util;
 
+
+
 /**
  * ViewAbstract.java
  * 
