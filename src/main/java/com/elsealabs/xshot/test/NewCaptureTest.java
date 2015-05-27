@@ -1,11 +1,10 @@
 package com.elsealabs.xshot.test;
 
-import java.awt.image.BufferedImage;
-import java.io.File;
+import com.elsealabs.xshot.capture.CaptureDevice;
 
 import javax.imageio.ImageIO;
-
-import com.elsealabs.xshot.capture.CaptureDevice;
+import java.awt.image.BufferedImage;
+import java.io.File;
 
 public class NewCaptureTest
 {
@@ -17,7 +16,7 @@ public class NewCaptureTest
 
 	public static void testCaptureDevice()
 	{
-		CaptureDevice cd = CaptureDevice.getInstance();
+		CaptureDevice cd = new CaptureDevice();
 
 		cd.getMonitors().stream()
 			.forEach(m -> System.out.println(m.getBounds()));

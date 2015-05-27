@@ -1,4 +1,4 @@
-package com.elsaelabs.xshot.theme;
+package com.elsealabs.xshot.graphics;
 
 import java.util.ArrayList;
 

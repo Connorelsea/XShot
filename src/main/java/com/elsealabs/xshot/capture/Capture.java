@@ -20,17 +20,16 @@ public class Capture
 
 	public static enum AREA
 	{
-		NORTH, SOUTH, EAST, WEST, 
-		NORTHWEST, NORTHEAST, SOUTHWEST, SOUTHEAST,
-		WHOLE
+		NORTH, SOUTH, EAST, WEST, NORTHWEST, NORTHEAST, SOUTHWEST, SOUTHEAST, WHOLE
 	}
 
-	public Capture(BufferedImage image, Rectangle total, Rectangle originalBounds)
+	public Capture(BufferedImage image, Rectangle total,
+			Rectangle originalBounds)
 	{
-		this.image    = image;
-		this.total    = total;
+		this.image = image;
+		this.total = total;
 		this.original = originalBounds;
-		this.updated  = originalBounds;
+		this.updated = originalBounds;
 	}
 
 	public void addTo(AREA area, int amountToAdd)
@@ -38,19 +37,23 @@ public class Capture
 		switch (area)
 		{
 		case NORTH:
-			updated.setBounds(updated.x, updated.y - amountToAdd, updated.width, updated.height + amountToAdd);
+			updated.setBounds(updated.x, updated.y - amountToAdd,
+					updated.width, updated.height + amountToAdd);
 			break;
 
 		case SOUTH:
-			updated.setBounds(updated.x, updated.y, updated.width, updated.height - amountToAdd);
+			updated.setBounds(updated.x, updated.y, updated.width,
+					updated.height - amountToAdd);
 			break;
 
 		case EAST:
-			updated.setBounds(updated.x, updated.y, updated.width - amountToAdd, updated.height);
+			updated.setBounds(updated.x, updated.y,
+					updated.width - amountToAdd, updated.height);
 			break;
 
 		case WEST:
-			updated.setBounds(updated.x - amountToAdd, updated.y, updated.width + amountToAdd, updated.height);
+			updated.setBounds(updated.x - amountToAdd, updated.y, updated.width
+					+ amountToAdd, updated.height);
 			break;
 
 		default:

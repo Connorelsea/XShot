@@ -1,4 +1,4 @@
-package com.elsealabs.xshot.math;
+package com.elsealabs.xshot.graphics;
 
 import java.awt.Point;
 
