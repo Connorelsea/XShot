@@ -9,6 +9,7 @@ import java.awt.Rectangle;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
+import java.awt.image.BufferedImage;
 
 import javax.swing.JComponent;
 import javax.swing.JFrame;
@@ -16,9 +17,9 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JViewport;
 
-import com.elsealabs.xshot.annotation.AnnotationEngine;
 import com.elsealabs.xshot.capture.Capture;
 import com.elsealabs.xshot.capture.Capture.AREA;
+import com.elsealabs.xshot.math.Scale;
 
 public class PanelCapture extends JPanel
 {
@@ -28,8 +29,6 @@ public class PanelCapture extends JPanel
 	private JFrame      frame;
 	private Capture     capture;
 	private JScrollPane scrollPane;
-	
-	private AnnotationEngine engine;
 
 	// State-related attributes
 
@@ -43,6 +42,8 @@ public class PanelCapture extends JPanel
 
 	private Dimension frameSize;
 	private Point viewportPoint;
+	
+	private Scale scale = Scale.getInstance();
 
 	// Information regarding collision
 
@@ -78,9 +79,6 @@ public class PanelCapture extends JPanel
 		this.capture = capture;
 
 		if (parent instanceof JScrollPane) scrollPane = ((JScrollPane) parent);
-		
-		engine = new AnnotationEngine();
-		engine.addTo(this);
 
 		width  = capture.getTotalBounds().width;
 		height = capture.getTotalBounds().height;
@@ -124,7 +122,13 @@ public class PanelCapture extends JPanel
 				if ((currentArea = locateArea(e.getPoint())) != null)
 				{
 					pressListening = true;
-					initial = e.getPoint();
+					
+					// Scale mouse clicks
+					
+					Point original = e.getPoint();
+					Point scaled = new Point(scale.scale(original.x) , scale.scale(original.y));
+					
+					initial = scaled;
 				}
 				super.mousePressed(e);
 			}
@@ -142,6 +146,8 @@ public class PanelCapture extends JPanel
 			@Override
 			public void mouseDragged(MouseEvent e)
 			{
+				Point scaled = scale.scalePoint(e.getPoint());
+				
 				if (currentArea != null && pressListening)
 				{
 					// Update currentAreas based on whether or not they are being updated
@@ -151,39 +157,39 @@ public class PanelCapture extends JPanel
 					{
 						case NORTH:
 						case SOUTH:
-							capture.addTo(currentArea, initial.y - e.getPoint().y);
+							capture.addTo(currentArea, initial.y - scaled.y);
 							break;
 
 						case EAST:
 						case WEST:
-							capture.addTo(currentArea, initial.x - e.getPoint().x);
+							capture.addTo(currentArea, initial.x - scaled.x);
 							break;
 
 						case NORTHWEST:
-							capture.addTo(Capture.AREA.NORTH, initial.y - e.getPoint().y);
-							capture.addTo(Capture.AREA.WEST , initial.x - e.getPoint().x);
+							capture.addTo(Capture.AREA.NORTH, initial.y - scaled.y);
+							capture.addTo(Capture.AREA.WEST , initial.x - scaled.x);
 							break;
 
 						case NORTHEAST:
-							capture.addTo(Capture.AREA.NORTH, initial.y - e.getPoint().y);
-							capture.addTo(Capture.AREA.EAST , initial.x - e.getPoint().x);
+							capture.addTo(Capture.AREA.NORTH, initial.y - scaled.y);
+							capture.addTo(Capture.AREA.EAST , initial.x - scaled.x);
 							break;
 
 						case SOUTHWEST:
-							capture.addTo(Capture.AREA.SOUTH, initial.y - e.getPoint().y);
-							capture.addTo(Capture.AREA.WEST , initial.x - e.getPoint().x);
+							capture.addTo(Capture.AREA.SOUTH, initial.y - scaled.y);
+							capture.addTo(Capture.AREA.WEST , initial.x - scaled.x);
 							break;
 
 						case SOUTHEAST:
-							capture.addTo(Capture.AREA.SOUTH, initial.y - e.getPoint().y);
-							capture.addTo(Capture.AREA.EAST , initial.x - e.getPoint().x);
+							capture.addTo(Capture.AREA.SOUTH, initial.y - scaled.y);
+							capture.addTo(Capture.AREA.EAST , initial.x - scaled.x);
 							break;
 
 						default:
 							break;
 					}
 
-					initial = e.getPoint();
+					initial = scaled;
 
 					updateCollisionBounds();
 					repaint();
@@ -198,7 +204,9 @@ public class PanelCapture extends JPanel
 			@Override
 			public void mouseMoved(MouseEvent e)
 			{
-				if (imageWhole.contains(e.getPoint())) hoverArea = locateArea(e.getPoint());
+				Point scaled = scale.scalePoint(e.getPoint());
+			
+				if (imageWhole.contains(scaled)) hoverArea = locateArea(scaled);
 				else hoverArea = null;
 
 				repaint();
@@ -215,6 +223,14 @@ public class PanelCapture extends JPanel
 	{
 		Graphics2D g = (Graphics2D) gd;
 		g.clearRect(0, 0, width, height);
+		
+		/**
+		 * Scale all used bounds
+		 */
+		
+		Rectangle boundsUpdatedScaled = scale.scaleRectangle(capture.getUpdatedBounds());
+		
+		System.out.println("SCALED BOUNDS: " + boundsUpdatedScaled);
 
 		/**
 		 * This ensures that the viewport will only be repositioned when the user
@@ -232,30 +248,40 @@ public class PanelCapture extends JPanel
 		}
 
         // Draw the capture's image with it's most recently updated bounds
-		g.drawImage(
-				capture.getUpdatedImage(),
-				capture.getUpdatedBounds().x,
-				capture.getUpdatedBounds().y,
-				null
-		);
+        
+        BufferedImage scaled = new BufferedImage(
+        		boundsUpdatedScaled.width, 
+        		boundsUpdatedScaled.height,
+        		BufferedImage.TYPE_INT_ARGB
+        );
+        Graphics gscaled = scaled.createGraphics();
+        
+        g.drawImage(
+        	capture.getUpdatedImage(),
+        	boundsUpdatedScaled.x,
+        	boundsUpdatedScaled.y,
+        	boundsUpdatedScaled.width,
+        	boundsUpdatedScaled.height,
+        	null
+        );
 
 		// Draw the image's visual hints
 
 		if (hoverArea == null)
 		{
 			g.setColor(Color.LIGHT_GRAY);
-			g.draw(capture.getUpdatedBounds());
+			g.draw(boundsUpdatedScaled);
 		}
 		else
 		{
 			g.setColor(Color.black);
-			g.draw(capture.getUpdatedBounds());;
+			g.draw(boundsUpdatedScaled);;
 		}
 
 		if (debug)
 		{
 			g.setColor(Color.RED);
-			g.draw(capture.getUpdatedBounds());
+			g.draw(boundsUpdatedScaled);
 
 			g.setColor(Color.BLUE);
 			g.draw(imageEast);
@@ -275,14 +301,16 @@ public class PanelCapture extends JPanel
 	{
 		if (parent instanceof JScrollPane)
 		{
+			Rectangle boundsUpdatedScaled = scale.scaleRectangle(capture.getUpdatedBounds());
+			
 			JViewport viewport = scrollPane.getViewport();
 
-			int proper_width  = (viewport.getWidth()  / 2) - (capture.getUpdatedBounds().width  / 2);
-			int proper_height = (viewport.getHeight() / 2) - (capture.getUpdatedBounds().height / 2);
+			int proper_width  = (viewport.getWidth()  / 2) - (boundsUpdatedScaled.width  / 2);
+			int proper_height = (viewport.getHeight() / 2) - (boundsUpdatedScaled.height / 2);
 
 			viewportPoint = new Point(
-					(500 / 2) + capture.getUpdatedBounds().x - proper_width,
-					(500 / 2) + capture.getUpdatedBounds().y - proper_height
+					(500 / 2) + boundsUpdatedScaled.x - proper_width,
+					(500 / 2) + boundsUpdatedScaled.y - proper_height
 			);
 
 			viewport.setViewPosition(viewportPoint);
@@ -295,45 +323,46 @@ public class PanelCapture extends JPanel
 	 */
     public void updateCollisionBounds()
     {
+    	Rectangle boundsUpdatedScaled = scale.scaleRectangle(capture.getUpdatedBounds());
 
         // Bounds of entire image, plus padding
         imageWhole.setBounds(
-                capture.getUpdatedBounds().x - padWidth,
-                capture.getUpdatedBounds().y - padWidth,
-                capture.getUpdatedBounds().width  + (padWidth * 2),
-                capture.getUpdatedBounds().height + (padWidth * 2)
+        		boundsUpdatedScaled.x - scale.scale(padWidth),
+        		boundsUpdatedScaled.y - scale.scale(padWidth),
+        		boundsUpdatedScaled.width  + (scale.scale(padWidth) * 2),
+        		boundsUpdatedScaled.height + (scale.scale(padWidth) * 2)
         );
 
         // Image's Northern Collision Bounds
         imageNorth.setBounds(
-                capture.getUpdatedBounds().x - (colWidth  / 2),
-                capture.getUpdatedBounds().y - (colHeight / 2),
-                capture.getUpdatedBounds().width + colWidth,
-                colHeight
+        		boundsUpdatedScaled.x - (scale.scale(colWidth)  / 2),
+        		boundsUpdatedScaled.y - (scale.scale(colHeight) / 2),
+        		boundsUpdatedScaled.width + scale.scale(colWidth),
+        		scale.scale(colHeight)
         );
 
         // Image's Southern Collision Bounds
         imageSouth.setBounds(
-                capture.getUpdatedBounds().x - (colWidth / 2),
-                capture.getUpdatedBounds().y + capture.getUpdatedBounds().height - (colHeight / 2),
-                capture.getUpdatedBounds().width + colWidth,
-                colHeight
+        		boundsUpdatedScaled.x - (scale.scale(colWidth) / 2),
+        		boundsUpdatedScaled.y + boundsUpdatedScaled.height - (scale.scale(colHeight) / 2),
+        		boundsUpdatedScaled.width + scale.scale(colWidth),
+        		scale.scale(colHeight)
         );
 
         // Image's Eastern Collision Bounds
         imageEast.setBounds(
-               capture.getUpdatedBounds().x + capture.getUpdatedBounds().width - (colWidth / 2),
-               capture.getUpdatedBounds().y - (colHeight / 2),
-               colWidth,
-               capture.getUpdatedBounds().height + colHeight
+        		boundsUpdatedScaled.x + boundsUpdatedScaled.width - (scale.scale(colWidth) / 2),
+        		boundsUpdatedScaled.y - (scale.scale(colHeight) / 2),
+        		scale.scale(colWidth),
+               boundsUpdatedScaled.height + scale.scale(colHeight)
         );
 
         // Image's Western Collision Bounds
         imageWest.setBounds(
-                capture.getUpdatedBounds().x - (colWidth  / 2),
-                capture.getUpdatedBounds().y - (colHeight / 2),
-                colWidth,
-                capture.getUpdatedBounds().height + colHeight
+        		boundsUpdatedScaled.x - (scale.scale(colWidth)  / 2),
+        		boundsUpdatedScaled.y - (scale.scale(colHeight) / 2),
+        		scale.scale(colWidth),
+                boundsUpdatedScaled.height + scale.scale(colHeight)
         );
     }
 
