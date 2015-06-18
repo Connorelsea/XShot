@@ -3,6 +3,8 @@ package com.elsealabs.xshot.capture;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 
+import com.elsealabs.xshot.math.Scale;
+
 /**
  * Capture.java
  * 
@@ -17,6 +19,8 @@ public class Capture
 	private Rectangle total;
 	private Rectangle original;
 	private Rectangle updated;
+	
+	private Scale scale = Scale.getInstance();
 
 	public static enum AREA
 	{

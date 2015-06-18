@@ -1,14 +1,26 @@
 package com.elsealabs.xshot.views;
 
-import com.elsealabs.xshot.capture.Capture;
-import com.elsealabs.xshot.file.FileUtil;
-
-import javax.swing.*;
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.GridLayout;
+import java.awt.Rectangle;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.ScrollPaneConstants;
+import javax.swing.UIManager;
+
+import com.elsealabs.xshot.capture.Capture;
+import com.elsealabs.xshot.file.FileUtil;
+import com.elsealabs.xshot.math.Scale;
 
 /**
  * PictureView.java
@@ -34,12 +46,14 @@ public class ViewPicture extends JFrame
 
 	private ActionListener actionSave;
 	private ActionListener actionNew;
-	private ActionListener actionCopy;
+	private ActionListener actionZoom;
 
 	private Capture capture;
 
 	private String[] options;
-
+	
+	private Scale scale = Scale.getInstance();
+	
 	public ViewPicture(Capture capture)
 	{
 		this.capture = capture;
@@ -97,13 +111,45 @@ public class ViewPicture extends JFrame
 		buttonNew.addActionListener(actionNew);
 		bar.add(buttonNew);
 
-		actionCopy = x ->
+		actionZoom = x ->
 		{
+			scale.setScale(scale.getScale() + .1f);
+			
+			Rectangle totalBounds = scale.scaleRectangle(capture.getTotalBounds());
+			
+			// Set size and position of container
+			
+			Dimension containerSize = new Dimension(
+					totalBounds.width  + 500,
+					totalBounds.height + 500
+			);
+			
+			container.setSize(containerSize);
+			container.setPreferredSize(containerSize);
+			
+			container.repaint();
+			
+			// Set size and position of panel capture
+			
+			Dimension panelCaptureSize = new Dimension(
+					totalBounds.width,
+					totalBounds.height
+			);
 
+			panelCapture.setSize(panelCaptureSize);
+			panelCapture.setPreferredSize(panelCaptureSize);
+
+			panelCapture.setLocation(
+					((totalBounds.width + 500)  / 2) - (totalBounds.width  / 2),
+					((totalBounds.height + 500) / 2) - (totalBounds.height / 2)
+			);
+			
+			container.repaint();
+			panelCapture.repaint();
 		};
 
-		buttonCopy = new JButton("Copy");
-		buttonCopy.addActionListener(actionCopy);
+		buttonCopy = new JButton("Zoom in");
+		buttonCopy.addActionListener(actionZoom);
 		bar.add(buttonCopy);
 
 		// Container for easier manipulation of the scroll pane.
@@ -112,8 +158,9 @@ public class ViewPicture extends JFrame
 		container.setBackground(Color.LIGHT_GRAY);
 
 		Dimension containerSize = new Dimension(
-				capture.getTotalBounds().width + 500,
-				capture.getTotalBounds().height + 500);
+				capture.getTotalBounds().width  + 500,
+				capture.getTotalBounds().height + 500
+		);
 
 		container.setSize(containerSize);
 		container.setPreferredSize(containerSize);
@@ -122,10 +169,8 @@ public class ViewPicture extends JFrame
 		// Scroll pane with always-on scroll bars
 		scrollPane = new JScrollPane();
 
-		scrollPane
-				.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
-		scrollPane
-				.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
+		scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 
 		scrollPane.getVerticalScrollBar().setUnitIncrement(16);
 		scrollPane.getHorizontalScrollBar().setUnitIncrement(16);
@@ -141,19 +186,30 @@ public class ViewPicture extends JFrame
 		// Set size the same as the size of the full original image
 
 		Dimension panelCaptureSize = new Dimension(
-				capture.getTotalBounds().width, capture.getTotalBounds().height);
+				capture.getTotalBounds().width,
+				capture.getTotalBounds().height
+		);
 
 		panelCapture.setSize(panelCaptureSize);
 		panelCapture.setPreferredSize(panelCaptureSize);
 
 		panelCapture.setLocation(
-				((capture.getTotalBounds().width + 500) / 2)
-						- (capture.getTotalBounds().width / 2),
-				((capture.getTotalBounds().height + 500) / 2)
-						- (capture.getTotalBounds().height / 2));
+				((capture.getTotalBounds().width + 500) / 2)  - (capture.getTotalBounds().width / 2),
+				((capture.getTotalBounds().height + 500) / 2) - (capture.getTotalBounds().height / 2)
+		);
 
 		// Add panelCapture at static position
 		container.add(panelCapture);
+		
+		JButton button = new JButton();
+		
+		button.addActionListener(x -> {
+			Scale.getInstance().setScale(Scale.getInstance().getScale() + .1f);
+		});
+		
+		JFrame frame = new JFrame("testing");
+		frame.add(button);
+		frame.setVisible(true);
 
 		setTitle(title);
 		setLocationRelativeTo(null);
