@@ -230,7 +230,7 @@ public class PanelCapture extends JPanel
 		
 		Rectangle boundsUpdatedScaled = scale.scaleRectangle(capture.getUpdatedBounds());
 		
-		System.out.println("SCALED BOUNDS: " + boundsUpdatedScaled);
+		//System.out.println("SCALED BOUNDS: " + boundsUpdatedScaled);
 
 		/**
 		 * This ensures that the viewport will only be repositioned when the user

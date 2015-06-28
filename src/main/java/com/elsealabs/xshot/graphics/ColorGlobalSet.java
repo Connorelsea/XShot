@@ -31,7 +31,6 @@ public class ColorGlobalSet {
 
     public void addContainer(ColorContainer container)
     {
-        System.out.println("Adding container " + container.getSet());
         containers.add(container);
     }
 

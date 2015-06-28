@@ -20,6 +20,8 @@ public class Capture
 	private Rectangle original;
 	private Rectangle updated;
 	
+	private int minCaptureSize = 20;
+	
 	private Scale scale = Scale.getInstance();
 
 	public static enum AREA
@@ -38,30 +40,54 @@ public class Capture
 
 	public void addTo(AREA area, int amountToAdd)
 	{
+		Rectangle updatedBounds = new Rectangle();
+		int x = -1;
+		int y = -1;
+		int width = -1;
+		int height = -1;
+		
 		switch (area)
 		{
-		case NORTH:
-			updated.setBounds(updated.x, updated.y - amountToAdd,
-					updated.width, updated.height + amountToAdd);
-			break;
-
-		case SOUTH:
-			updated.setBounds(updated.x, updated.y, updated.width,
-					updated.height - amountToAdd);
-			break;
-
-		case EAST:
-			updated.setBounds(updated.x, updated.y,
-					updated.width - amountToAdd, updated.height);
-			break;
-
-		case WEST:
-			updated.setBounds(updated.x - amountToAdd, updated.y, updated.width
-					+ amountToAdd, updated.height);
-			break;
-
-		default:
-			break;
+			case NORTH:
+				x = updated.x;
+				y = updated.y - amountToAdd;
+				width = updated.width;
+				height = updated.height + amountToAdd;
+				break;
+	
+			case SOUTH:
+				x = updated.x;
+				y = updated.y;
+				width = updated.width;
+				height = updated.height - amountToAdd;
+				break;
+	
+			case EAST:
+				x = updated.x;
+				y = updated.y;
+				width = updated.width - amountToAdd;
+				height = updated.height;
+				break;
+	
+			case WEST:
+				x = updated.x - amountToAdd;
+				y = updated.y;
+				width = updated.width + amountToAdd;
+				height = updated.height;
+				break;
+	
+			default:
+				break;
+		}
+		
+		// Ensure that the user does not drag the image out of bounds
+		
+		if ( (x < total.width  && x > minCaptureSize) &&
+			 (y < total.height && y > minCaptureSize) &&
+			 (width  + x < total.width  && width  > minCaptureSize) &&
+			 (height + y < total.height && height > minCaptureSize))
+		{
+			updated.setBounds(x, y, width, height);
 		}
 	}
 
