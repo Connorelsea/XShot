@@ -20,8 +20,6 @@ public class Capture
 	private Rectangle original;
 	private Rectangle updated;
 	
-	private int minCaptureSize = 20;
-	
 	private Scale scale = Scale.getInstance();
 
 	public static enum AREA
@@ -82,10 +80,10 @@ public class Capture
 		
 		// Ensure that the user does not drag the image out of bounds
 		
-		if ( (x < total.width  && x > minCaptureSize) &&
-			 (y < total.height && y > minCaptureSize) &&
-			 (width  + x < total.width  && width  > minCaptureSize) &&
-			 (height + y < total.height && height > minCaptureSize))
+		if ( (x < total.width  && x > 0) &&
+			 (y < total.height && y > 0) &&
+			 (width  + x < total.width  && width  > 0) &&
+			 (height + y < total.height && height > 0))
 		{
 			updated.setBounds(x, y, width, height);
 		}
