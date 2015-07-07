@@ -1,5 +1,6 @@
 package com.elsealabs.xshot.program;
 
+import com.elsealabs.xshot.file.FileSystem;
 import com.elsealabs.xshot.graphics.ColorContainer;
 import com.elsealabs.xshot.graphics.ColorGlobalSet;
 import com.elsealabs.xshot.views.ViewMainModern;
@@ -11,6 +12,7 @@ public class Program
 {
 
 	private static Program program;
+	private FileSystem fileSystem;
 	private ColorGlobalSet colors;
 
 	private BUILD_TYPE buildType = BUILD_TYPE.JAR;
@@ -18,26 +20,42 @@ public class Program
 	public enum BUILD_TYPE
 	{
 		IDE, JAR
-	}
+	} 
 
 	public static Program getInstance()
 	{
-		if (program == null)
-		{
-			program = new Program();
-		}
+		if (program == null) program = new Program();
 		return program;
 	}
 
+	/**
+	 * Runs the methods needed to start the program.
+	 */
 	public void run()
 	{
-		init();
-		EventQueue.invokeLater(ViewMainModern::new);
-	}
-
-	private void init()
-	{
+		check();
 		defineColors();
+		//EventQueue.invokeLater(ViewMainModern::new);
+	}
+	
+	/**
+	 * Loads file system data and checks whether or not the user is a first  time
+	 * user. If the user is a first time user it will fire other methods that aid
+	 * the user in getting their settings set up.
+	 */
+	private void check()
+	{
+		fileSystem = new FileSystem();
+		fileSystem.init();
+		
+		if (fileSystem.getPath(FileSystem.PATH.PROGRAM_DIR).exists())
+		{
+			
+		}
+		else
+		{
+			
+		}
 	}
 
 	private void defineColors()
@@ -50,8 +68,7 @@ public class Program
 		main_red_colors.put("med_light", new Color(178, 52, 52));
 		main_red_colors.put("light", new Color(226, 86, 86));
 
-		ColorContainer main_red = new ColorContainer("main", "red",
-				main_red_colors);
+		ColorContainer main_red = new ColorContainer("main", "red", main_red_colors);
 		main_red.setDefault(true);
 		colors.addContainer(main_red);
 
@@ -61,8 +78,7 @@ public class Program
 		main_gray_colors.put("med_light", new Color(126, 126, 126));
 		main_gray_colors.put("light", new Color(182, 182, 182));
 
-		ColorContainer main_gray = new ColorContainer("main", "red",
-				main_gray_colors);
+		ColorContainer main_gray = new ColorContainer("main", "red", main_gray_colors);
 		main_gray.setDefault(false);
 		colors.addContainer(main_gray);
 
@@ -72,8 +88,7 @@ public class Program
 		main_green_colors.put("med_light", new Color(76, 130, 68));
 		main_green_colors.put("light", new Color(123, 192, 121));
 
-		ColorContainer main_green = new ColorContainer("main", "red",
-				main_green_colors);
+		ColorContainer main_green = new ColorContainer("main", "red", main_green_colors);
 		main_green.setDefault(false);
 		colors.addContainer(main_green);
 
@@ -83,8 +98,7 @@ public class Program
 		main_blue_colors.put("med_light", new Color(12, 54, 112));
 		main_blue_colors.put("light", new Color(18, 75, 153));
 
-		ColorContainer main_blue = new ColorContainer("main", "red",
-				main_blue_colors);
+		ColorContainer main_blue = new ColorContainer("main", "red", main_blue_colors);
 		main_blue.setDefault(false);
 		colors.addContainer(main_blue);
 	}
