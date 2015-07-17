@@ -200,16 +200,6 @@ public class ViewPicture extends JFrame
 
 		// Add panelCapture at static position
 		container.add(panelCapture);
-		
-		JButton button = new JButton();
-		
-		button.addActionListener(x -> {
-			Scale.getInstance().setScale(Scale.getInstance().getScale() + .1f);
-		});
-		
-		JFrame frame = new JFrame("testing");
-		frame.add(button);
-		frame.setVisible(true);
 
 		setTitle(title);
 		setLocationRelativeTo(null);
