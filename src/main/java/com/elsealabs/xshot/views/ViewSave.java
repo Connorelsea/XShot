@@ -4,16 +4,20 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
 
 import javax.imageio.ImageIO;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSeparator;
 import javax.swing.JTextField;
@@ -39,6 +43,8 @@ public class ViewSave extends JFrame {
 	private JComboBox combo_fileType;
 	private JLabel label_fileAlert;
 	
+	private List<String> positiveFileAlerts; 
+	
 	private File defaultFilePath;
 	private File currentFile;
 	private List<String> fileLocations;
@@ -49,17 +55,30 @@ public class ViewSave extends JFrame {
 	private Capture capture;
 	private ClipboardCapture clipCapture;
 	
-	public ViewSave()
-	{
-		init();
-		generateFileLocations();
-		generateExtensions();
-	}
+	private ViewPicture viewPicture;
 	
 	public void init()
-	{
+	{	
 		program = Program.getInstance();
 		pool    = program.getPool();
+		
+		positiveFileAlerts = new ArrayList<>();
+		positiveFileAlerts.add("Good to go.");
+		positiveFileAlerts.add("Ready to go.");
+		positiveFileAlerts.add("Okay to save!");
+		positiveFileAlerts.add("Ready to save!");
+		positiveFileAlerts.add("Awesome!");
+		positiveFileAlerts.add("Cool! Save it!");
+		positiveFileAlerts.add("Neato!");
+		positiveFileAlerts.add("Sweet!");
+		positiveFileAlerts.add("Coolio!");
+		positiveFileAlerts.add("Ready to savaroo!");
+		positiveFileAlerts.add("Wahoo!");
+		
+		generateFileLocations();
+		generateExtensions();
+		addListeners();
+		
 	}
 	
 	public void generateFileLocations()
@@ -97,7 +116,7 @@ public class ViewSave extends JFrame {
 		else 
 		{
 			label_fileAlert.setForeground(Color.GRAY);
-			label_fileAlert.setText("File does not already exist. Good to go.");
+			label_fileAlert.setText("File does not already exist. " + positiveFileAlerts.get(new Random().nextInt((positiveFileAlerts.size() - 1 ) + 1)));
 		}
 	}
 
@@ -106,7 +125,6 @@ public class ViewSave extends JFrame {
 	 */
 	public void build()
 	{
-		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
@@ -269,6 +287,11 @@ public class ViewSave extends JFrame {
 		setLocationRelativeTo(null);
 	}
 	
+	private void addListeners()
+	{
+		addWindowListener(viewPicture.getWindowListener());
+	}
+	
 	public void doCopy() {
 		clipCapture = new ClipboardCapture(capture);
 		clipCapture.moveToClipboard();
@@ -286,8 +309,13 @@ public class ViewSave extends JFrame {
 		return label_fileAlert;
 	}
 	
-	public void setCapture(Capture capture) {
+	public void supplyCapture(Capture capture) {
 		this.capture = capture;
+	}
+	
+	public void supplyViewPicture(ViewPicture viewPicture)
+	{
+		this.viewPicture = viewPicture;
 	}
 	
 }

@@ -8,6 +8,7 @@ import java.awt.Rectangle;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.io.File;
 
 import javax.swing.JButton;
@@ -40,6 +41,7 @@ public class ViewPicture extends JFrame
 
 	private JScrollPane scrollPane;
 
+	private WindowListener windowListener;
 	private JButton buttonSave;
 	private JButton buttonNew;
 	private JButton buttonCopy;
@@ -88,15 +90,11 @@ public class ViewPicture extends JFrame
 
 		actionSave = x ->
 		{
-//			File defaultFile = new File("C:\\Capture.PNG");
-//			File dest = new FileUtil().getUserSaveLocation(defaultFile,
-//					"Save Image");
-
-			// TODO: re-implement image saving
-			// capture.getUpdatedImage().writeImage(dest, XImage.FORMAT.PNG);
 			
 			ViewSave viewSave = new ViewSave();
-			viewSave.setCapture(capture);
+			viewSave.supplyCapture(capture);
+			viewSave.supplyViewPicture(this);
+			viewSave.init();
 			viewSave.build();
 			viewSave.setVisible(true);
 
@@ -213,7 +211,7 @@ public class ViewPicture extends JFrame
 
 	private void addListeners()
 	{
-		addWindowListener(new WindowAdapter()
+		windowListener = new WindowAdapter()
 		{
 
 			@Override
@@ -236,13 +234,14 @@ public class ViewPicture extends JFrame
 					panelCapture.setSaved(false);
 				} else
 				{
+					super.windowClosing(e);
 					instance.dispose();
 				}
-
-				super.windowClosing(e);
 			}
 
-		});
+		};
+		
+		addWindowListener(windowListener);
 	}
 
 	private void setLookAndFeel()
@@ -254,6 +253,21 @@ public class ViewPicture extends JFrame
 		{
 			ex.printStackTrace();
 		}
+	}
+	
+	public ActionListener getActionSave()
+	{
+		return actionSave;
+	}
+	
+	public ActionListener getActionNew()
+	{
+		return actionNew;
+	}
+	
+	public WindowListener getWindowListener()
+	{
+		return windowListener;
 	}
 
 }
