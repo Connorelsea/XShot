@@ -132,9 +132,15 @@ public class ViewMainModern extends JFrame
 				container.getColor("med_dark"),
 				container.getColor("med_dark").brighter(),
 				a -> {
+					// Hide View Main Modern before screenshot
+					this.setVisible(false);
+					
+					// Capture the entire screen
 					CaptureDevice device = new CaptureDevice();
 					BufferedImage image  = device.captureAll();
 
+					// Create a View Capture Rectangle to allow the user
+					// to select the area of the image they want to keep.
 					ViewCaptureRec disp  = new ViewCaptureRec(image);
 					disp.build(device.mergeBounds(device.getMonitors()));
 

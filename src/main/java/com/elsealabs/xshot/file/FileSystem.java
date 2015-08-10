@@ -15,7 +15,7 @@ import com.elsea.stone.property.PropertyPoolWriter;
  * 
  * Holds information about locations of important directories  and
  * files relevant to the program. It also holds helper methods for
- * dierctory and file repair and first time setup.
+ * directory and file repair and first time setup.
  * 
  * @author Connor M. Elsea
  */

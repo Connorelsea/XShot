@@ -7,6 +7,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -34,25 +35,27 @@ import com.elsealabs.xshot.program.Program;
 
 public class ViewSave extends JFrame {
 
-	private JPanel contentPane;
-	private JTextField field_fileName;
+	private JPanel      contentPane;
+	private JTextField  field_fileName;
 	
-	private Program program;
+	private Program      program;
 	private PropertyPool pool;
-	private JComboBox combo_locations;
-	private JComboBox combo_fileType;
-	private JLabel label_fileAlert;
+	private JComboBox    combo_locations;
+	private JComboBox    combo_fileType;
+	private JLabel       label_fileAlert;
 	
 	private List<String> positiveFileAlerts; 
+	private boolean      correctFileName;
 	
-	private File defaultFilePath;
-	private File currentFile;
+	private File         defaultFilePath;
+	private File         currentFile;
 	private List<String> fileLocations;
 	
-	private String defaultExtension;
+	private String       defaultExtension;
+	private String       currentExtension;
 	private List<String> extensions;
 	
-	private Capture capture;
+	private Capture          capture;
 	private ClipboardCapture clipCapture;
 	
 	private ViewPicture viewPicture;
@@ -99,24 +102,49 @@ public class ViewSave extends JFrame {
 	
 	public void updateCurrentFile()
 	{
-		currentFile = new File(
-				defaultFilePath.getAbsolutePath() + 
-				"\\" +
-				field_fileName.getText() +
-				".png"
-		);
-		
-		System.out.println(currentFile.getAbsolutePath());
-		
-		if (currentFile.exists())
+		if (field_fileName.getText().length() > 0)
 		{
-			label_fileAlert.setForeground(Color.RED);
-			label_fileAlert.setText("File already exists. Name conflicts!");
+			currentFile = new File(
+					defaultFilePath.getAbsolutePath() + 
+					"\\" +
+					field_fileName.getText() +
+					".png"
+			);
+			
+			if (currentFile.exists())
+			{
+				correctFileName = true;
+				label_fileAlert.setForeground(Color.RED);
+				label_fileAlert.setText("File already exists. Name conflicts!");
+			}
+			else 
+			{
+				correctFileName = false;
+				label_fileAlert.setForeground(Color.GRAY);
+				label_fileAlert.setText("File does not already exist. " + positiveFileAlerts.get(new Random().nextInt((positiveFileAlerts.size() - 1 ) + 1)));
+			}
 		}
-		else 
+		else
 		{
-			label_fileAlert.setForeground(Color.GRAY);
-			label_fileAlert.setText("File does not already exist. " + positiveFileAlerts.get(new Random().nextInt((positiveFileAlerts.size() - 1 ) + 1)));
+			correctFileName = false;
+			label_fileAlert.setForeground(Color.RED);
+			label_fileAlert.setText("File name not valid.");
+		}
+	}
+	
+	public void flush()
+	{
+		if (correctFileName)
+		{
+			try {
+				ImageIO.write(capture.getUpdatedImage(), currentExtension, currentFile);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		else
+		{
+			
 		}
 	}
 
@@ -125,6 +153,7 @@ public class ViewSave extends JFrame {
 	 */
 	public void build()
 	{
+		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());

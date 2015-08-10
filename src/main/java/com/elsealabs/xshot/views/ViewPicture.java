@@ -3,6 +3,7 @@ package com.elsealabs.xshot.views;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.EventQueue;
 import java.awt.GridLayout;
 import java.awt.Rectangle;
 import java.awt.event.ActionListener;
@@ -20,6 +21,7 @@ import javax.swing.ScrollPaneConstants;
 import javax.swing.UIManager;
 
 import com.elsealabs.xshot.capture.Capture;
+import com.elsealabs.xshot.capture.ClipboardCapture;
 import com.elsealabs.xshot.file.FileUtil;
 import com.elsealabs.xshot.math.Scale;
 
@@ -49,7 +51,10 @@ public class ViewPicture extends JFrame
 	private ActionListener actionSave;
 	private ActionListener actionNew;
 	private ActionListener actionZoom;
+	private ActionListener actionCopy;
+	private ActionListener actionQuit;
 
+	private ClipboardCapture clipCapture;
 	private Capture capture;
 
 	private String[] options;
@@ -107,7 +112,9 @@ public class ViewPicture extends JFrame
 
 		actionNew = x ->
 		{
-
+			this.setVisible(false);
+			this.dispose();
+			EventQueue.invokeLater(ViewMainModern::new);
 		};
 
 		buttonNew = new JButton("New");
@@ -150,10 +157,29 @@ public class ViewPicture extends JFrame
 			container.repaint();
 			panelCapture.repaint();
 		};
+		
+		// Copy image action and button
+		
+		actionCopy = x -> {
+			clipCapture = new ClipboardCapture(capture);
+			clipCapture.moveToClipboard();
+		};
 
-		buttonCopy = new JButton("Zoom in");
-		buttonCopy.addActionListener(actionZoom);
+		buttonCopy = new JButton("Copy");
+		buttonCopy.addActionListener(actionCopy);
 		bar.add(buttonCopy);
+		
+		// Force quit no save action and button
+		
+		actionQuit = x -> {
+			this.setVisible(false);
+			this.dispose();
+			System.exit(0);
+		};
+		
+		JButton buttonQuit = new JButton("Quit, no save");
+		buttonQuit.addActionListener(actionQuit);
+		bar.add(buttonQuit);
 
 		// Container for easier manipulation of the scroll pane.
 		container = new JPanel();
