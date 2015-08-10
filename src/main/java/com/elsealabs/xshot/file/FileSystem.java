@@ -119,6 +119,11 @@ public class FileSystem {
 			if (reader.read(getPath(PATH.STONE_FILE)))
 			{
 				pool = reader.getPropertyPool();
+				
+				if (pool.search().getGroup("locations") == null)
+				{
+					issues.add(ISSUE.MISSING_STONE);
+				}
 			}
 			else
 			{

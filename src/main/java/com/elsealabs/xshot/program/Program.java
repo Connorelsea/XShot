@@ -143,12 +143,17 @@ public class Program
 	
 	public void addSaveLocation(SaveLocation saveLocation)
 	{
-		saveLocations.addLocation(saveLocation);
+		saveLocations.saveLocation(saveLocation);
 	}
 	
 	public SaveLocationPool getSaveLocationPool()
 	{
 		return saveLocations;
+	}
+	
+	public FileSystem getFileSystem()
+	{
+		return fileSystem;
 	}
 
 }

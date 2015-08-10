@@ -48,6 +48,7 @@ public class ViewSave extends JFrame {
 	private List<String> positiveFileAlerts; 
 	private boolean      correctFileName;
 	
+	private List<String> files;
 	private File         defaultFilePath;
 	private File         currentFile;
 	
@@ -152,6 +153,23 @@ public class ViewSave extends JFrame {
 			label_fileAlert.setText("Unable to save file!");
 		}
 	}
+	
+	public void updateLocations()
+	{
+		if (files == null) files = new ArrayList<>();
+		
+		if (program.getSaveLocationPool().isUpdated())
+		{
+			
+			for (SaveLocation sl : program.getSaveLocations())
+			{
+				System.out.println(sl.getPath());
+				files.add(sl.getPath());
+			}
+		}
+		
+		combo_locations = new JComboBox(files.toArray());
+	}
 
 	/**
 	 * Create the frame.
@@ -166,7 +184,6 @@ public class ViewSave extends JFrame {
 			ex.printStackTrace();
 		}
 		
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 384, 455);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -311,7 +328,7 @@ public class ViewSave extends JFrame {
 			
 			public void actionPerformed(ActionEvent e)
 			{
-				
+				program.getSaveLocationPool().addNewUI(new SaveLocation("", ""));
 			}
 		});
 		button_addLocation.setBounds(193, 270, 149, 23);
@@ -322,7 +339,15 @@ public class ViewSave extends JFrame {
 			
 			public void actionPerformed(ActionEvent e)
 			{
+				List<SaveLocation> locations = program.getSaveLocations();
 				
+				for (SaveLocation loc : locations)
+				{
+					if (loc.getPath().equals(combo_locations.getItemAt(combo_locations.getSelectedIndex())))
+					{
+						program.getSaveLocationPool().addNewUI(loc);
+					}
+				}
 			}
 			
 		});
@@ -330,18 +355,11 @@ public class ViewSave extends JFrame {
 		contentPane.add(button_editLocations);
 		
 		// Generate files
-		
-		List<String> files = new ArrayList<>();
-		
-		for (SaveLocation sl : program.getSaveLocations())
-		{
-			files.add(sl.getPath());
-			if (sl.isDefault()) defaultFilePath = new File(sl.getPath());
-		}
-		
-		combo_locations = new JComboBox(files.toArray());
+		combo_locations = new JComboBox();
 		combo_locations.setBounds(28, 236, 314, 23);
 		contentPane.add(combo_locations);
+		
+		updateLocations();
 		
 		// Resolve Conflict Button and Action
 		

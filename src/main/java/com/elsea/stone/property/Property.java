@@ -51,6 +51,7 @@ public class Property extends PropertyElement
 	@Override
 	public void write(Document doc, Element parent)
 	{
+		System.out.println(getName());
 		Element prop        = doc.createElement(getName());
 		Element currentProp = doc.createElement("current");
 		Element defaultProp = doc.createElement("default");

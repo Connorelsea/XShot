@@ -5,13 +5,13 @@ import java.io.File;
 
 public class FileUtil {
 
-    public File getUserSaveLocation(File defaultFile, String title)
+    public static File getUserSaveLocation(File defaultFile, String title)
     {
         JFileChooser fileChooser = new JFileChooser();
         File dest = new File("empty");
 
         fileChooser.setDialogTitle(title);
-        fileChooser.setSelectedFile(defaultFile);
+        fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 
         int choice = fileChooser.showSaveDialog(null);
 

@@ -13,6 +13,10 @@ import javax.xml.transform.stream.StreamResult;
 
 import org.w3c.dom.Document;
 
+import com.elsealabs.xshot.file.FileSystem;
+import com.elsealabs.xshot.file.FileSystem.PATH;
+import com.elsealabs.xshot.program.Program;
+
 /**
  * PropertyPoolTemplate
  * 
@@ -262,6 +266,20 @@ public class PropertyPool
 		if (search == null) search = new PropertyPoolSearch(this);
 		System.out.println("Beginning search");
 		return search;
+	}
+	
+	public void save()
+	{
+		PropertyPoolWriter writer = new PropertyPoolWriter();
+		
+		if (writer.write(this, Program.getInstance().getFileSystem().getPath(PATH.STONE_FILE)))
+		{
+			System.out.println("Resolve: Wrote Stone file correctly");
+		}
+		else
+		{
+			System.err.println("Fatal Error: Failed to write Stone file.");
+		}
 	}
 	
 	/**
