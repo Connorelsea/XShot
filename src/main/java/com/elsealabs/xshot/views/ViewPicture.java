@@ -88,12 +88,16 @@ public class ViewPicture extends JFrame
 
 		actionSave = x ->
 		{
-			File defaultFile = new File("C:\\Capture.PNG");
-			File dest = new FileUtil().getUserSaveLocation(defaultFile,
-					"Save Image");
+//			File defaultFile = new File("C:\\Capture.PNG");
+//			File dest = new FileUtil().getUserSaveLocation(defaultFile,
+//					"Save Image");
 
 			// TODO: re-implement image saving
 			// capture.getUpdatedImage().writeImage(dest, XImage.FORMAT.PNG);
+			
+			ViewSave viewSave = new ViewSave();
+			viewSave.build();
+			viewSave.setVisible(true);
 
 			panelCapture.setSaved(true);
 		};

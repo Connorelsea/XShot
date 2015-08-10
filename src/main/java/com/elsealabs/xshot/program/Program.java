@@ -27,8 +27,14 @@ public class Program
 
 	public static Program getInstance()
 	{
-		if (program == null) program = new Program();
+		if (program == null) {
+			program = new Program();
+		}
 		return program;
+	}
+	
+	private Program() {
+		System.out.println("Creating new program object.");
 	}
 
 	/**
@@ -54,6 +60,10 @@ public class Program
 		if (reader.read(fileSystem.getPath(FileSystem.PATH.STONE_FILE)))
 		{
 			pool = reader.getPropertyPool();
+			
+			System.out.println("Pool is originally not null...");
+			System.out.println("Calling from object " + this);
+			System.out.println(pool);
 		}
 		else
 		{
@@ -113,6 +123,9 @@ public class Program
 	
 	public PropertyPool getPool()
 	{
+		System.out.println("Attempting to get pool later...");
+		System.out.println("Calling from object " + this);
+		System.out.println(pool);
 		return pool;
 	}
 
