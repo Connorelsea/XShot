@@ -4,8 +4,6 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -20,7 +18,6 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSeparator;
 import javax.swing.JTextField;
@@ -29,10 +26,10 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
-import com.elsea.stone.property.Property;
 import com.elsea.stone.property.PropertyPool;
 import com.elsealabs.xshot.capture.Capture;
 import com.elsealabs.xshot.capture.ClipboardCapture;
+import com.elsealabs.xshot.file.SaveLocation;
 import com.elsealabs.xshot.program.Program;
 
 public class ViewSave extends JFrame {
@@ -51,7 +48,6 @@ public class ViewSave extends JFrame {
 	
 	private File         defaultFilePath;
 	private File         currentFile;
-	private List<String> fileLocations;
 	
 	private String       defaultExtension;
 	private String       currentExtension;
@@ -80,20 +76,9 @@ public class ViewSave extends JFrame {
 		positiveFileAlerts.add("Ready to savaroo!");
 		positiveFileAlerts.add("Wahoo!");
 		
-		generateFileLocations();
 		generateExtensions();
 		addListeners();
 		
-	}
-	
-	public void generateFileLocations()
-	{
-		fileLocations = new ArrayList<String>();
-		Property prop = pool.search().getProperty("savePath");
-		
-		String defaultPath = prop.getCurrentValue();
-		defaultFilePath = new File(defaultPath);
-		fileLocations.add(defaultPath);
 	}
 	
 	public void generateExtensions() {
@@ -304,7 +289,7 @@ public class ViewSave extends JFrame {
 		button_randomName.setBounds(193, 169, 149, 23);
 		contentPane.add(button_randomName);
 		
-		JButton button_addLocation = new JButton("Quick Add New Location");
+		JButton button_addLocation = new JButton("Add New Location");
 		button_addLocation.addActionListener(new ActionListener() {
 			
 			public void actionPerformed(ActionEvent e)
@@ -315,7 +300,7 @@ public class ViewSave extends JFrame {
 		button_addLocation.setBounds(193, 270, 149, 23);
 		contentPane.add(button_addLocation);
 		
-		JButton button_editLocations = new JButton("Edit Save Locations");
+		JButton button_editLocations = new JButton("Edit Current Location");
 		button_editLocations.addActionListener(new ActionListener() {
 			
 			public void actionPerformed(ActionEvent e)
@@ -327,9 +312,20 @@ public class ViewSave extends JFrame {
 		button_editLocations.setBounds(28, 270, 155, 23);
 		contentPane.add(button_editLocations);
 		
-		combo_locations = new JComboBox(fileLocations.toArray());
+		// Generate files
+		
+		List<String> files = new ArrayList<>();
+		
+		for (SaveLocation sl : program.getSaveLocations())
+		{
+			files.add(sl.getPath());
+		}
+		
+		combo_locations = new JComboBox(files.toArray());
 		combo_locations.setBounds(28, 236, 314, 23);
 		contentPane.add(combo_locations);
+		
+		// Resolve Conflict Button and Action
 		
 		JButton button_resolveConflict = new JButton("Resolve Conflict");
 		button_resolveConflict.setToolTipText("This will append numbers to the end of your file name to resolve the conflicting file.");

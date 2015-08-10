@@ -1,14 +1,18 @@
 package com.elsealabs.xshot.program;
 
+import java.awt.Color;
+import java.awt.EventQueue;
+import java.util.HashMap;
+import java.util.List;
+
 import com.elsea.stone.property.PropertyPool;
 import com.elsea.stone.property.PropertyPoolReader;
 import com.elsealabs.xshot.file.FileSystem;
+import com.elsealabs.xshot.file.SaveLocation;
+import com.elsealabs.xshot.file.SaveLocationPool;
 import com.elsealabs.xshot.graphics.ColorContainer;
 import com.elsealabs.xshot.graphics.ColorGlobalSet;
 import com.elsealabs.xshot.views.ViewMainModern;
-
-import java.awt.*;
-import java.util.HashMap;
 
 public class Program
 {
@@ -17,6 +21,7 @@ public class Program
 	private FileSystem fileSystem;
 	private PropertyPool pool;
 	private ColorGlobalSet colors;
+	private SaveLocationPool saveLocations;
 
 	private BUILD_TYPE buildType = BUILD_TYPE.JAR;
 
@@ -46,6 +51,9 @@ public class Program
 		fileSystem.run();
 		
 		initPool();
+		
+		saveLocations = new SaveLocationPool();
+		saveLocations.init();
 		
 		defineColors();
 		EventQueue.invokeLater(ViewMainModern::new);
@@ -127,6 +135,20 @@ public class Program
 		System.out.println("Calling from object " + this);
 		System.out.println(pool);
 		return pool;
+	}
+
+	public List<SaveLocation> getSaveLocations() {
+		return saveLocations.getLocations();
+	}
+	
+	public void addSaveLocation(SaveLocation saveLocation)
+	{
+		saveLocations.addLocation(saveLocation);
+	}
+	
+	public SaveLocationPool getSaveLocationPool()
+	{
+		return saveLocations;
 	}
 
 }

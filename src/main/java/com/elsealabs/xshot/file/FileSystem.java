@@ -199,8 +199,13 @@ public class FileSystem {
 		
 		pool
 			.group("file")
-				.property("savePath", defaultSave)
-				.group("altPaths")
+				.group("locations")
+				
+					.group("location")
+						.property("name", "Pictures")
+						.property("path", defaultSave)
+						.property("default", "true")
+					.end()
 					
 				.end()
 			.end()
