@@ -1,6 +1,8 @@
 package com.elsealabs.xshot.capture;
 
 import java.awt.Rectangle;
+import java.awt.Toolkit;
+import java.awt.datatransfer.Clipboard;
 import java.awt.image.BufferedImage;
 
 import com.elsealabs.xshot.math.Scale;

@@ -96,6 +96,7 @@ public class ViewPicture extends JFrame
 			// capture.getUpdatedImage().writeImage(dest, XImage.FORMAT.PNG);
 			
 			ViewSave viewSave = new ViewSave();
+			viewSave.setCapture(capture);
 			viewSave.build();
 			viewSave.setVisible(true);
 

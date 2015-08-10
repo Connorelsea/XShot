@@ -6,6 +6,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.imageio.ImageIO;
@@ -23,6 +24,8 @@ import javax.swing.event.DocumentListener;
 
 import com.elsea.stone.property.Property;
 import com.elsea.stone.property.PropertyPool;
+import com.elsealabs.xshot.capture.Capture;
+import com.elsealabs.xshot.capture.ClipboardCapture;
 import com.elsealabs.xshot.program.Program;
 
 public class ViewSave extends JFrame {
@@ -40,10 +43,17 @@ public class ViewSave extends JFrame {
 	private File currentFile;
 	private List<String> fileLocations;
 	
+	private String defaultExtension;
+	private List<String> extensions;
+	
+	private Capture capture;
+	private ClipboardCapture clipCapture;
+	
 	public ViewSave()
 	{
 		init();
 		generateFileLocations();
+		generateExtensions();
 	}
 	
 	public void init()
@@ -60,6 +70,12 @@ public class ViewSave extends JFrame {
 		String defaultPath = prop.getCurrentValue();
 		defaultFilePath = new File(defaultPath);
 		fileLocations.add(defaultPath);
+	}
+	
+	public void generateExtensions() {
+		extensions = Arrays.asList(ImageIO.getWriterFormatNames());
+		if (extensions.contains("png")) defaultExtension = "png";
+		else defaultExtension = extensions.get(0);
 	}
 	
 	public void updateCurrentFile()
@@ -90,6 +106,7 @@ public class ViewSave extends JFrame {
 	 */
 	public void build()
 	{
+		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
@@ -144,7 +161,8 @@ public class ViewSave extends JFrame {
 			}
 		});
 		
-		combo_fileType = new JComboBox(ImageIO.getReaderFormatNames());
+		combo_fileType = new JComboBox(extensions.toArray());
+		combo_fileType.setSelectedItem(defaultExtension);
 		combo_fileType.setFont(new Font("Segoe UI", Font.PLAIN, 18));
 		combo_fileType.setBounds(267, 95, 75, 38);
 		contentPane.add(combo_fileType);
@@ -177,7 +195,7 @@ public class ViewSave extends JFrame {
 		JButton button_copyQuit = new JButton("Copy & Quit");
 		button_copyQuit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
+				doCopy();
 			}
 		});
 		button_copyQuit.setFont(new Font("Segoe UI", Font.PLAIN, 16));
@@ -251,6 +269,11 @@ public class ViewSave extends JFrame {
 		setLocationRelativeTo(null);
 	}
 	
+	public void doCopy() {
+		clipCapture = new ClipboardCapture(capture);
+		clipCapture.moveToClipboard();
+	}
+	
 	public JComboBox getCombo_locations() {
 		return combo_locations;
 	}
@@ -261,6 +284,10 @@ public class ViewSave extends JFrame {
 	
 	public JLabel getLabel_fileAlert() {
 		return label_fileAlert;
+	}
+	
+	public void setCapture(Capture capture) {
+		this.capture = capture;
 	}
 	
 }
