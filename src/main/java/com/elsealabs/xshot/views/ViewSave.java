@@ -8,6 +8,8 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -98,6 +100,8 @@ public class ViewSave extends JFrame {
 		extensions = Arrays.asList(ImageIO.getWriterFormatNames());
 		if (extensions.contains("png")) defaultExtension = "png";
 		else defaultExtension = extensions.get(0);
+		
+		currentExtension = defaultExtension;
 	}
 	
 	public void updateCurrentFile()
@@ -113,23 +117,36 @@ public class ViewSave extends JFrame {
 			
 			if (currentFile.exists())
 			{
-				correctFileName = true;
+				correctFileName = false;
 				label_fileAlert.setForeground(Color.RED);
 				label_fileAlert.setText("File already exists. Name conflicts!");
 			}
 			else 
 			{
-				correctFileName = false;
+				correctFileName = true;
 				label_fileAlert.setForeground(Color.GRAY);
 				label_fileAlert.setText("File does not already exist. " + positiveFileAlerts.get(new Random().nextInt((positiveFileAlerts.size() - 1 ) + 1)));
 			}
 		}
 		else
 		{
-			correctFileName = false;
+			correctFileName = true;
 			label_fileAlert.setForeground(Color.RED);
 			label_fileAlert.setText("File name not valid.");
 		}
+	}
+	
+	public void doCopy()
+	{
+		clipCapture = new ClipboardCapture(capture);
+		clipCapture.moveToClipboard();
+	}
+	
+	public void quit()
+	{
+		this.setVisible(false);
+		this.dispose();
+		System.exit(0);
 	}
 	
 	public void flush()
@@ -144,7 +161,8 @@ public class ViewSave extends JFrame {
 		}
 		else
 		{
-			
+			label_fileAlert.setForeground(Color.RED);
+			label_fileAlert.setText("Unable to save file!");
 		}
 	}
 
@@ -216,9 +234,14 @@ public class ViewSave extends JFrame {
 		
 		JButton button_copySave = new JButton("Copy & Save");
 		button_copySave.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				
+			
+			public void actionPerformed(ActionEvent e)
+			{
+				doCopy();
+				flush();
+				if (correctFileName) quit();
 			}
+			
 		});
 		button_copySave.setFont(new Font("Segoe UI", Font.PLAIN, 16));
 		button_copySave.setBounds(193, 317, 149, 33);
@@ -230,9 +253,12 @@ public class ViewSave extends JFrame {
 		contentPane.add(label_fileAlert);
 		
 		JButton button_cancel = new JButton("Cancel");
-		button_cancel.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				
+		button_cancel.addActionListener(new ActionListener() 
+		{
+			public void actionPerformed(ActionEvent e)
+			{
+				setVisible(false);
+				dispose();
 			}
 		});
 		button_cancel.setFont(new Font("Segoe UI", Font.PLAIN, 16));
@@ -241,9 +267,13 @@ public class ViewSave extends JFrame {
 		
 		JButton button_copyQuit = new JButton("Copy & Quit");
 		button_copyQuit.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
+			
+			public void actionPerformed(ActionEvent e)
+			{
 				doCopy();
+				quit();
 			}
+			
 		});
 		button_copyQuit.setFont(new Font("Segoe UI", Font.PLAIN, 16));
 		button_copyQuit.setBounds(28, 317, 155, 33);
@@ -264,16 +294,21 @@ public class ViewSave extends JFrame {
 		JButton button_randomName = new JButton("Generate Random Name");
 		button_randomName.setToolTipText("This will replace the file name in the text field with a random, non-conflicting, file name.");
 		button_randomName.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
+			
+			public void actionPerformed(ActionEvent e)
+			{
 				
 			}
+			
 		});
 		button_randomName.setBounds(193, 169, 149, 23);
 		contentPane.add(button_randomName);
 		
 		JButton button_addLocation = new JButton("Quick Add New Location");
 		button_addLocation.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
+			
+			public void actionPerformed(ActionEvent e)
+			{
 				
 			}
 		});
@@ -282,9 +317,12 @@ public class ViewSave extends JFrame {
 		
 		JButton button_editLocations = new JButton("Edit Save Locations");
 		button_editLocations.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
+			
+			public void actionPerformed(ActionEvent e)
+			{
 				
 			}
+			
 		});
 		button_editLocations.setBounds(28, 270, 155, 23);
 		contentPane.add(button_editLocations);
@@ -296,18 +334,38 @@ public class ViewSave extends JFrame {
 		JButton button_resolveConflict = new JButton("Resolve Conflict");
 		button_resolveConflict.setToolTipText("This will append numbers to the end of your file name to resolve the conflicting file.");
 		button_resolveConflict.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
+			
+			public void actionPerformed(ActionEvent e)
+			{
+				int i = 0;
 				
+				String filePath = currentFile.getAbsolutePath();
+				String fileName = field_fileName.getText();
+				
+				while (Files.exists(Paths.get(filePath)))
+				{
+					i += 1;
+					fileName = field_fileName.getText() + i;
+					filePath = defaultFilePath.getAbsolutePath() + "\\" + fileName + "." + currentExtension;
+					System.out.println(filePath);
+				}
+				
+				field_fileName.setText(fileName);
 			}
+			
 		});
 		button_resolveConflict.setBounds(28, 169, 155, 23);
 		contentPane.add(button_resolveConflict);
 		
 		JButton button_save = new JButton("Save");
 		button_save.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				
+			
+			public void actionPerformed(ActionEvent e)
+			{
+				flush();
+				if (correctFileName) quit();
 			}
+			
 		});
 		button_save.setFont(new Font("Segoe UI", Font.PLAIN, 16));
 		button_save.setBounds(193, 361, 149, 33);
@@ -319,11 +377,6 @@ public class ViewSave extends JFrame {
 	private void addListeners()
 	{
 		addWindowListener(viewPicture.getWindowListener());
-	}
-	
-	public void doCopy() {
-		clipCapture = new ClipboardCapture(capture);
-		clipCapture.moveToClipboard();
 	}
 	
 	public JComboBox getCombo_locations() {
