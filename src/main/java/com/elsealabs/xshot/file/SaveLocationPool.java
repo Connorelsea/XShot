@@ -42,6 +42,11 @@ public class SaveLocationPool {
 		}
 	}
 	
+	public void addNewUI()
+	{
+		
+	}
+	
 	public List<SaveLocation> getLocations()
 	{
 		return saveLocations;

@@ -4,6 +4,8 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -97,7 +99,7 @@ public class ViewSave extends JFrame {
 					defaultFilePath.getAbsolutePath() + 
 					"\\" +
 					field_fileName.getText() +
-					".png"
+					"." + currentExtension
 			);
 			
 			if (currentFile.exists())
@@ -217,6 +219,21 @@ public class ViewSave extends JFrame {
 		combo_fileType.setBounds(267, 95, 75, 38);
 		contentPane.add(combo_fileType);
 		
+		combo_fileType.addItemListener(new ItemListener() {
+			
+			@Override
+			public void itemStateChanged(ItemEvent e)
+			{
+				
+				if (e.getStateChange() == ItemEvent.SELECTED)
+				{
+					currentExtension = (String) e.getItem();
+					updateCurrentFile();
+				}
+				
+			}
+		});
+		
 		JButton button_copySave = new JButton("Copy & Save");
 		button_copySave.addActionListener(new ActionListener() {
 			
@@ -319,6 +336,7 @@ public class ViewSave extends JFrame {
 		for (SaveLocation sl : program.getSaveLocations())
 		{
 			files.add(sl.getPath());
+			if (sl.isDefault()) defaultFilePath = new File(sl.getPath());
 		}
 		
 		combo_locations = new JComboBox(files.toArray());
